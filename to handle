@@ -1,0 +1,3 @@
+// << stop | commands
+// ctrl+c after multiple heredoc
+// cat | ls

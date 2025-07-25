@@ -1,1 +1,1 @@
-# minishell_2
+# Miniishell
