@@ -31,6 +31,7 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd, t_d
   char **new_file_input;
   int j;
   
+  (void)first_cmd;
   // if ((*current)->type != TOKEN_REDIR_IN)
   //   return (1);
   if (!(*current)->next)
@@ -49,10 +50,9 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd, t_d
   }
   
   // Allocate or reallocate file_input array
-  new_file_input = malloc(sizeof(char *) * ((*data)->count_red_in + 2));
+  new_file_input = gc_malloc(sizeof(char *) * ((*data)->count_red_in + 2));
   if (!new_file_input)
   {
-    free_cmd(first_cmd);
     return (0);
   }
   
@@ -61,14 +61,12 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd, t_d
   {
     for (j = 0; j < (*data)->count_red_in; j++)
       new_file_input[j] = cmd->file_input[j];
-    free(cmd->file_input);
   }
   
   cmd->file_input = new_file_input;
-  cmd->file_input[(*data)->count_red_in] = ft_strdup((*current)->next->av);
+  cmd->file_input[(*data)->count_red_in] = gc_strdup((*current)->next->av);
   if (!cmd->file_input[(*data)->count_red_in])
   {
-    free_cmd(first_cmd);
     return (0);
   }
   cmd->file_input[(*data)->count_red_in + 1] = NULL;
@@ -80,6 +78,7 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd, t_d
 
 int	handle_redir_out(t_token **current, t_command *cmd, t_command *first_cmd, t_data **data)
 {
+  (void)first_cmd;
   (void)data;
   // if ((*current)->type != TOKEN_REDIR_OUT)
   //   return (1);
@@ -96,14 +95,19 @@ int	handle_redir_out(t_token **current, t_command *cmd, t_command *first_cmd, t_
     // (*data)->exit = 2;
     return (0);
   }
-  if (cmd->file_output)
-    free(cmd->file_output);
-  cmd->file_output = ft_strdup((*current)->next->av);
+  cmd->file_output = gc_strdup((*current)->next->av);
   if (!cmd->file_output)
   {
-    free_cmd(first_cmd);
     return (0);
   }
+  int fd;
+  fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  if (fd < 0)
+  {
+    printf("minishell: %s: \n", cmd->file_output);
+    return (0);
+  }
+  close(fd);
   cmd->append = 0;
   (*current) = (*current)->next->next;
   (*data)->exit = 0;
@@ -114,6 +118,7 @@ int	handle_redir_append(t_token **current, t_command *cmd, t_command *first_cmd,
 {
   // if ((*current)->type != TOKEN_REDIR_APPEND)
   //   return (1);
+  (void)first_cmd;
   (void)data;
   if (!(*current)->next)
   {
@@ -129,14 +134,19 @@ int	handle_redir_append(t_token **current, t_command *cmd, t_command *first_cmd,
     // (*data)->exit = 2;
     return (0);
   }
-  if (cmd->file_output)
-    free(cmd->file_output);
-  cmd->file_output = ft_strdup((*current)->next->av);
+  cmd->file_output = gc_strdup((*current)->next->av);
   if (!cmd->file_output)
   {
-    free_cmd(first_cmd);
     return (0);
   }
+  int fd;
+  fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
+  if (fd < 0)
+  {
+    printf("minishell: %s: \n", cmd->file_output);
+    return (0);
+  }
+  close(fd);
   cmd->append = 1;
   (*current) = (*current)->next->next;
   // (*data)->exit = 0;
@@ -148,6 +158,7 @@ int	handle_heredoc(t_token **current, t_command *cmd, t_command *first_cmd, t_da
   char **new_herdoc;
   int j;
   
+  (void)first_cmd;
   (void)data;
   // if ((*current)->type != TOKEN_HERDOC)
   //   return (1);
@@ -167,10 +178,9 @@ int	handle_heredoc(t_token **current, t_command *cmd, t_command *first_cmd, t_da
   }
   
   // Allocate or reallocate herdoc array
-  new_herdoc = malloc(sizeof(char *) * (*i + 2));
+  new_herdoc = gc_malloc(sizeof(char *) * (*i + 2));
   if (!new_herdoc)
   {
-    free_cmd(first_cmd);
     return (0);
   }
   
@@ -179,14 +189,12 @@ int	handle_heredoc(t_token **current, t_command *cmd, t_command *first_cmd, t_da
   {
     for (j = 0; j < *i; j++)
       new_herdoc[j] = cmd->herdoc[j];
-    free(cmd->herdoc);
   }
   
   cmd->herdoc = new_herdoc;
-  cmd->herdoc[(*i)] = ft_strdup((*current)->next->av);
+  cmd->herdoc[(*i)] = gc_strdup((*current)->next->av);
   if (!cmd->herdoc[*i])
   {
-    free_cmd(first_cmd);
     return (0);
   }
   cmd->herdoc[*i + 1] = NULL;

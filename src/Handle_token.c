@@ -1,4 +1,18 @@
-/* ************************************************************************** */
+/* **************t_token *creat_token(char *line, t_token_type type, bool should_join)
+{
+	t_token *new_token;
+
+	if (!(new_token = (t_token *)gc_calloc(1, sizeof(t_token))))
+		return (NULL);
+	if (!(new_token->av = gc_strdup(line)))
+		return (NULL);
+	new_token->type = type;
+	new_token->info = should_join;
+	//printf("%d->%d->%s\n", *j, should_join, new_token->av);
+	new_token->next = NULL;
+	new_token->prev = NULL;
+	return (new_token);
+}********************************************* */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
@@ -19,10 +33,10 @@ t_token *creat_token(char *line, t_token_type type, bool  should_join)
 {
 	t_token *new_token;
 
-	if (!(new_token = (t_token *)ft_calloc(1, sizeof(t_token))))
+	if (!(new_token = (t_token *)gc_calloc(1, sizeof(t_token))))
 		return (NULL);
-	if (!(new_token->av = ft_strdup(line)))
-		return (free(new_token), NULL);
+	if (!(new_token->av = gc_strdup(line)))
+		return (NULL);
 	new_token->type = type;
 	new_token->info = should_join;
 	//printf("%d->%d->%s\n", *j, should_join, new_token->av);
@@ -71,7 +85,7 @@ void	init_variables(char *str, int *i, int *j, bool *in_quotes, char *quote_char
 	*i = 0;
 	*quote_char = 0;
 	*len = ft_strlen(str);
-	*result = malloc(*len + 1);
+	*result = gc_malloc(*len + 1);
 }
 
 char *remove_quotes(char *str)
@@ -82,7 +96,7 @@ char *remove_quotes(char *str)
   int i = 0, j = 0;
   bool in_single = false;
   bool in_double = false;
-  char *result = malloc(strlen(str) + 1);
+  char *result = gc_malloc(strlen(str) + 1);
   if (!result) return NULL;
 
   while (str[i])
@@ -169,7 +183,7 @@ void  lexe_with_space(t_token **token, int *start, int *i, char *word, bool *sho
 
   if (*i > *start)
   {
-    str = ft_substr(word, *start, *i - *start);
+    str = gc_substr(word, *start, *i - *start);
     add_token(token, creat_token(str, value, *should_join));
   }
   while (word[*i] == ' ' || word[*i] == '\t')
@@ -235,10 +249,9 @@ void convert_exit_status(char **word)
   if (ft_strncmp(*word, "$?", 2) == 0)
   {
     char *convert = ft_itoa(get_status());
-    char *new_word = ft_strdup(convert);
+    char *new_word = gc_strdup(convert);
     set_status(0);
-    free(convert);
-    free(*word);
+    free(convert);  // ft_itoa uses malloc, so we still need to free this
     *word = new_word;
   }
 }
@@ -253,7 +266,7 @@ char  *make_content(char *line, t_data **data)
 {
   char *word;
 
-  word = ft_substr(line, (*data)->start, (*data)->end - (*data)->start);
+  word = gc_substr(line, (*data)->start, (*data)->end - (*data)->start);
   if (ft_strchr(word, '\'') || ft_strchr(word, '\"'))
     (*data)->should_expand_inside = true;
   if (!word)
@@ -292,8 +305,6 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
       }
       if (str && str != word)
       {
-        if (word)
-          free(word);
         word = str;
       }
       if (!flag)
@@ -301,13 +312,11 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
       if (!flag && (ft_strchr(word, ' ') || ft_strchr(word, '\t')))
       {
         make_list(word, token, value);
-        free(word);
         return;
       }
       new = creat_token(word, value, should_join);
       if (new)
         add_token(token, new);
-      free(word);
     }
   }
 }
@@ -367,7 +376,7 @@ int	handle_speciale_token(t_token **token, char *line, int i, t_data **data)
 	bool  should_join;
   (*data)->exit = 0;
 
-	special = malloc(3 * sizeof(char));
+	special = gc_malloc(3 * sizeof(char));
 	if (!special)
 		return (0);
 	should_join = false;
@@ -377,7 +386,6 @@ int	handle_speciale_token(t_token **token, char *line, int i, t_data **data)
 		special[1] = line[i];
 		special[2] = '\0';
 		add_token(token, creat_token(special, get_token_type(special), should_join));
-		free(special);
 		return (i + 2);
 	}
 	else
@@ -385,7 +393,6 @@ int	handle_speciale_token(t_token **token, char *line, int i, t_data **data)
 		special[0] = line[i];
 		special[1] = '\0';
 		add_token(token, creat_token(special, get_token_type(special), should_join));
-		free(special);
 		return (i + 1);
 	}
 }

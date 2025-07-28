@@ -62,14 +62,8 @@ bool	built_in(char *cmd)
 
 void	free_2D_array(char **str)
 {
-  if (!str || !str[0])
-    return;
-  int i = 0;
-  while (str[i])
-  {
-    free(str[i]);
-    i++;
-  }
+  // No manual freeing needed - GC will handle it
+  (void)str;
 }
 
 char *get_command(char *cmd, char **env)
@@ -84,7 +78,7 @@ char *get_command(char *cmd, char **env)
   {
     if (access(cmd, X_OK) == 0)
     {
-      return(ft_strdup(cmd));
+      return(gc_strdup(cmd));
     }
     return(NULL);
   }
@@ -98,22 +92,17 @@ char *get_command(char *cmd, char **env)
     i++;
   }
   split_env = ft_split(path_env, ':');
-  first_join = ft_strjoin("/", cmd);
+  first_join = gc_strjoin("/", cmd);
   i = 0;
   while(split_env[i])
   {
-    complete_path = ft_strjoin(split_env[i], first_join);
+    complete_path = gc_strjoin(split_env[i], first_join);
     if (access(complete_path, X_OK) == 0)
     {
-      free_2D_array(split_env);
-      free(first_join);
       return (complete_path);
     }
-    if (complete_path)
-      free(complete_path);
     i++;
   }
-  free_2D_array(split_env);
   return (NULL);
 }
 

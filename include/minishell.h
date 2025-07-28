@@ -25,6 +25,19 @@
 
 extern int	g_value;
 
+// Garbage Collector structures
+typedef struct s_gc_node
+{
+	void			*ptr;
+	struct s_gc_node	*next;
+}	t_gc_node;
+
+typedef struct s_gc
+{
+	t_gc_node	*allocations;
+	size_t		count;
+}	t_gc;
+
 typedef enum s_token_type
 {
 	TOKEN_WORD,
@@ -78,6 +91,7 @@ int  *init_status();
 void set_status(int val);
 int  get_status();
 void my_handler(int sig);
+void cleanup_exit_handler(int sig);
 void  free_array(char **arr);
 void	my_echo(t_command *cmd);
 void  my_exit_child(t_command **cmd);
@@ -114,6 +128,7 @@ void	handle_quote(bool	*in_quot ,char *quot_char, int *i, char *line);
 void	add_token(t_token **token, t_token *new_token);
 bool is_closed_quotes(char *str);
 void	handle_word_token(t_token **token, char *line, t_data **data);
+bool logic_of_meta(t_token *cmd, t_data **data);
 t_token_type	get_token_type(char *str);
 int	handle_speciale_token(t_token **token, char *line, int i, t_data **data);
 t_token	*tokenize(char *line, t_data **data);
@@ -125,6 +140,20 @@ t_command	*parsing_command(t_token *token, t_data **data);
 int	is_space(char c);
 void	free_token(t_token **token);
 char *remove_quotes(char *str);
+
+// Garbage Collector functions
+t_gc		*gc_init(void);
+void		*gc_malloc(size_t size);
+char		*gc_strdup(const char *s);
+void		*gc_calloc(size_t count, size_t size);
+char		*gc_substr(char const *s, unsigned int start, size_t len);
+char		*gc_strjoin(char const *s1, char const *s2);
+void		gc_free(void *ptr);
+void		gc_register_external(void *ptr);
+void		gc_cleanup(void);
+void		gc_cleanup_partial(void);
+size_t		gc_get_allocation_count(void);
+void		gc_print_allocations(void);
 
 
 #endif

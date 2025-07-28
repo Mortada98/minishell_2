@@ -2,13 +2,12 @@
 
 char	*manual_realloc(char *old, size_t len)
 {
-  char *new = malloc(len + 1);
+  char *new = gc_malloc(len + 1);
   if (new == NULL)
     return (NULL);
   if (old)
   {
     ft_memcpy(new, old, len);
-    free(old);
   }
   new[len] = '\0';
   return (new);

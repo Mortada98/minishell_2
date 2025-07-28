@@ -596,15 +596,16 @@ void join_nodes(t_token **token)
 		if (curr->info)
 		{
 			next = curr->next;
-			joined = ft_strjoin(curr->av, next->av);
-			free(curr->av);
+			joined = gc_strjoin(curr->av, next->av);
+			if (!joined)
+			{
+				printf("minishell: memory allocation failed\n");
+				return;
+			}
 			curr->av = joined;
 			curr->next = next->next;
 			if (!next->info)
 				curr->info = false;
-			if (next->av)
-				free(next->av);
-			free(next);
 			continue;
 		}
 		curr = curr->next;
@@ -647,9 +648,15 @@ void make_prompt(char **env)
 {
 	char *line;
 	t_token *token;
-  t_data  *data = malloc(sizeof(t_data));
+  t_data  *data = malloc(sizeof(t_data));  // Use regular malloc for persistent data
 	t_command *cmd;
   // t_command *cur;
+
+	if (!data)
+	{
+		printf("minishell: memory allocation failed\n");
+		return;
+	}
 
 	signal(SIGINT, my_handler);
 	signal(SIGQUIT, SIG_IGN);
@@ -662,12 +669,16 @@ void make_prompt(char **env)
 		if (!line)
 		{
 			printf("exit\n");
-			free(data);
+			gc_cleanup();
+			free(data);  // Free the persistent data structure on EOF
 			return;
 		}
+		
+		// Register readline's allocation with GC
+		gc_register_external(line);
+		
     if (line[0] == '\0')
     {
-      free(line);
       continue;
     }
 		if (line[0] != '\0')
@@ -676,7 +687,6 @@ void make_prompt(char **env)
 			token = tokenize(line, &data);
       if (!token)
       {
-        free(line);
         continue;
       }
 			//print_token(token);
@@ -686,7 +696,6 @@ void make_prompt(char **env)
 			join_nodes(&token);
       if (logic_of_meta(token, &data) == false)
       {
-        free(line);
         continue;
       }
 			//  printf (" after joining------------------------------------------\n");
@@ -694,7 +703,6 @@ void make_prompt(char **env)
 			cmd = parsing_command(token, &data);
 			if (!cmd)
 			{
-				free(line);
       //printf("{%s}\n", str);
 				continue;
 			}
@@ -742,9 +750,7 @@ void make_prompt(char **env)
       if (heredoc_interrupted)
       {
         g_value = 0;  // Reset for next command
-        free_token(&token);
-        free_cmd(cmd);
-        free(line);
+        gc_cleanup_partial();
         continue;  // Skip execution and go to next prompt
       }
       g_value = 0;  // Reset for normal execution
@@ -774,12 +780,11 @@ void make_prompt(char **env)
 					unlink(cmd->herdoc_file);
 				}
 			}
-			free_token(&token);
-      free_cmd(cmd);
+			gc_cleanup_partial();
 		}
-		free(line);
 	}
-	free(data);
+	gc_cleanup();
+	free(data);  // Free the persistent data structure
 	rl_clear_history();
 }
 

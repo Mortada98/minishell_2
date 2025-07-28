@@ -21,11 +21,10 @@ void	free_token(t_token **token)
 	while (current)
 	{
 		next = current->next;
-		if (current->av)
-			free(current->av);
-		free(current);
+		// No manual freeing needed - GC will handle it
 		current = next;
 	}
+	*token = NULL;
 }
 
 int	is_space(char c)
@@ -47,55 +46,14 @@ int count_args(char **av)
 
 void  free_array(char **arr)
 {
-  int i;
-
-  i = 0;
-  while (arr[i])
-  {
-    free(arr[i]);
-    i++;
-  }
-  free(arr);
+  // No manual freeing needed - GC will handle it
+  (void)arr;
 }
 
 void	free_cmd(t_command *cmd)
 {
-	t_command	*current, *next;
-	int i;
-
-	current = cmd;
-	while (current)
-	{
-		next = current->next;
-		if (current->args)
-      free_array(current->args);
-		if (current->file_input)
-		{
-			i = 0;
-			while (current->file_input[i])
-			{
-				free(current->file_input[i]);
-				i++;
-			}
-			free(current->file_input);
-		}
-		if (current->file_output)
-			free(current->file_output);
-		if (current->herdoc)
-		{
-			i = 0;
-			while (current->herdoc[i])
-			{
-				free(current->herdoc[i]);
-				i++;
-			}
-			free(current->herdoc);
-		}
-		if (current->herdoc_file)
-		  free(current->herdoc_file);
-		free(current);
-		current = next;
-	}
+	// No manual freeing needed - GC will handle it
+	(void)cmd;
 }
 
 void	append_arg(t_command *cmd, char *str, t_data **data)
@@ -107,17 +65,15 @@ void	append_arg(t_command *cmd, char *str, t_data **data)
 	i = 0;
 	if (cmd->args)
     i = count_args(cmd->args);
-	new_array = ft_calloc(i + 2, sizeof(char *));
+	new_array = gc_calloc(i + 2, sizeof(char *));
 	if (!new_array)
 		return;
 	j = -1;
 	while (++j < i)
 		new_array[j] = cmd->args[j];
-	new_array[i] = ft_strdup(str);
-	if (!new_array[j])
-		return(free(new_array));
+	new_array[i] = gc_strdup(str);
+	if (!new_array[i])
+		return;
 	new_array[i + 1] = NULL;
-	if (cmd->args)
-		free(cmd->args);
 	cmd->args = new_array;
 }

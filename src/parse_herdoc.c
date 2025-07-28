@@ -7,7 +7,6 @@ static void  read_and_convert(char *buffer, int *fd, unsigned char *c, int *i)
   if (read(*fd, c, 1) != 1)
   {
     close(*fd);
-    free(buffer);
     return;
   }
   buffer[(*i)++] = 'a' + (*c % 26);
@@ -20,7 +19,7 @@ static char *generate_file_name()
   int fd, i;
   static int counter = 0;
 
-  buffer = malloc(11);
+  buffer = gc_malloc(11);
   if (!buffer)
     return NULL;
   
@@ -60,14 +59,16 @@ static void  make_loop(t_command **cmd , int *fd, int i, t_data **data)
         printf("warning: here-document at line delimited by end-of-file (wanted `%s')\n", (*cmd)->herdoc[i]);
       break;
     }
+    
+    // Register readline's allocation with GC
+    gc_register_external(line);
+    
     if (!(*cmd)->herdoc || (*cmd)->herdoc[i] == NULL)
     {
-      free(line);
       return;
     }
     if (strcmp(line, (*cmd)->herdoc[i]) == 0)
     {
-      free(line);
       return;
     }
     str = line;
@@ -77,7 +78,7 @@ static void  make_loop(t_command **cmd , int *fd, int i, t_data **data)
       if (expanded_line && expanded_line != str)
       {
         write(*fd, expanded_line, ft_strlen(expanded_line));
-        free(expanded_line);
+        // expand_env uses GC allocation, so no manual free needed
       }
       else
       {
@@ -89,7 +90,6 @@ static void  make_loop(t_command **cmd , int *fd, int i, t_data **data)
       write(*fd, line, ft_strlen(line));
     }
     write(*fd, "\n", 1);
-    free(line);
   }
 }
 
@@ -101,10 +101,9 @@ static void  minishell_init(char **buffer, char **join, int *fd)
       *fd = -1;
       return;
     }
-    *join = ft_strjoin("/tmp/", *buffer);
+    *join = gc_strjoin("/tmp/", *buffer);
     if (!*join)
     {
-      free(*buffer);
       *buffer = NULL;
       *fd = -1;
       return;
@@ -112,8 +111,6 @@ static void  minishell_init(char **buffer, char **join, int *fd)
     *fd = open(*join, O_RDWR | O_CREAT, 0644);
     if (*fd < 0)
     {
-      free(*buffer);
-      free(*join);
       *buffer = NULL;
       *join = NULL;
       return;
@@ -145,7 +142,7 @@ int  herdoc_condition_2(t_command **cmd, t_data **data)
 void  herdoc_condition_1(t_command **cmd, t_data **data, char *join, int i)
 {
   if (i == (*data)->count_herdoc - 1)
-    (*cmd)->herdoc_file = ft_strdup(join);
+    (*cmd)->herdoc_file = gc_strdup(join);
   else
     unlink(join);
 }
@@ -165,16 +162,12 @@ void excute_herdoc_for_child(t_command **cmd, t_data **data)
     minishell_init(&buffer, &join, &fd);
     if (!buffer || !join || fd < 0)
     {
-      if (buffer) free(buffer);
-      if (join) free(join);
       break;
     }
     signal(SIGINT, my_server);
     make_loop(cmd, &fd, i, data);
     close(fd);
     herdoc_condition_1(cmd, data, join, i);
-    free(buffer);
-    free(join);
     if (!herdoc_condition_2(cmd, data))
       break;
     i++;

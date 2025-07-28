@@ -3,7 +3,7 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC = src/main.c	src/Handle_command.c	src/Handle_token.c	src/Helper.c  src/prompt.c	src/print.c	src/tools.c	src/meta_char.c	src/utils.c	src/excute.c  src/parse_herdoc.c
+SRC = src/main.c	src/Handle_command.c	src/Handle_token.c	src/Helper.c  src/prompt.c	src/print.c	src/tools.c	src/meta_char.c	src/utils.c	src/excute.c  src/parse_herdoc.c	src/garbage_collector.c
 
 LIBFT_SRC = my_libft/ft_isdigit.c my_libft/ft_isalnum.c my_libft/ft_isascii.c my_libft/ft_isprint.c my_libft/ft_strlen.c my_libft/ft_memset.c my_libft/ft_isalpha.c \
 	my_libft/ft_bzero.c my_libft/ft_memcpy.c my_libft/ft_memmove.c my_libft/ft_strlcpy.c my_libft/ft_strlcat.c my_libft/ft_toupper.c my_libft/ft_tolower.c \

@@ -20,7 +20,7 @@ t_command	*create_command(void)
 {
 	t_command	*cmd;
 
-	cmd = (t_command *)ft_calloc(1, sizeof(t_command));
+	cmd = (t_command *)gc_calloc(1, sizeof(t_command));
 	if(cmd == NULL)
 	{
 		return (NULL);
@@ -70,7 +70,7 @@ char *split_var(size_t *i, char *str, size_t *start)
   *start = *i;
   while((ft_isalnum(str[*i]) || str[*i] == '_') && str[*i])
     (*i)++;
-  string = ft_substr(str, *start, (*i) - (*start));	
+  string = gc_substr(str, *start, (*i) - (*start));	
   if (!string)
     return (NULL);
   return(string);
@@ -83,7 +83,7 @@ char	*expand_env(char *str)
 	size_t	(i), j, old_size, new_size, start;
 
   init_var(str, &i, &j, &old_size, &condition, &flag);
-	if(!(result = (char *)ft_calloc((old_size), 1)))
+	if(!(result = (char *)gc_calloc((old_size), 1)))
 		return (NULL);
 	while (str[i])
 	{
@@ -93,7 +93,7 @@ char	*expand_env(char *str)
       if (!string)
         return(NULL);
 			valeur = getenv(string);
-			free(string);
+			// No need to free GC memory
 			if(valeur)
 			{
         make_the_envirement(&result, valeur, &old_size, &new_size, flag, &j);
