@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 15:30:28 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/28 16:37:44 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,22 +146,22 @@ t_command	*parsing_command(t_token *token, t_data **data)
 		}
 		else if (current->type == TOKEN_REDIR_IN)
 		{
-			if (!handle_redir_in(&current, current_cmd, first_cmd, data))
+			if (!handle_redir_in(&current, current_cmd, data))
 				return (NULL);
 		}
 		else if (current->type == TOKEN_REDIR_OUT)
 		{
-			if (!handle_redir_out(&current, current_cmd, first_cmd, data))
+			if (!handle_redir_out(&current, current_cmd))
 				return (NULL);
 		}
 		else if (current->type == TOKEN_REDIR_APPEND)
 		{
-			if (!handle_redir_append(&current, current_cmd, first_cmd, data))
+			if (!handle_redir_append(&current, current_cmd))
 				return (NULL);
 		}
 		else if (current->type == TOKEN_HERDOC)
 		{
-			if (!handle_heredoc(&current, current_cmd, first_cmd, data, &i))
+			if (!handle_heredoc(&current, current_cmd, &i))
 				return (NULL);
 		}
 		else if (current->type == TOKEN_WORD)

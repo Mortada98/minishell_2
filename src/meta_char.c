@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   meta_char.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 16:21:41 by helfatih          #+#    #+#             */
+/*   Updated: 2025/07/28 16:42:25 by helfatih         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
-#include <string.h>
 
 int	handle_pipe(t_token **current, t_command **current_cmd,
 		t_command *first_cmd, t_data **data)
@@ -27,13 +38,8 @@ int	handle_pipe(t_token **current, t_command **current_cmd,
 	return (1);
 }
 
-int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd,
-		t_data **data)
+int	handle_redir_in(t_token **current, t_command *cmd, t_data **data)
 {
-	char	**new_file_input;
-	int		j;
-
-	(void)first_cmd;
 	if (!(*current)->next)
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
@@ -47,39 +53,20 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_command *first_cmd,
 		set_status(2);
 		return (0);
 	}
-	new_file_input = gc_malloc(sizeof(char *) * ((*data)->count_red_in + 2));
-	if (!new_file_input)
-	{
+	if (red_in_realloc(cmd, data, current) == 0)
 		return (0);
-	}
-	if (cmd->file_input)
-	{
-		for (j = 0; j < (*data)->count_red_in; j++)
-			new_file_input[j] = cmd->file_input[j];
-	}
-	cmd->file_input = new_file_input;
-	cmd->file_input[(*data)->count_red_in] = gc_strdup((*current)->next->av);
-	if (!cmd->file_input[(*data)->count_red_in])
-	{
-		return (0);
-	}
-	cmd->file_input[(*data)->count_red_in + 1] = NULL;
-	(*data)->count_red_in++;
 	(*current) = (*current)->next->next;
 	return (1);
 }
 
-int	handle_redir_out(t_token **current, t_command *cmd, t_command *first_cmd,
-		t_data **data)
+int	handle_redir_out(t_token **current, t_command *cmd)
 {
 	int	fd;
 
-	(void)first_cmd;
-	(void)data;
 	if (!(*current)->next)
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
-		(*data)->exit = 2;
+		set_status(2);
 		return (0);
 	}
 	if ((*current)->next->type != TOKEN_WORD)
@@ -91,29 +78,20 @@ int	handle_redir_out(t_token **current, t_command *cmd, t_command *first_cmd,
 	}
 	cmd->file_output = gc_strdup((*current)->next->av);
 	if (!cmd->file_output)
-	{
 		return (0);
-	}
 	fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-	{
-		printf("minishell: %s: \n", cmd->file_output);
 		return (0);
-	}
 	close(fd);
 	cmd->append = 0;
 	(*current) = (*current)->next->next;
-	(*data)->exit = 0;
 	return (1);
 }
 
-int	handle_redir_append(t_token **current, t_command *cmd, t_command *first_cmd,
-		t_data **data)
+int	handle_redir_append(t_token **current, t_command *cmd)
 {
 	int	fd;
 
-	(void)first_cmd;
-	(void)data;
 	if (!(*current)->next)
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
@@ -129,29 +107,18 @@ int	handle_redir_append(t_token **current, t_command *cmd, t_command *first_cmd,
 	}
 	cmd->file_output = gc_strdup((*current)->next->av);
 	if (!cmd->file_output)
-	{
 		return (0);
-	}
 	fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-	{
-		printf("minishell: %s: \n", cmd->file_output);
 		return (0);
-	}
 	close(fd);
 	cmd->append = 1;
 	(*current) = (*current)->next->next;
 	return (1);
 }
 
-int	handle_heredoc(t_token **current, t_command *cmd, t_command *first_cmd,
-		t_data **data, int *i)
+int	handle_heredoc(t_token **current, t_command *cmd, int *i)
 {
-	char	**new_herdoc;
-	int		j;
-
-	(void)first_cmd;
-	(void)data;
 	if (!(*current)->next)
 	{
 		printf("minishell: syntax error near unexpected token `newline'\n");
@@ -165,24 +132,8 @@ int	handle_heredoc(t_token **current, t_command *cmd, t_command *first_cmd,
 		set_status(2);
 		return (0);
 	}
-	new_herdoc = gc_malloc(sizeof(char *) * (*i + 2));
-	if (!new_herdoc)
-	{
+	if (heredoc_realloc(i, cmd, current) == 0)
 		return (0);
-	}
-	if (cmd->herdoc)
-	{
-		for (j = 0; j < *i; j++)
-			new_herdoc[j] = cmd->herdoc[j];
-	}
-	cmd->herdoc = new_herdoc;
-	cmd->herdoc[(*i)] = gc_strdup((*current)->next->av);
-	if (!cmd->herdoc[*i])
-	{
-		return (0);
-	}
-	cmd->herdoc[*i + 1] = NULL;
-	(*i)++;
 	(*current) = (*current)->next->next;
 	return (1);
 }

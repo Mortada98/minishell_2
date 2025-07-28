@@ -114,15 +114,15 @@ static void	my_server(int ig)
 	if (ig == SIGINT)
 	{
 		close(0);
-		g_value = 1;
-		write(1, "\n", 1);
+		g_value = SIGINT;
+		write(1, "^C", 2);
 	}
 }
 
 int	herdoc_condition_2(t_command **cmd, t_data **data)
 {
 	(void)data;
-	if (g_value == 1)
+	if (g_value == SIGINT)
 	{
 		(*cmd)->file = true;
 		set_status(130);

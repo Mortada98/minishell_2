@@ -24,3 +24,6 @@ drwxr-xr-x 2 mbouizak 2024_rabat   4096 Jul 28 10:15 src
 -rw-r--r-- 1 mbouizak 2024_rabat 347383 Jul 28 09:59 valgrind_output.log
 -rwxr-xr-x 1 mbouizak 2024_rabat   2934 Jul 28 10:01 valgrind_test.sh
 -rw-r--r-- 1 mbouizak 2024_rabat   3922 Jul 28 01:01 WORKING_GARBAGE_COLLECTOR.md
+
+
+ctrl +c ->>> handle
