@@ -1,5 +1,7 @@
 NAME = minishell
 
+#HELLO
+
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
