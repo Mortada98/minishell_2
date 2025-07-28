@@ -9,7 +9,8 @@ void	handle_dollar(t_token **token, char *line, t_data **data)
 	}
 	(*data)->start = (*data)->end;
 	(*data)->end++;
-	while ((ft_isalnum(line[(*data)->end]) || line[(*data)->end] == '_') && line[(*data)->end])
+	while ((ft_isalnum(line[(*data)->end]) || line[(*data)->end] == '_')
+		&& line[(*data)->end])
 		(*data)->end++;
 	if ((*data)->end > (*data)->start)
 	{
@@ -20,21 +21,22 @@ void	handle_dollar(t_token **token, char *line, t_data **data)
 
 void	handle_special_quot(t_token **token, char *line, t_data **data)
 {
-  char q;
+	char	q;
 
-	if (line[(*data)->start] == '$' && (line[(*data)->end] == '\"' || line[(*data)->end] == '\''))
+	if (line[(*data)->start] == '$' && (line[(*data)->end] == '\"'
+			|| line[(*data)->end] == '\''))
 		(*data)->start = (*data)->end;
 	if ((*data)->end > (*data)->start)
-  {
-    if (line[(*data)->end - 1] == '$')
-    {
-      (*data)->end -= 1;
-		  handle_word_token(token, line, data);
-      (*data)->end++;
-    }
-    else
-      handle_word_token(token, line, data);
-  }
+	{
+		if (line[(*data)->end - 1] == '$')
+		{
+			(*data)->end -= 1;
+			handle_word_token(token, line, data);
+			(*data)->end++;
+		}
+		else
+			handle_word_token(token, line, data);
+	}
 	(*data)->start = (*data)->end;
 	q = line[(*data)->end];
 	(*data)->end++;
@@ -54,32 +56,28 @@ void	handle_white_spaces(t_token **token, char *line, t_data **data)
 	(*data)->start = (*data)->end;
 }
 
-bool  check_somthing(char *word)
+bool	check_somthing(char *word)
 {
 	if (!is_closed_quotes(word))
 	{
-		printf ("minishell : the quote does not close!\n");
+		printf("minishell : the quote does not close!\n");
 		set_status(0);
-		return(false);
+		return (false);
 	}
 	return (true);
 }
 
 void	handle_some_cases(t_token **token, char *line, t_data **data)
 {
-  if ((*data)->end > (*data)->start)
-  {
-    handle_word_token(token, line, data);
-    (*data)->start = (*data)->end;
-  }
+	if ((*data)->end > (*data)->start)
+	{
+		handle_word_token(token, line, data);
+		(*data)->start = (*data)->end;
+	}
 	if (line[(*data)->end + 1] == '?')
 	{
 		(*data)->end += 2;
 		handle_word_token(token, line, data);
 		(*data)->start = (*data)->end;
 	}
-	// else if (line[(*data)->end + 1] == '!')
-	// {
-	// 	*start = (*i) += 2;
-	// }
 }

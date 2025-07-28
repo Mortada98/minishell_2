@@ -1,6 +1,7 @@
 
 
-// void	handle_word_token(t_token **token, int start, char *line, int *i, t_data **data)
+// void	handle_word_token(t_token **token, int start, char *line, int *i,
+		t_data **data)
 // {
 //   bool  should_join = false;
 //   t_token *new;
@@ -14,7 +15,7 @@
 //     mix(&should_join, line, i);
 //     word = make_content(line, i, start, data);
 //     if (!word)
-//       return;
+//       return ;
 //     convert_exit_status(word);
 //     if (word && *word != '\0')
 //     {
@@ -40,7 +41,7 @@
 //       {
 //         make_list(word, token, value);
 //         free(word);
-//         return;
+//         return ;
 //       }
 //       new = creat_token(word, value, should_join);
 //       if (new)

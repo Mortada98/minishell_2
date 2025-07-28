@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-// #include <readline/readline.h>
+#include "../include/minishell.h"
 
 static size_t	count_words(char const *s, char c)
 {
@@ -57,7 +57,7 @@ static void	set_mem(char **tab, char const *s, char c)
 			count++;
 		if (count > 0)
 		{
-			tab[i] = malloc(sizeof(char) * (count + 1));
+			tab[i] = gc_malloc(sizeof(char) * (count + 1));
 			if (!tab[i])
 				return ;
 			fill_tab(tab[i], (s + index), c);
@@ -75,8 +75,10 @@ char	**ft_split(char const *s, char c)
 	size_t	words;
 	char	**tab;
 
+	if (!s)
+		return (NULL);
 	words = count_words(s, c);
-	tab = malloc(sizeof(char *) * (words + 1));
+	tab = gc_malloc(sizeof(char *) * (words + 1));
 	if (!tab)
 		return (NULL);
 	set_mem(tab, s, c);

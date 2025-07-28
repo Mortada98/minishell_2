@@ -1,10 +1,11 @@
 #include "../include/minishell.h"
 
+
 static char	*get_path_display(void)
 {
-	char	*pwd;
-	char	*home;
-	char	*path;
+	char *pwd;
+	char *home;
+	char *path;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
@@ -13,7 +14,7 @@ static char	*get_path_display(void)
 	if (home && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
 		path = gc_strjoin("~", pwd + ft_strlen(home));
-		free(pwd);  // pwd is from getcwd, not GC
+		free(pwd);
 	}
 	else
 		path = pwd;
@@ -22,9 +23,9 @@ static char	*get_path_display(void)
 
 static char	*get_user_display(void)
 {
-	char	*user;
-	char	*base;
-	char	*full;
+	char *user;
+	char *base;
+	char *full;
 
 	user = getenv("USER");
 	if (!user)
@@ -32,16 +33,16 @@ static char	*get_user_display(void)
 	base = gc_strjoin("\033[3;46m", user);
 	if (!base)
 		return (NULL);
-	full = gc_strjoin(base, "@shell\033[0m\033[1;33m | \033[1;32m");  // "\033[0m" = reset - "\033[1;33m" = bold yellow = "\033[1;32m" = bold green
+	full = gc_strjoin(base, "@shell\033[0m\033[1;33m | \033[1;32m");
 	return (full);
 }
 
 char	*promt(void)
 {
-	char	*prompt;
-	char	*path;
-	char	*user;
-	char	*p_arrow;
+	char *prompt;
+	char *path;
+	char *user;
+	char *p_arrow;
 
 	path = get_path_display();
 	if (!path)
