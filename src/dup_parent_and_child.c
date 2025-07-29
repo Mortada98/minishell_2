@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 17:20:43 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/29 12:20:02 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 		close(saved_stdout);
 		close(saved_stdin);
 		close(*fd1);
+		gc_cleanup();
+		rl_clear_history();
 		exit(get_status());
 	}
 	my_echo(*cmd);
@@ -75,9 +77,10 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 }
 
 void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
-		t_data *data)
+		t_data *data, int *fd1, int *fd2)
 {
 	int(saved_stdout), saved_stdin, flags;
+	int	error = 0;
 	if ((*cmd)->file_output)
 	{
 		if (is_directory_parent(cmd))
@@ -86,7 +89,17 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
 	open_and_duplicate(cmd, &flags, fd_out);
-	my_exit_child(cmd, data);
+	my_exit_child(cmd, data, &error);
+	if (error == 1)
+	{
+		close(saved_stdin);
+		close(saved_stdout);
+		close(*fd1);
+		close(*fd2);
+		gc_cleanup();
+		rl_clear_history();
+		exit(get_status());
+	}
 	my_echo(*cmd);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);

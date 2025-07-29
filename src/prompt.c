@@ -8,13 +8,13 @@ static char	*get_path_display(void)
 	char *path;
 
 	pwd = getcwd(NULL, 0);
+	gc_register_external(pwd);
 	if (!pwd)
 		return (NULL);
 	home = getenv("HOME");
 	if (home && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
 		path = gc_strjoin("~", pwd + ft_strlen(home));
-		free(pwd);
 	}
 	else
 		path = pwd;

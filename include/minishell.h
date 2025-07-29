@@ -81,18 +81,18 @@ typedef struct s_data
 	bool				should_expand_inside;
 	int					count_herdoc;
 	int					count_red_in;
+	bool				ambigiouse;
+	int					flags;
 }						t_data;
 
 void					join_nodes(t_token **token);
-void					excute_redirection_of_child_builtin(t_command **cmd,
-							int *fd_out, t_data *data);
 void					excute_redirection_of_parent(t_command **cmd,
 							int *fd_out, t_data *data, int *fd1);
 int						is_directory_parent(t_command **cmd);
 void					open_and_duplicate(t_command **cmd, int *flags,
 							int *fd_out);
 int						is_number(char *str);
-void					my_exit_child(t_command **cmd, t_data *data);
+void					my_exit_child(t_command **cmd, t_data *data, int *error);
 void					my_exit(t_command **cmd, t_data *data, int *error);
 int						make_exit(t_command *cmd);
 int						validation(t_command *cmd);
@@ -115,9 +115,8 @@ void					my_handler(int sig);
 void					cleanup_exit_handler(int sig);
 void					free_array(char **arr);
 void					my_echo(t_command *cmd);
-void					my_exit_child(t_command **cmd, t_data *data);
 void					excute_redirection_of_child_builtin(t_command **cmd,
-							int *fd_out, t_data *data);
+							int *fd_out, t_data *data, int *fd1, int *fd2);
 void					check_exit_status(t_command *cmd, t_data **data);
 void					excute_herdoc_for_child(t_command **cmd, t_data **data);
 bool					built_in(char *cmd);

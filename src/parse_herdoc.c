@@ -16,7 +16,6 @@ static char	*generate_file_name(void)
 {
 	unsigned char	c;
 	char			*buffer;
-	static int		counter = 0;
 
 	int fd, i;
 	buffer = gc_malloc(11);
@@ -24,10 +23,7 @@ static char	*generate_file_name(void)
 		return (NULL);
 	fd = open("/dev/urandom", O_RDONLY);
 	if (fd < 0)
-		fd = open("/dev/random", O_RDONLY);
-	if (fd < 0)
 	{
-		snprintf(buffer, 11, "hd_%06d", counter++);
 		return (buffer);
 	}
 	i = 0;

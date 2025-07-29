@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 18:27:05 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 00:42:28 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 			{
 				if (access(temp_cmd->file_input[i], R_OK) != 0)
 				{
-					printf("bash: %s: No such file or directory\n",
+					printf("minishell: %s: No such file or directory\n",
 						temp_cmd->file_input[i]);
 					set_status(1);
 					dup2(saved_stdin, 0);
@@ -163,8 +163,12 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 			{
 				if (built_in(curr->args[0]))
 				{
-					excute_redirection_of_child_builtin(&curr, &fd_out, *data);
-					exit((*data)->exit);
+					close(save);
+					excute_redirection_of_child_builtin(&curr, &fd_out, *data, &saved_stdin, &save);
+					close(saved_stdin);
+					gc_cleanup();
+					rl_clear_history();
+					exit(get_status());
 				}
 				command = get_command(curr->args[0], env);
 				if (!command)
@@ -293,8 +297,7 @@ void	make_prompt(char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		data = malloc(sizeof(t_data));
-		gc_register_external(data);
+		data = gc_malloc(sizeof(t_data));
 		if (!data)
 		{
 			printf("minishell: memory allocation failed\n");
@@ -306,7 +309,7 @@ void	make_prompt(char **env)
 		{
 			printf("exit\n");
 			gc_cleanup();
-			// gc_cleanup_partial();
+			//gc_cleanup_partial();
 			// free(data);
 			return ;
 		}
@@ -323,11 +326,11 @@ void	make_prompt(char **env)
 			{
 				continue ;
 			}
+			if (data->flags)
+			{
+				continue;
+			}
 			join_nodes(&token);
-			// if (logic_of_meta(token, &data) == false)
-			// {
-			// 	continue ;
-			// }
 			cmd = parsing_command(token, &data);
 			if (!cmd)
 				continue ;
@@ -366,11 +369,11 @@ void	make_prompt(char **env)
 					if (check_cmd->args && check_cmd->args[0])
 					{
 						has_command = true;
-						break ;
+						break;
 					}
 					check_cmd = check_cmd->next;
 				}
-				if (has_command)
+				if (has_command || cmd->file_input[0])
 				{
 					execute_command(cmd, env, &data);
 				}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/07/28 15:11:47 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 00:29:07 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,16 +227,21 @@ void	check_the_last_element(t_token **token, t_data **data)
 	t_token	*cur;
 
 	cur = *token;
-	if (!*token || !(*token)->next)
+	if (!*token)
 		return ;
+	if (cur->type == TOKEN_HERDOC)
+	{
+		(*data)->should_expand_outside = true;
+		return;
+	}
 	while (cur->next)
 	{
 		cur = cur->next;
 	}
 	if (cur->type == TOKEN_HERDOC)
 		(*data)->should_expand_outside = true;
-	else
-		(*data)->should_expand_outside = false;
+	if (cur->type == TOKEN_REDIR_IN)
+		(*data)->ambigiouse = true;
 }
 
 void	convert_exit_status(char **word)
@@ -272,6 +277,22 @@ char	*make_content(char *line, t_data **data)
 	return (word);
 }
 
+static size_t	count_word(char const *s, char c, char k)
+{
+	size_t	words;
+	size_t	i;
+
+	words = 0;
+	i = 0;
+	while (s[i])
+	{
+		if ((s[i] != c && s[i]) && (s[i + 1] == c || s[i + 1] == k || s[i + 1] == '\0'))
+			words++;
+		i++;
+	}
+	return (words);
+}
+
 void	handle_word_token(t_token **token, char *line, t_data **data)
 {
 	bool			should_join;
@@ -283,6 +304,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 	flag = 0;
 	char *str, *word;
 	value = TOKEN_WORD;
+	(*data)->should_expand_outside = false;
 	check_the_last_element(token, data);
 	if ((*data)->end > (*data)->start)
 	{
@@ -294,7 +316,19 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 		if (word && *word != '\0')
 		{
 			if (!(*data)->should_expand_outside)
+			{
 				str = expand_env(word);
+				if (strcmp(str, word) != 0)
+				{
+					int count = count_word(str, ' ', '\t');
+					if ((*data)->ambigiouse && (count > 1 || count == 0))
+					{
+						printf("minishell : %s: ambiguous redirect\n", word);
+						(*data)->flags = 1;
+						return ;
+					}
+				}
+			}
 			else
 				str = word;
 			join_expansion(str, token);
