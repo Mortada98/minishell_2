@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../include/minishell.h"
 
 int update_existing_var(char *name, char *value, char **env)
 {
@@ -17,7 +17,7 @@ int update_existing_var(char *name, char *value, char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (strncmp(env[i], name, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
 		{
 			free(env[i]);
 			env[i] = new_entry;
@@ -29,7 +29,7 @@ int update_existing_var(char *name, char *value, char **env)
 	return (0);
 }
 
-int export(char *arg, char ***env)
+int my_export(char *arg, char ***env)
 {
 	char	*equal_sign;
 	char	*name;
@@ -38,7 +38,7 @@ int export(char *arg, char ***env)
 	char	*tmp;
 
 	if (!arg || !*arg)
-		return (printf_env(*env), 1);
+		return (print_env(*env), 1);
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
 		return (1);
@@ -60,7 +60,7 @@ int export(char *arg, char ***env)
 	return (1);
 }
 
-int unset(char *name, char ***env)
+int my_unset(char *name, char ***env)
 {
 	int		i = 0, j = 0;
 	size_t	len = ft_strlen(name);
@@ -74,7 +74,7 @@ int unset(char *name, char ***env)
 	i = 0;
 	while ((*env)[i])
 	{
-		if (!(strncmp((*env)[i], name, len) == 0 && (*env)[i][len] == '='))
+		if (!(ft_strncmp((*env)[i], name, len) == 0 && (*env)[i][len] == '='))
 			new_env[j++] = (*env)[i];
 		else
 			free((*env)[i]);
@@ -84,4 +84,21 @@ int unset(char *name, char ***env)
 	free(*env);
 	*env = new_env;
 	return (1);
+}
+
+void	my_pwd(void)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd)
+	{
+		printf("%s\n", cwd);
+		free(cwd);
+	}
+	else
+	{
+		perror("pwd");
+		set_status(1);
+	}
 }

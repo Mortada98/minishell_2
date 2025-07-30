@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:24:34 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 13:55:27 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:57:44 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_token_type	get_token_type(char *str)
 		return (TOKEN_WORD);
 }
 
-t_token	*tokenize(char *line, t_data **data)
+t_token	*tokenize(char *line, t_data **data, char **env)
 {
 	t_token	*token;
 
@@ -42,29 +42,29 @@ t_token	*tokenize(char *line, t_data **data)
 		if (line[(*data)->end] == '$' && (ft_isalnum(line[(*data)->end + 1])
 				|| line[(*data)->end + 1] == '_'))
 		{
-			handle_dollar(&token, line, data);
+			handle_dollar(&token, line, data, env);
 			continue ;
 		}
 		if (line[(*data)->end] == '$' && !ft_isalnum(line[(*data)->end + 1]))
 		{
-			handle_some_cases(&token, line, data);
+			handle_some_cases(&token, line, data, env);
 		}
 		if (line[(*data)->end] == '|' || line[(*data)->end] == '<'
 			|| line[(*data)->end] == '>')
 		{
-			handle_word_token(&token, line, data);
+			handle_word_token(&token, line, data, env);
 			(*data)->end = handle_speciale_token(&token, line, (*data)->end,
 					data);
 			(*data)->start = (*data)->end;
 		}
 		else if (line[(*data)->end] == '\"' || line[(*data)->end] == '\'')
-			handle_special_quot(&token, line, data);
+			handle_special_quot(&token, line, data, env);
 		else if (line[(*data)->end] == ' ' || line[(*data)->end] == '\t')
-			handle_white_spaces(&token, line, data);
+			handle_white_spaces(&token, line, data, env);
 		else
 			(*data)->end++;
 	}
-	handle_word_token(&token, line, data);
+	handle_word_token(&token, line, data, env);
 	return (token);
 }
 

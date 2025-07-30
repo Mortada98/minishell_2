@@ -34,7 +34,7 @@ static char	*generate_file_name(void)
 	return (buffer);
 }
 
-static void	make_loop(t_command **cmd, int *fd, int i, t_data **data)
+static void	make_loop(t_command **cmd, int *fd, int i, t_data **data, char **env)
 {
 	char	*line;
 	char	*str;
@@ -63,7 +63,7 @@ static void	make_loop(t_command **cmd, int *fd, int i, t_data **data)
 		str = line;
 		if (!(*data)->should_expand_inside)
 		{
-			expanded_line = expand_env(str);
+			expanded_line = expand_env(str, env);
 			if (expanded_line && expanded_line != str)
 			{
 				write(*fd, expanded_line, ft_strlen(expanded_line));
@@ -135,7 +135,7 @@ void	herdoc_condition_1(t_command **cmd, t_data **data, char *join, int i)
 		unlink(join);
 }
 
-void	excute_herdoc_for_child(t_command **cmd, t_data **data)
+void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)
 {
 	int	save;
 
@@ -153,7 +153,7 @@ void	excute_herdoc_for_child(t_command **cmd, t_data **data)
 			break ;
 		}
 		signal(SIGINT, my_server);
-		make_loop(cmd, &fd, i, data);
+		make_loop(cmd, &fd, i, data, env);
 		close(fd);
 		herdoc_condition_1(cmd, data, join, i);
 		if (!herdoc_condition_2(cmd, data))

@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 17:36:37 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:57:44 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	is_number(char *str)
 	return (1);
 }
 
-void	execute_command(t_command *cmd, char **env, t_data **data)
+void	execute_command(t_command *cmd, char ***env, t_data **data)
 {
 	int			prev_fd;
 	int			fd[2];
@@ -174,7 +174,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 					rl_clear_history();
 					exit(get_status());
 				}
-				command = get_command(curr->args[0], env);
+				command = get_command(curr->args[0], *env);
 				if (!command)
 				{
 					close(saved_stdin);
@@ -185,7 +185,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 					set_status(127);
 					exit(127);
 				}
-				if (execve(command, curr->args, env) != 0)
+				if (execve(command, curr->args, *env) != 0)
 				{
 					close(saved_stdin);
 					close(save);
@@ -285,7 +285,7 @@ void	my_handler(int sig)
 	}
 }
 
-void	make_prompt(char **env)
+void	make_prompt(char ***env)
 {
 	char		*line;
 	t_token		*token;
@@ -308,7 +308,7 @@ void	make_prompt(char **env)
 			return ;
 		}
 		ft_memset(data, 0, sizeof(t_data));
-		line = readline(prompt(env));
+		line = readline(prompt(*env));
 		if (!line)
 		{
 			printf("exit\n");
@@ -325,7 +325,7 @@ void	make_prompt(char **env)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			token = tokenize(line, &data);
+			token = tokenize(line, &data, *env);
 			if (!token)
 			{
 				continue ;
@@ -348,7 +348,7 @@ void	make_prompt(char **env)
 					while (temp_cmd->herdoc[herdoc_count])
 						herdoc_count++;
 					data->count_herdoc = herdoc_count;
-					excute_herdoc_for_child(&temp_cmd, &data);
+					excute_herdoc_for_child(&temp_cmd, &data, *env);
 					if (g_value == SIGINT)
 					{
 						heredoc_interrupted = true;
@@ -401,5 +401,5 @@ int	main(int ac, char **av, char **env)
 	rl_catch_signals = 0;
 	char **my_env;
 	my_env = copy_env(env);
-	make_prompt(my_env);
+	make_prompt(&my_env);
 }

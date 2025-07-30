@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 10:03:21 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:45:03 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*split_var(size_t *i, char *str, size_t *start)
 	return (string);
 }
 
-char	*expand_env(char *str)
+char	*expand_env(char *str, char **env)
 {
 	char *result, *string, *valeur, *status_str;
 	bool condition, flag;
@@ -107,7 +107,7 @@ char	*expand_env(char *str)
 			string = split_var(&i, str, &start);
 			if (!string)
 				return (NULL);
-			valeur = getenv(string);
+			valeur = get_env(string, env);
 			if (valeur)
 			{
 				make_the_envirement(&result, valeur, &old_size, &new_size, flag,

@@ -69,19 +69,50 @@ bool	built_in(char *cmd)
 	}
 }
 
-void	execute_builtin_command(t_command *cmd, char **env)
+void	execute_builtin_command(t_command *cmd, char ***env)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		my_echo(cmd);
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 	{
 		if (cmd->args[1])
-			cd(cmd->args[1], env);
+			cd(cmd->args[1], *env);
 		else
-			cd(NULL, env);
+			cd(NULL, *env);
 	}
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
-		print_env(env);
+		print_env(*env);
+	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
+		my_pwd();
+	else if (ft_strcmp(cmd->args[0], "export") == 0)
+	{
+		if (cmd->args[1])
+		{
+			int i = 1;
+			while (cmd->args[i])
+			{
+				my_export(cmd->args[i], env);
+				i++;
+			}
+		}
+		else
+		{
+			// No arguments, print all environment variables in export format
+			print_env(*env);
+		}
+	}
+	else if (ft_strcmp(cmd->args[0], "unset") == 0)
+	{
+		if (cmd->args[1])
+		{
+			int i = 1;
+			while (cmd->args[i])
+			{
+				my_unset(cmd->args[i], env);
+				i++;
+			}
+		}
+	}
 }
 
 void	free_2D_array(char **str)

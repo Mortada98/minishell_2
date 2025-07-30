@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/07/30 17:53:12 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:46:06 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ static size_t	count_word(char const *s, char c, char k)
 	return (words);
 }
 
-void	handle_word_token(t_token **token, char *line, t_data **data)
+void	handle_word_token(t_token **token, char *line, t_data **data, char **env)
 {
 	bool			should_join;
 	t_token			*new;
@@ -332,7 +332,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 		{
 			if (!(*data)->should_expand_outside)
 			{
-				str = expand_env(word);
+				str = expand_env(word, env);
 				if (ft_strcmp(str, word) != 0)
 				{
 					count = count_word(str, ' ', '\t');

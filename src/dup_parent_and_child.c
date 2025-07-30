@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 17:36:37 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 20:34:22 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	is_directory_parent(t_command **cmd)
 	return (0);
 }
 
-void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, int *fd1, char **env)
+void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, int *fd1, char ***env)
 {
 	int(saved_stdout), saved_stdin, flags;
 	int error = 0;
@@ -77,7 +77,7 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 }
 
 void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
-		t_data *data, int *fd1, int *fd2, char **env)
+		t_data *data, int *fd1, int *fd2, char ***env)
 {
 	(void)fd2;
 	int(saved_stdout), saved_stdin, flags;

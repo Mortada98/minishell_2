@@ -93,7 +93,7 @@ typedef struct s_data
 
 void					join_nodes(t_token **token);
 void					excute_redirection_of_parent(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1, char **env);
+							int *fd_out, t_data *data, int *fd1, char ***env);
 int						is_directory_parent(t_command **cmd);
 void					open_and_duplicate(t_command **cmd, int *flags,
 							int *fd_out);
@@ -122,24 +122,24 @@ void					cleanup_exit_handler(int sig);
 void					free_array(char **arr);
 void					my_echo(t_command *cmd);
 void					excute_redirection_of_child_builtin(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1, int *fd2, char **env);
+							int *fd_out, t_data *data, int *fd1, int *fd2, char ***env);
 void					check_exit_status(t_command *cmd, t_data **data);
-void					excute_herdoc_for_child(t_command **cmd, t_data **data);
+void					excute_herdoc_for_child(t_command **cmd, t_data **data, char **env);
 bool					built_in(char *cmd);
-void					execute_builtin_command(t_command *cmd, char **env);
+void					execute_builtin_command(t_command *cmd, char ***env);
 void					free_2D_array(char **str);
 char					*get_command(char *cmd, char **env);
-void					execute_command(t_command *cmd, char **env,
+void					execute_command(t_command *cmd, char ***env,
 							t_data **data);
 void					handle_dollar(t_token **token, char *line,
-							t_data **data);
+							t_data **data, char **env);
 void					handle_special_quot(t_token **token, char *line,
-							t_data **data);
+							t_data **data, char **env);
 void					handle_white_spaces(t_token **token, char *line,
-							t_data **data);
+							t_data **data, char **env);
 bool					check_somthing(char *word);
 void					handle_some_cases(t_token **token, char *line,
-							t_data **data);
+							t_data **data, char **env);
 char					*manual_realloc(char *old, size_t len);
 int						handle_pipe(t_token **current, t_command **current_cmd,
 							t_command *first_cmd, t_data **data);
@@ -158,7 +158,7 @@ void					print_commands(t_command *cmd);
 void					print_token(t_token *token);
 bool					special_character(char *str);
 char					*prompt(char **env);
-void					make_prompt(char **env);
+void					make_prompt(char ***env);
 bool					special_character(char *str);
 t_token					*creat_token(char *line, t_token_type type,
 							bool should_join);
@@ -167,16 +167,16 @@ void					handle_quote(bool *in_quot, char *quot_char, int *i,
 void					add_token(t_token **token, t_token *new_token);
 bool					is_closed_quotes(char *str);
 void					handle_word_token(t_token **token, char *line,
-							t_data **data);
+							t_data **data, char **env);
 bool					logic_of_meta(t_token *cmd, t_data **data);
 t_token_type			get_token_type(char *str);
 int						handle_speciale_token(t_token **token, char *line,
 							int i, t_data **data);
-t_token					*tokenize(char *line, t_data **data);
+t_token					*tokenize(char *line, t_data **data, char **env);
 void					append_arg(t_command *cmd, char *str, t_data **data);
 t_command				*create_command(void);
 void					free_cmd(t_command *cmd);
-char					*expand_env(char *str);
+char					*expand_env(char *str, char **env);
 t_command				*parsing_command(t_token *token, t_data **data);
 int						is_space(char c);
 void					free_token(t_token **token);
@@ -188,6 +188,10 @@ void					cd(char *cmd, char **env);
 void					update_oldpwd(char **env);
 void					update_pwd(char **env);
 int						add_env_variable(char *new_var, char ***env);
+int						my_export(char *arg, char ***env);
+int						my_unset(char *name, char ***env);
+void					my_pwd(void);
+int						update_existing_var(char *name, char *value, char **env);
 void					print_env(char **env);
 
 // Garbage Collector functions
