@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:01:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/29 11:41:13 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:53:12 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	my_exit(t_command **cmd, t_data *data, int *error)
 	int	i;
 
 	(void)data;
-	if (strcmp((*cmd)->args[0], "exit") == 0)
+	if (ft_strcmp((*cmd)->args[0], "exit") == 0)
 	{
 		printf("exit\n");
 		i = make_exit(*cmd);
@@ -84,7 +84,7 @@ void	my_exit_child(t_command **cmd, t_data *data, int	*error)
 	int i;
 
 	(void)data;
-	if (strcmp((*cmd)->args[0], "exit") == 0)
+	if (ft_strcmp((*cmd)->args[0], "exit") == 0)
 	{
 		i = make_exit(*cmd);
 		if (i == 0)

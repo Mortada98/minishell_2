@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 14:05:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:36:37 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	is_directory_parent(t_command **cmd)
 	return (0);
 }
 
-void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, int *fd1)
+void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, int *fd1, char **env)
 {
 	int(saved_stdout), saved_stdin, flags;
 	int error = 0;
@@ -69,7 +69,7 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 		rl_clear_history();
 		exit(get_status());
 	}
-	my_echo(*cmd);
+	execute_builtin_command(*cmd, env);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
@@ -77,7 +77,7 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 }
 
 void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
-		t_data *data, int *fd1, int *fd2)
+		t_data *data, int *fd1, int *fd2, char **env)
 {
 	(void)fd2;
 	int(saved_stdout), saved_stdin, flags;
@@ -101,7 +101,7 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 		rl_clear_history();
 		exit(get_status());
 	}
-	my_echo(*cmd);
+	execute_builtin_command(*cmd, env);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);

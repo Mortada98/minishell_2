@@ -56,7 +56,7 @@ static void	make_loop(t_command **cmd, int *fd, int i, t_data **data)
 		{
 			return ;
 		}
-		if (strcmp(line, (*cmd)->herdoc[i]) == 0)
+		if (ft_strcmp(line, (*cmd)->herdoc[i]) == 0)
 		{
 			return ;
 		}

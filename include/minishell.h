@@ -1,11 +1,17 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# ifndef COLOR_START
-#  define COLOR_START "\001\033[1;36m\002"
+# ifndef GREEN
+#  define GREEN "\001\033[1;32m\002"
 # endif
-# ifndef COLOR_RESET
-#  define COLOR_RESET "\001\033[1;33m\002"
+# ifndef BLUE
+#  define BLUE "\001\033[1;34m\002"
+# endif
+# ifndef WHITE
+#  define WHITE "\001\033[1;37m\002"
+# endif
+# ifndef YELLOW
+#  define YELLOW "\001\033[1;33m\002"
 # endif
 # include "../my_libft/libft.h"
 # include <dirent.h>
@@ -87,7 +93,7 @@ typedef struct s_data
 
 void					join_nodes(t_token **token);
 void					excute_redirection_of_parent(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1);
+							int *fd_out, t_data *data, int *fd1, char **env);
 int						is_directory_parent(t_command **cmd);
 void					open_and_duplicate(t_command **cmd, int *flags,
 							int *fd_out);
@@ -116,10 +122,11 @@ void					cleanup_exit_handler(int sig);
 void					free_array(char **arr);
 void					my_echo(t_command *cmd);
 void					excute_redirection_of_child_builtin(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1, int *fd2);
+							int *fd_out, t_data *data, int *fd1, int *fd2, char **env);
 void					check_exit_status(t_command *cmd, t_data **data);
 void					excute_herdoc_for_child(t_command **cmd, t_data **data);
 bool					built_in(char *cmd);
+void					execute_builtin_command(t_command *cmd, char **env);
 void					free_2D_array(char **str);
 char					*get_command(char *cmd, char **env);
 void					execute_command(t_command *cmd, char **env,
@@ -150,7 +157,7 @@ void					init_var(char *str, size_t *i, size_t *j,
 void					print_commands(t_command *cmd);
 void					print_token(t_token *token);
 bool					special_character(char *str);
-char					*promt(void);
+char					*prompt(char **env);
 void					make_prompt(char **env);
 bool					special_character(char *str);
 t_token					*creat_token(char *line, t_token_type type,
@@ -174,6 +181,13 @@ t_command				*parsing_command(t_token *token, t_data **data);
 int						is_space(char c);
 void					free_token(t_token **token);
 char					*remove_quotes(char *str);
+char					*get_env(char *name, char **env);
+char					**copy_env(char **env);
+char					*get_env(char *name, char **env);
+void					cd(char *cmd, char **env);
+void					update_oldpwd(char **env);
+void					update_pwd(char **env);
+int						add_env_variable(char *new_var, char ***env);
 
 // Garbage Collector functions
 t_gc					*gc_init(void);

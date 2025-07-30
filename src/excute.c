@@ -49,13 +49,28 @@ void	my_echo(t_command *cmd)
 
 bool	built_in(char *cmd)
 {
-	if (ft_strncmp(cmd, "exit", 4) == 0)
+	if (ft_strcmp(cmd, "exit") == 0)
 		return (true);
-	if (ft_strncmp(cmd, "echo", 5) == 0)
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (true);
+	if (ft_strcmp(cmd, "cd") == 0)
 		return (true);
 	else
 	{
 		return (false);
+	}
+}
+
+void	execute_builtin_command(t_command *cmd, char **env)
+{
+	if (ft_strcmp(cmd->args[0], "echo") == 0)
+		my_echo(cmd);
+	else if (ft_strcmp(cmd->args[0], "cd") == 0)
+	{
+		if (cmd->args[1])
+			cd(cmd->args[1], env);
+		else
+			cd(NULL, env);
 	}
 }
 

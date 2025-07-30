@@ -1,54 +1,67 @@
 #include "../include/minishell.h"
 
-
-static char	*get_path_display(void)
+static char	*get_path_display(char **env)
 {
-	char *pwd;
-	char *home;
-	char *path;
+	char	*pwd;
+	char	*home;
+	char	*path;
 
 	pwd = getcwd(NULL, 0);
-	gc_register_external(pwd);
 	if (!pwd)
 		return (NULL);
-	home = getenv("HOME");
+	home = get_env("HOME", env);
 	if (home && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
-		path = gc_strjoin("~", pwd + ft_strlen(home));
+		path = ft_strjoin("~", pwd + ft_strlen(home));
+		free(pwd);
 	}
 	else
 		path = pwd;
 	return (path);
 }
 
-static char	*get_user_display(void)
+static char	*get_user_display(char **env)
 {
-	char *user;
-	char *base;
-	char *full;
+	char	*user;
+	char	*base;
+	char	*full;
 
-	user = getenv("USER");
+	user = get_env("USER", env);
 	if (!user)
 		user = "unknown";
-	base = gc_strjoin("\033[3;46m", user);
+	base = ft_strjoin(BLUE, user);
 	if (!base)
 		return (NULL);
-	full = gc_strjoin(base, "@shell\033[0m\033[1;33m | \033[1;32m");
+	full = ft_strjoin(base, "@shell\033[0m\033[1;33m | \033[1;32m");
+	free(base);
 	return (full);
 }
 
-char	*promt(void)
+char	*prompt(char **env)
 {
-	char *prompt;
-	char *path;
-	char *user;
-	char *p_arrow;
+	char	*prompt;
+	char	*path;
+	char	*user;
+	char	*p_arrow;
 
-	path = get_path_display();
+	path = get_path_display(env);
 	if (!path)
 		return (NULL);
-	user = get_user_display();
-	p_arrow = gc_strjoin(path, "\e[1;33m ➜  \033[0m");
-	prompt = gc_strjoin(user, p_arrow);
+
+	user = get_user_display(env);
+	if (!user)
+		return (free(path), NULL);
+
+	p_arrow = ft_strjoin(path, "\e[1;33m ➜ \033[0m");
+	free(path);
+	if (!p_arrow)
+		return (free(user), NULL);
+
+	prompt = ft_strjoin(user, p_arrow);
+	free(user);
+	free(p_arrow);
+	if (!prompt)
+		return (NULL);
+
 	return (prompt);
 }

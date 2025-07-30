@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 16:37:14 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:36:37 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 	if (cmd && cmd->next == NULL && cmd->args && cmd->args[0]
 		&& built_in(cmd->args[0]))
 	{
-		excute_redirection_of_parent(&cmd, &fd_out, *data, &saved_stdin);
+		excute_redirection_of_parent(&cmd, &fd_out, *data, &saved_stdin, env);
 		dup2(saved_stdin, 0);
 		close(saved_stdin);
 		return ;
@@ -167,7 +167,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 			{
 				if (built_in(curr->args[0]))
 				{
-					excute_redirection_of_child_builtin(&curr, &fd_out, *data, &saved_stdin, &save);
+					excute_redirection_of_child_builtin(&curr, &fd_out, *data, &saved_stdin, &save, env);
 					close(save);
 					close(saved_stdin);
 					gc_cleanup();
@@ -308,7 +308,7 @@ void	make_prompt(char **env)
 			return ;
 		}
 		ft_memset(data, 0, sizeof(t_data));
-		line = readline(promt());
+		line = readline(prompt(env));
 		if (!line)
 		{
 			printf("exit\n");
@@ -399,5 +399,7 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	rl_catch_signals = 0;
-	make_prompt(env);
+	char **my_env;
+	my_env = copy_env(env);
+	make_prompt(my_env);
 }

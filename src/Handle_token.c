@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/07/30 13:57:35 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 17:53:12 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 			if (!(*data)->should_expand_outside)
 			{
 				str = expand_env(word);
-				if (strcmp(str, word) != 0)
+				if (ft_strcmp(str, word) != 0)
 				{
 					count = count_word(str, ' ', '\t');
 					if ((*data)->ambigiouse && (count > 1 || count == 0))
