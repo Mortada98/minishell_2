@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 11:48:09 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 12:33:54 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,14 +95,14 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 	has_command = false;
 	while (temp_cmd)
 	{
-		if (curr->args[0][0] == '\0')
+		if (temp_cmd->args[0][0] == '\0')
 		{
 			printf("minishell: '': command not found\n");
 		}
 		if (temp_cmd->args && temp_cmd->args[0] && temp_cmd->args[0][0] != '\0')
 		{
 			has_command = true;
-			break;
+			//break;
 		}
 		temp_cmd = temp_cmd->next;
 	}
