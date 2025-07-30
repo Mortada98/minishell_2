@@ -55,6 +55,14 @@ bool	built_in(char *cmd)
 		return (true);
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (true);
+	if (ft_strcmp(cmd, "pwd") == 0)
+		return (true);
+	if (ft_strcmp(cmd, "export") == 0)
+		return (true);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (true);
+	if (ft_strcmp(cmd, "env") == 0)
+		return (true);
 	else
 	{
 		return (false);
@@ -72,6 +80,8 @@ void	execute_builtin_command(t_command *cmd, char **env)
 		else
 			cd(NULL, env);
 	}
+	else if (ft_strcmp(cmd->args[0], "env") == 0)
+		print_env(env);
 }
 
 void	free_2D_array(char **str)

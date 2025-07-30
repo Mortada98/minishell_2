@@ -188,6 +188,7 @@ void					cd(char *cmd, char **env);
 void					update_oldpwd(char **env);
 void					update_pwd(char **env);
 int						add_env_variable(char *new_var, char ***env);
+void					print_env(char **env);
 
 // Garbage Collector functions
 t_gc					*gc_init(void);
