@@ -5,10 +5,29 @@ static char	*get_path_display(char **env)
 	char	*pwd;
 	char	*home;
 	char	*path;
+	char	*env_pwd;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
-		return (NULL);
+	{
+		// If getcwd fails (directory deleted), show (deleted) with last known path
+		env_pwd = get_env("PWD", env);
+		if (env_pwd)
+		{
+			path = ft_strjoin(env_pwd, " (deleted)");
+			home = get_env("HOME", env);
+			if (home && ft_strnstr(env_pwd, home, ft_strlen(env_pwd)))
+			{
+				char *temp = ft_strjoin("~", env_pwd + ft_strlen(home));
+				free(path);
+				path = ft_strjoin(temp, " (deleted)");
+				free(temp);
+			}
+		}
+		else
+			path = gc_strdup("(deleted)");
+		return (path);
+	}
 	home = get_env("HOME", env);
 	if (home && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
