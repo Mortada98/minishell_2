@@ -6,12 +6,11 @@
 /*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:24:34 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 17:27:40 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:55:27 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 t_token_type	get_token_type(char *str)
 {

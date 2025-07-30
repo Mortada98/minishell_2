@@ -1,16 +1,16 @@
 #include "../include/minishell.h"
 
-void	compare_newline(char *str, bool *j, int *i)
+void	compare_newline(char **str, bool *j, int *i)
 {
 	int	k;
 
 	k = 0;
-	if (str && ft_strncmp(str, "-n", 2) == 0)
+	while (str[*i] && ft_strncmp(str[*i], "-n", 2) == 0)
 	{
 		k = 1;
-		while (str[k])
+		while (str[*i][k])
 		{
-			if (str[k] != 'n')
+			if (str[*i][k] != 'n')
 			{
 				*j = false;
 				return ;
@@ -18,9 +18,9 @@ void	compare_newline(char *str, bool *j, int *i)
 			k++;
 		}
 		*j = true;
-	}
-	if (*j == true)
 		(*i)++;
+	}
+
 }
 
 void	my_echo(t_command *cmd)
@@ -35,7 +35,7 @@ void	my_echo(t_command *cmd)
 		printf("\n");
 		return ;
 	}
-	compare_newline(cmd->args[i], &j, &i);
+	compare_newline(cmd->args, &j, &i);
 	while (cmd->args[i])
 	{
 		ft_putstr_fd(cmd->args[i], 1);
@@ -91,6 +91,10 @@ char	*get_command(char *cmd, char **env)
 		{
 			return (gc_strdup(cmd));
 		}
+		if (access(cmd, F_OK) == 0)
+		{
+			return (gc_strdup(cmd));
+		}
 		return (NULL);
 	}
 	while (env[i])
@@ -110,6 +114,11 @@ char	*get_command(char *cmd, char **env)
 		complete_path = gc_strjoin(split_env[i], first_join);
 		if (access(complete_path, X_OK) == 0)
 		{
+			return (complete_path);
+		}
+		if (access	(complete_path, F_OK) == 0)
+		{
+			//printf("minishell: %s: Permission denied\n", complete_path);
 			return (complete_path);
 		}
 		i++;

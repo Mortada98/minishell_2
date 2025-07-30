@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/07/30 11:42:09 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 13:57:35 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../include/minishell.h"
 #include <stdbool.h>
@@ -78,7 +77,8 @@ void	init_variables(char *str, int *i, int *j, bool *in_quotes,
 
 char	*remove_quotes(char *str)
 {
-	int		i = 0, j;
+	int		i;
+	int		j;
 	bool	in_single;
 	bool	in_double;
 	char	*result;
@@ -232,13 +232,13 @@ void	check_the_last_element(t_token **token, t_data **data)
 	if (cur->type == TOKEN_HERDOC)
 	{
 		(*data)->should_expand_outside = true;
-		return;
+		return ;
 	}
-	if (cur->next == NULL && (cur->type == TOKEN_REDIR_APPEND || cur->type == TOKEN_REDIR_OUT
-		|| cur->type == TOKEN_REDIR_IN))
+	if (cur->next == NULL && (cur->type == TOKEN_REDIR_APPEND
+			|| cur->type == TOKEN_REDIR_OUT || cur->type == TOKEN_REDIR_IN))
 	{
 		(*data)->ambigiouse = true;
-		return;
+		return ;
 	}
 	else if (cur->next)
 	{
@@ -248,8 +248,9 @@ void	check_the_last_element(t_token **token, t_data **data)
 		}
 		if (cur->type == TOKEN_HERDOC)
 			(*data)->should_expand_outside = true;
-		else if ((cur->type == TOKEN_REDIR_APPEND || cur->type == TOKEN_REDIR_OUT
-		|| cur->type == TOKEN_REDIR_IN) && cur->next == NULL)
+		else if ((cur->type == TOKEN_REDIR_APPEND
+				|| cur->type == TOKEN_REDIR_OUT || cur->type == TOKEN_REDIR_IN)
+			&& cur->next == NULL)
 		{
 			(*data)->ambigiouse = true;
 		}
@@ -298,7 +299,8 @@ static size_t	count_word(char const *s, char c, char k)
 	i = 0;
 	while (s[i])
 	{
-		if ((s[i] != c && s[i]) && (s[i + 1] == c || s[i + 1] == k || s[i + 1] == '\0'))
+		if ((s[i] != c && s[i]) && (s[i + 1] == c || s[i + 1] == k || s[i
+				+ 1] == '\0'))
 			words++;
 		i++;
 	}
@@ -311,6 +313,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 	t_token			*new;
 	int				flag;
 	t_token_type	value;
+	int				count;
 
 	should_join = false;
 	flag = 0;
@@ -332,7 +335,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 				str = expand_env(word);
 				if (strcmp(str, word) != 0)
 				{
-					int count = count_word(str, ' ', '\t');
+					count = count_word(str, ' ', '\t');
 					if ((*data)->ambigiouse && (count > 1 || count == 0))
 					{
 						printf("minishell : %s: ambiguous redirect\n", word);
@@ -344,8 +347,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 			else
 				str = word;
 			join_expansion(str, token);
-
-			if ((str[0] != '"'  || str[0] != '\'') && str[0] == '\0')
+			if ((str[0] != '"' || str[0] != '\'') && str[0] == '\0')
 			{
 				str = NULL;
 				return ;

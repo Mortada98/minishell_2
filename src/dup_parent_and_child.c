@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 09:57:11 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 14:05:02 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 		t_data *data, int *fd1, int *fd2)
 {
+	(void)fd2;
 	int(saved_stdout), saved_stdin, flags;
 	int	error = 0;
 	if ((*cmd)->file_output)

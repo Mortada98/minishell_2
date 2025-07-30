@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 12:33:54 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/30 16:37:14 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 	has_command = false;
 	while (temp_cmd)
 	{
-		if (temp_cmd->args[0][0] == '\0')
+		if (temp_cmd->args && temp_cmd->args[0][0] == '\0')
 		{
 			printf("minishell: '': command not found\n");
 		}
@@ -167,8 +167,8 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 			{
 				if (built_in(curr->args[0]))
 				{
-					close(save);
 					excute_redirection_of_child_builtin(&curr, &fd_out, *data, &saved_stdin, &save);
+					close(save);
 					close(saved_stdin);
 					gc_cleanup();
 					rl_clear_history();
@@ -179,7 +179,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 				{
 					close(saved_stdin);
 					close(save);
-					fprintf(stderr, "minishell: %s: command not found\n",
+					printf("minishell: %s: command not found\n",
 						curr->args[0]);
 					gc_cleanup();
 					set_status(127);
