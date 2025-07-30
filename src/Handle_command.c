@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 16:37:44 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 10:03:21 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*split_var(size_t *i, char *str, size_t *start)
 
 char	*expand_env(char *str)
 {
-	char *result, *string, *valeur;
+	char *result, *string, *valeur, *status_str;
 	bool condition, flag;
 	size_t(i), j, old_size, new_size, start;
 	init_var(str, &i, &j, &old_size, &condition, &flag);
@@ -85,6 +85,22 @@ char	*expand_env(char *str)
 		return (NULL);
 	while (str[i])
 	{
+		if (condition && str[i] == '$' && str[i + 1] == '?')
+		{
+			status_str = ft_itoa(get_status());
+			if (status_str)
+			{
+				valeur = gc_strdup(status_str);
+				free(status_str);
+				if (valeur)
+				{
+					make_the_envirement(&result, valeur, &old_size, &new_size, flag,
+						&j);
+				}
+			}
+			i += 2;
+			continue ;
+		}
 		if (condition && str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1]) || str[i
 				+ 1] == '_'))
 		{

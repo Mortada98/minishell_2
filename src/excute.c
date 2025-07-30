@@ -71,10 +71,22 @@ char	*get_command(char *cmd, char **env)
 	char	*complete_path;
 	char	*first_join;
 	int		i;
+	DIR		*folder;
 
 	i = 0;
 	if (ft_strchr(cmd, '/'))
 	{
+		// Check if it's a directory first
+		folder = opendir(cmd);
+		if (folder != NULL)
+		{
+			printf("minishell: %s: Is a directory\n", cmd);
+			set_status(126);
+			closedir(folder);
+			return (NULL);
+		}
+		closedir(folder);
+		
 		if (access(cmd, X_OK) == 0)
 		{
 			return (gc_strdup(cmd));

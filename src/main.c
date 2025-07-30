@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 00:42:28 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:48:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 					set_status(1);
 					dup2(saved_stdin, 0);
 					close(saved_stdin);
-					return ;
+					//return ;
 				}
 			}
 		}
@@ -95,6 +95,10 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 	has_command = false;
 	while (temp_cmd)
 	{
+		if (curr->args[0][0] == '\0')
+		{
+			printf("minishell: '': command not found\n");
+		}
 		if (temp_cmd->args && temp_cmd->args[0] && temp_cmd->args[0][0] != '\0')
 		{
 			has_command = true;
@@ -159,7 +163,7 @@ void	execute_command(t_command *cmd, char **env, t_data **data)
 				close(fd[1]);
 			}
 			excute_redirection_of_child(&curr, data, &fd_out, &fd_in);
-			if (curr->args && curr->args[0])
+			if (curr->args && curr->args[0] && curr->args[0][0] != '\0')
 			{
 				if (built_in(curr->args[0]))
 				{
@@ -373,7 +377,7 @@ void	make_prompt(char **env)
 					}
 					check_cmd = check_cmd->next;
 				}
-				if (has_command || cmd->file_input[0])
+				if (cmd)
 				{
 					execute_command(cmd, env, &data);
 				}

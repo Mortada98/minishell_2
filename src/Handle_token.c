@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/07/30 00:29:07 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/07/30 11:42:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,14 +234,26 @@ void	check_the_last_element(t_token **token, t_data **data)
 		(*data)->should_expand_outside = true;
 		return;
 	}
-	while (cur->next)
+	if (cur->next == NULL && (cur->type == TOKEN_REDIR_APPEND || cur->type == TOKEN_REDIR_OUT
+		|| cur->type == TOKEN_REDIR_IN))
 	{
-		cur = cur->next;
-	}
-	if (cur->type == TOKEN_HERDOC)
-		(*data)->should_expand_outside = true;
-	if (cur->type == TOKEN_REDIR_IN)
 		(*data)->ambigiouse = true;
+		return;
+	}
+	else if (cur->next)
+	{
+		while (cur->next)
+		{
+			cur = cur->next;
+		}
+		if (cur->type == TOKEN_HERDOC)
+			(*data)->should_expand_outside = true;
+		else if ((cur->type == TOKEN_REDIR_APPEND || cur->type == TOKEN_REDIR_OUT
+		|| cur->type == TOKEN_REDIR_IN) && cur->next == NULL)
+		{
+			(*data)->ambigiouse = true;
+		}
+	}
 }
 
 void	convert_exit_status(char **word)
@@ -332,6 +344,12 @@ void	handle_word_token(t_token **token, char *line, t_data **data)
 			else
 				str = word;
 			join_expansion(str, token);
+
+			if ((str[0] != '"'  || str[0] != '\'') && str[0] == '\0')
+			{
+				str = NULL;
+				return ;
+			}
 			if (str[0] == '"' || str[0] == '\'')
 			{
 				// value = get_token_type(str);

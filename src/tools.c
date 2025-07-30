@@ -42,9 +42,9 @@ void	make_like_bash(char *result, char *valeur, size_t *j)
 	k = 0;
 	while (valeur[k])
 	{
-		if (valeur[k] == ' ')
+		if (valeur[k] == ' '|| valeur[k] == '\t')
 		{
-			while (valeur[k] == ' ')
+			while (valeur[k] == ' '|| valeur[k] == '\t')
 			{
 				k++;
 			}
