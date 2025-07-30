@@ -5,7 +5,7 @@
 #  define GREEN "\001\033[1;32m\002"
 # endif
 # ifndef BLUE
-#  define BLUE "\001\033[1;34m\002"
+#  define BLUE "\001\033[4;34m\002"
 # endif
 # ifndef WHITE
 #  define WHITE "\001\033[1;37m\002"

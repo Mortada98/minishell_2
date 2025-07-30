@@ -5,34 +5,27 @@ static char	*get_path_display(char **env)
 	char	*pwd;
 	char	*home;
 	char	*path;
-	char	*env_pwd;
+	bool	from_getcwd;
 
 	pwd = getcwd(NULL, 0);
+	from_getcwd = (pwd != NULL);
 	if (!pwd)
 	{
-		// If getcwd fails (directory deleted), show (deleted) with last known path
-		env_pwd = get_env("PWD", env);
-		if (env_pwd)
-		{
-			path = ft_strjoin(env_pwd, " (deleted)");
-			home = get_env("HOME", env);
-			if (home && ft_strnstr(env_pwd, home, ft_strlen(env_pwd)))
-			{
-				char *temp = ft_strjoin("~", env_pwd + ft_strlen(home));
-				free(path);
-				path = ft_strjoin(temp, " (deleted)");
-				free(temp);
-			}
-		}
+		// If getcwd fails (directory deleted), try to use PWD env variable
+		pwd = get_env("PWD", env);
+		if (pwd)
+			pwd = gc_strdup(pwd);
 		else
-			path = gc_strdup("(deleted)");
-		return (path);
+			return (gc_strdup("(unknown)"));
 	}
+	if (!pwd)
+		return (gc_strdup("(unknown)"));
 	home = get_env("HOME", env);
 	if (home && ft_strnstr(pwd, home, ft_strlen(pwd)))
 	{
 		path = ft_strjoin("~", pwd + ft_strlen(home));
-		free(pwd);
+		if (from_getcwd)
+			free(pwd);  // Only free if we got it from getcwd, not gc_strdup
 	}
 	else
 		path = pwd;

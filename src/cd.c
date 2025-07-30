@@ -15,7 +15,7 @@ void	update_oldpwd(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (strncmp(env[i], "OLDPWD=", 7) == 0)
+		if (ft_strncmp(env[i], "OLDPWD=", 7) == 0)
 		{
 			free(env[i]);
 			env[i] = new_oldpwd;
@@ -35,7 +35,11 @@ void	update_pwd(char **env)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
+	{
+		write(2, "cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n", 108);
+		set_status(1);
 		return ;
+	}
 	new_pwd = ft_strjoin("PWD=", cwd);
 	free(cwd);
 	if (!new_pwd)
@@ -79,6 +83,7 @@ void	cd(char *cmd, char **env)
 	{
 		set_status(1);
 		perror(target);
+		return ;
 	}
 	update_oldpwd(env);
 	update_pwd(env);
