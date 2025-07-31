@@ -75,5 +75,6 @@ char	*prompt(char **env)
 	if (!prompt)
 		return (NULL);
 
+	gc_register_external(prompt);
 	return (prompt);
 }

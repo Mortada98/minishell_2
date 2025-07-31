@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 20:57:44 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:57:23 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,13 @@ void	execute_command(t_command *cmd, char ***env, t_data **data)
 					close(save);
 					close(saved_stdin);
 					gc_cleanup();
+					int i = 0;
+					while((*env)[i])
+					{
+						free((*env)[i]);
+						i++;
+					}
+					free(*env);
 					rl_clear_history();
 					exit(get_status());
 				}
@@ -183,6 +190,13 @@ void	execute_command(t_command *cmd, char ***env, t_data **data)
 						curr->args[0]);
 					gc_cleanup();
 					set_status(127);
+					int i = 0;
+					while((*env)[i])
+					{
+						free((*env)[i]);
+						i++;
+					}
+					free(*env);
 					exit(127);
 				}
 				if (execve(command, curr->args, *env) != 0)
@@ -191,6 +205,13 @@ void	execute_command(t_command *cmd, char ***env, t_data **data)
 					close(save);
 					gc_cleanup();
 					perror("execve");
+					int i = 0;
+					while((*env)[i])
+					{
+						free((*env)[i]);
+						i++;
+					}
+					free(*env);
 					exit(1);
 				}
 				exit(1);
@@ -315,7 +336,7 @@ void	make_prompt(char ***env)
 			gc_cleanup();
 			//gc_cleanup_partial();
 			// free(data);
-			return ;
+			break;
 		}
 		gc_register_external(line);
 		if (line[0] == '\0')
@@ -390,6 +411,13 @@ void	make_prompt(char ***env)
 		}
 	}
 	gc_cleanup();
+	int i = 0;
+	while((*env)[i])
+	{
+		free((*env)[i]);
+		i++;
+	}
+	free(*env);
 	// free(data);
 	rl_clear_history();
 }

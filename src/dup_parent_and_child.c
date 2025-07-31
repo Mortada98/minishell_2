@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/30 20:34:22 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/07/31 17:01:22 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,13 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 		close(saved_stdin);
 		close(*fd1);
 		gc_cleanup();
+		int i = 0;
+		while((*env)[i])
+		{
+			free((*env)[i]);
+			i++;
+		}
+		free(*env);
 		rl_clear_history();
 		exit(get_status());
 	}
@@ -98,6 +105,13 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 		close(*fd1);
 		close(*fd2);
 		gc_cleanup();
+		int i = 0;
+		while((*env)[i])
+		{
+			free((*env)[i]);
+			i++;
+		}
+		free(*env);
 		rl_clear_history();
 		exit(get_status());
 	}
