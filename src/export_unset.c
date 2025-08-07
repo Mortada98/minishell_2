@@ -1,104 +1,87 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_unset.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
+/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-int update_existing_var(char *name, char *value, char **env)
+static int	handle_invalid_identifier_error(char *arg)
 {
-	int		i;
-	size_t	len = ft_strlen(name);
-	char	*new_entry;
-	char	*tmp;
-
-	tmp = ft_strjoin(name, "=");
-	if (!tmp)
-		return (0);
-	new_entry = ft_strjoin(tmp, value);
-	free(tmp);
-	if (!new_entry)
-		return (0);
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
-		{
-			free(env[i]);
-			env[i] = new_entry;
-			return (1);
-		}
-		i++;
-	}
-	free(new_entry);
+	write(2, "minishell: export: `", 20);
+	write(2, arg, ft_strlen(arg));
+	write(2, "': not a valid identifier\n", 26);
+	set_status(1);
 	return (0);
 }
 
-int my_export(char *arg, char ***env)
+int	my_export(char *arg, char ***env)
 {
 	char	*equal_sign;
-	char	*name;
-	char	*value;
-	char	*new_var;
-	char	*tmp;
 
 	if (!arg || !*arg)
-		return (print_env(*env), 1);
+	{
+		print_export_env(*env);
+		return (1);
+	}
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
-		return (1);
-	name = ft_substr(arg, 0, equal_sign - arg);
-	value = ft_strdup(equal_sign + 1);
-	if (!name || !value)
-		return (free(name), free(value), 0);
-	if (!update_existing_var(name, value, *env))
 	{
-		tmp = ft_strjoin(name, "=");
-		new_var = ft_strjoin(tmp, value);
-		free(tmp);
-		if (!new_var)
-			return (free(name), free(value), 0);
-		add_env_variable(new_var, env);
+		if (!is_valid_identifier(arg))
+			return (handle_invalid_identifier_error(arg));
+		return (export_without_value(arg, env));
 	}
-	free(name);
-	free(value);
-	return (1);
+	return (export_with_value(arg, equal_sign, env));
 }
 
-int my_unset(char *name, char ***env)
+static char	**allocate_new_env(char **env)
 {
-	int		i = 0, j = 0;
-	size_t	len = ft_strlen(name);
+	int		count;
 	char	**new_env;
 
-	while ((*env)[i])
-		i++;
-	new_env = malloc(sizeof(char *) * i);
-	if (!new_env)
-		return (0);
+	count = 0;
+	while (env[count])
+		count++;
+	new_env = malloc(sizeof(char *) * count);
+	return (new_env);
+}
+
+static void	copy_env_without_var(char **env, char **new_env, char *name,
+	size_t len)
+{
+	int	i;
+	int	j;
+
 	i = 0;
-	while ((*env)[i])
+	j = 0;
+	while (env[i])
 	{
-		if (!(ft_strncmp((*env)[i], name, len) == 0 && (*env)[i][len] == '='))
-			new_env[j++] = (*env)[i];
+		if (!(ft_strncmp(env[i], name, len) == 0 && env[i][len] == '='))
+			new_env[j++] = env[i];
 		else
-			free((*env)[i]);
+			free(env[i]);
 		i++;
 	}
 	new_env[j] = NULL;
+}
+
+int	my_unset(char *name, char ***env)
+{
+	size_t	len;
+	char	**new_env;
+
+	len = ft_strlen(name);
+	new_env = allocate_new_env(*env);
+	if (!new_env)
+		return (0);
+	copy_env_without_var(*env, new_env, name, len);
 	free(*env);
 	*env = new_env;
 	return (1);
-}
-
-void	my_pwd(void)
-{
-	char	*cwd;
-
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-	{
-		printf("%s\n", cwd);
-		free(cwd);
-	}
-	else
-	{
-		perror("pwd");
-		set_status(1);
-	}
 }

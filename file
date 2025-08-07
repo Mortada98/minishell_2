@@ -1,0 +1,17 @@
+file
+include
+Makefile
+minishell
+my_libft
+readline.sup
+README.md
+segfix.md
+src
+test_both_fixes.txt
+test_commands.txt
+test_double_free.sh
+test_final.txt
+test_input.txt
+test_segfault.txt
+test_tilde_fix.txt
+test.txt

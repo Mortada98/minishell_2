@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/31 17:01:22 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/07 14:12:43 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,49 @@ void	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 
 int	is_directory_parent(t_command **cmd)
 {
-	DIR	*folder;
-
-	folder = opendir((*cmd)->file_output);
-	if (folder != NULL)
+	int	fd;
+	
+	if (!(*cmd)->file_output)
+		return (0);
+	fd = open((*cmd)->file_output, O_WRONLY | O_CREAT , 0644);
+	if (fd < 0)
 	{
-		printf("minishell : %s:  Is a directory\n", (*cmd)->file_output);
+		if (errno == EISDIR)
+		{
+			write(2, "minishell: ", 11);
+			write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+			write(2, ": Is a directory\n", 17);
+		}
+		else if (errno == ENOTDIR)
+		{
+			write(2, "minishell: ", 11);
+			write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+			write(2, ": Not a directory\n", 18);
+		}
+		else if (errno == ENOENT)
+		{
+			write(2, "minishell: ", 11);
+			write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+			write(2, ": No such file or directory\n", 28);
+		}
+		else if (errno == EACCES)
+		{
+			write(2, "minishell: ", 11);
+			write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+			write(2, ": Permission denied\n", 20);
+		}
+		else
+		{
+			write(2, "minishell: ", 11);
+			write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+			write(2, ": ", 2);
+			write(2, strerror(errno), ft_strlen(strerror(errno)));
+			write(2, "\n", 1);
+		}
 		set_status(1);
-		closedir(folder);
 		return (1);
 	}
-	closedir(folder);
+	close(fd);
 	return (0);
 }
 
@@ -66,13 +98,7 @@ void	excute_redirection_of_parent(t_command **cmd, int *fd_out, t_data *data, in
 		close(saved_stdin);
 		close(*fd1);
 		gc_cleanup();
-		int i = 0;
-		while((*env)[i])
-		{
-			free((*env)[i]);
-			i++;
-		}
-		free(*env);
+		free_2d_array(*env);
 		rl_clear_history();
 		exit(get_status());
 	}
@@ -105,13 +131,7 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 		close(*fd1);
 		close(*fd2);
 		gc_cleanup();
-		int i = 0;
-		while((*env)[i])
-		{
-			free((*env)[i]);
-			i++;
-		}
-		free(*env);
+		free_2d_array(*env);
 		rl_clear_history();
 		exit(get_status());
 	}

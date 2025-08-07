@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/28 16:21:41 by helfatih          #+#    #+#             */
-/*   Updated: 2025/07/28 16:42:25 by helfatih         ###   ########.fr       */
+/*   Created: 2025/08/03 20:10:38 by helfatih          #+#    #+#             */
+/*   Updated: 2025/08/05 16:32:31 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,27 @@ int	handle_pipe(t_token **current, t_command **current_cmd,
 {
 	t_command	*new_cmd;
 
-	if ((*current)->type != TOKEN_PIPE)
-		return (1);
+	(void)first_cmd;
+	if ((*current)->prev == NULL)
+	{
+		write(2, "minishell: syntax error near unexpected token `|'\n", 54);
+		set_status(2);
+		return (0);
+	}
 	if ((*current)->next == NULL)
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		write(2, "minishell: syntax error near unexpected token `|'\n", 54);
 		(*data)->exit = 2;
 		return (0);
 	}
 	new_cmd = create_command();
 	if (!new_cmd)
-	{
-		free_cmd(first_cmd);
 		return (0);
-	}
 	(*current_cmd)->next = new_cmd;
 	*current_cmd = new_cmd;
 	*current = (*current)->next;
 	(*data)->exit = 0;
+	reset_redir_error(0);
 	return (1);
 }
 
@@ -42,14 +45,16 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_data **data)
 {
 	if (!(*current)->next)
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
+		write(2, "minishell: syntax error near unexpected token `newline'\n",
+			59);
 		set_status(2);
 		return (0);
 	}
 	if ((*current)->next->type != TOKEN_WORD)
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			(*current)->next->av);
+		write(2, "minishell: syntax error near unexpected token `", 46);
+		write(2, (*current)->next->av, ft_strlen((*current)->next->av));
+		write(2, "'\n", 2);
 		set_status(2);
 		return (0);
 	}
@@ -61,28 +66,19 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_data **data)
 
 int	handle_redir_out(t_token **current, t_command *cmd)
 {
-	int	fd;
+	char	*filename;
 
-	if (!(*current)->next)
+	if (!check_redir_syntax(current))
+		return (0);
+	if (get_redir_error())
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		set_status(2);
-		return (0);
+		(*current) = (*current)->next->next;
+		return (1);
 	}
-	if ((*current)->next->type != TOKEN_WORD)
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			(*current)->next->av);
-		set_status(2);
+	filename = gc_strdup((*current)->next->av);
+	if (!filename)
 		return (0);
-	}
-	cmd->file_output = gc_strdup((*current)->next->av);
-	if (!cmd->file_output)
-		return (0);
-	fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		return (0);
-	close(fd);
+	open_output_file_0(cmd, filename);
 	cmd->append = 0;
 	(*current) = (*current)->next->next;
 	return (1);
@@ -90,28 +86,20 @@ int	handle_redir_out(t_token **current, t_command *cmd)
 
 int	handle_redir_append(t_token **current, t_command *cmd)
 {
-	int	fd;
+	char	*filename;
 
-	if (!(*current)->next)
+	if (!check_redir_syntax(current))
+		return (0);
+	if (get_redir_error())
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		set_status(2);
-		return (0);
+		(*current) = (*current)->next->next;
+		return (1);
 	}
-	if ((*current)->next->type != TOKEN_WORD)
-	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			(*current)->next->av);
-		set_status(2);
+	filename = gc_strdup((*current)->next->av);
+	if (!filename)
 		return (0);
-	}
-	cmd->file_output = gc_strdup((*current)->next->av);
-	if (!cmd->file_output)
+	if (!open_output_file_1(cmd, filename))
 		return (0);
-	fd = open(cmd->file_output, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd < 0)
-		return (0);
-	close(fd);
 	cmd->append = 1;
 	(*current) = (*current)->next->next;
 	return (1);
@@ -127,8 +115,9 @@ int	handle_heredoc(t_token **current, t_command *cmd, int *i)
 	}
 	if ((*current)->next->type != TOKEN_WORD)
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			(*current)->next->av);
+		write(2, "minishell: syntax error near unexpected token `", 46);
+		write(2, (*current)->next->av, ft_strlen((*current)->next->av));
+		write(2, "'\n", 2);
 		set_status(2);
 		return (0);
 	}
