@@ -18,6 +18,7 @@ static void	setup_child_io(int prev_fd, int *fd, t_command *curr)
 	{
 		dup2(fd[1], 1);
 		close(fd[1]);
+		close(fd[0]);
 	}
 	if (prev_fd != -1)
 	{
@@ -38,7 +39,5 @@ void	execute_child_process(t_command *curr, t_data **data,
 	signal(SIGINT, SIG_DFL);
 	setup_child_io(params->prev_fd, params->fd, curr);
 	excute_redirection_of_child(&curr, data, params->fd_out, params->fd_in);
-	if (curr->redir_error)
-		cleanup_and_exit(params->save, params->saved_stdin, env, 1);
 	execute_command_logic(curr, &child_params, params, &bp);
 }

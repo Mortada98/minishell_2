@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:10:43 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/05 14:10:00 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:41:20 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	open_output_file_0(t_command *cmd, char *filename)
 {
 	int	fd;
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(filename, O_WRONLY | O_CREAT, 0644);
 	if (fd < 0)
 	{
 		reset_redir_error(1);
@@ -85,5 +85,21 @@ int	open_output_file_0(t_command *cmd, char *filename)
 	}
 	close(fd);
 	cmd->file_output = filename;
+	return (1);
+}
+
+int	check_input_file(char *filename, t_command *cmd)
+{
+	int	fd;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		reset_redir_error(1);
+		cmd->redir_error = true;
+		print_open_error(filename);
+		return (0);
+	}
+	close(fd);
 	return (1);
 }

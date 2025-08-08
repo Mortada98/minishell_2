@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/04 13:41:28 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:29:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,21 @@ char	**copy_env(char **env)
 	}
 	copy[i] = NULL;
 	return (copy);
+}
+
+void	free_env(char **env)
+{
+	int	i;
+
+	if (!env)
+		return ;
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		i++;
+	}
+	free(env);
 }
 
 void	print_env(char **env)

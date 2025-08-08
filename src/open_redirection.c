@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 19:06:48 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:12:46 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,35 @@ void	open_red_in(int *fd_in, t_command **cmd)
 {
 	int	i;
 
+	if (!fd_in || !cmd || !*cmd)
+		return ;
+	if (!(*cmd)->file_input)
+		return ;
 	i = 0;
 	while ((*cmd)->file_input && (*cmd)->file_input[i])
 	{
+		if (*fd_in > 2)
+			close(*fd_in);
 		*fd_in = open((*cmd)->file_input[i], O_RDONLY);
 		if (*fd_in < 0)
 		{
-			write(2, "minishell: ", 11);
-			write(2, (*cmd)->file_input[i], ft_strlen((*cmd)->file_input[i]));
-			if (errno == ENOTDIR)
-				write(2, ": Not a directory\n", 18);
-			else if (errno == ENOENT)
-				write(2, ": No such file or directory\n", 28);
-			else if (errno == EACCES)
-				write(2, ": Permission denied\n", 20);
-			else
-				write(2, ": No such file or directory\n", 28);
-			set_status(1);
-			gc_cleanup();
-			close_fds_except_std();
-			exit(1);
+			if (!(*cmd)->redir_error)
+			{
+				write(2, "minishell: ", 11);
+				write(2, (*cmd)->file_input[i], ft_strlen((*cmd)->file_input[i]));
+				if (errno == ENOTDIR)
+					write(2, ": Not a directory\n", 18);
+				else if (errno == ENOENT)
+					write(2, ": No such file or directory\n", 28);
+				else if (errno == EACCES)
+					write(2, ": Permission denied\n", 20);
+				else
+					write(2, ": No such file or directory\n", 28);
+				(*cmd)->redir_error = true;
+				set_status(1);
+			}
+			i++;
+			continue ;
 		}
 		dup2(*fd_in, STDIN_FILENO);
 		close(*fd_in);
@@ -47,6 +56,8 @@ void	open_red_out(t_command **cmd, int *fd_out)
 {
 	int	flags;
 
+	if (!fd_out)
+		return;
 	if (is_directory(cmd))
 	{
 		gc_cleanup();
@@ -112,9 +123,16 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 	int	hd_fd;
 
 	(void)data;
+	// Process output redirection first to match bash behavior
+	if ((*cmd)->file_output)
+	{
+		open_red_out(cmd, fd_out);
+	}
 	if ((*cmd)->file_input)
 	{
 		open_red_in(fd_in, cmd);
+		if ((*cmd)->redir_error)
+			return;
 	}
 	if ((*cmd)->herdoc_file)
 	{
@@ -128,9 +146,5 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 		}
 		dup2(hd_fd, 0);
 		close(hd_fd);
-	}
-	if ((*cmd)->file_output)
-	{
-		open_red_out(cmd, fd_out);
 	}
 }

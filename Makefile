@@ -8,7 +8,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 SRC = src/main.c	src/Handle_command.c	src/Handle_token.c	src/Helper.c  src/prompt.c	src/tools.c	src/meta_char.c	src/utils.c	src/excute.c  src/parse_herdoc.c	\
 			src/garbage_collector.c src/manual_realloc.c	src/open_redirection.c	src/set_global_value.c	src/exit_command.c	src/dup_parent_and_child.c	src/lexer.c  src/enviroment.c src/cd.c src/export_unset.c\
 			src/meta_char_utils.c	src/g_redir_err.c	src/lexer_split.c	src/lexer_parser.c	src/lexer_utils.c	src/token.c	src/lexer_helpers.c	src/garbage_collecter_utils.c	src/clean_up.c	src/herdoc_utils.c	src/parse_cmd_utils.c\
-			src/parse_helper.c	src/excute_utils.c	src/main_execution.c	src/main_utils.c	src/main_helper.c	src/token_to_command.c	src/token_to_cmd_utils.c src/print_export_env.c src/export_helpers.c src/pwd_cmd.c src/identifier_utils.c src/env_sort_utils.c src/env_var_utils.c src/export_without_value.c src/execution_helpers.c src/pipeline_execution.c src/pipeline_utils.c src/child_execution_helpers.c src/pipeline_setup_utils.c src/pipeline_main.c src/fd_cleanup.c
+			src/parse_helper.c	src/excute_utils.c	src/main_execution.c	src/main_utils.c	src/main_helper.c	src/token_to_command.c	src/token_to_cmd_utils.c src/print_export_env.c src/export_helpers.c src/pwd_cmd.c src/identifier_utils.c src/env_sort_utils.c src/env_var_utils.c src/export_without_value.c src/execution_helpers.c src/pipeline_execution.c src/child_execution_helpers.c src/pipeline_setup_utils.c src/pipeline_utils_clean.c src/fd_cleanup.c
 
 
 LIBFT_SRC = my_libft/ft_isdigit.c my_libft/ft_isalnum.c my_libft/ft_isascii.c my_libft/ft_isprint.c my_libft/ft_strlen.c my_libft/ft_memset.c my_libft/ft_isalpha.c \

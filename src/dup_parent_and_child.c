@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 14:12:43 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:54:00 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 {
+	if (!fd_out)
+		return;
 	if ((*cmd)->file_output)
 	{
 		*flags = O_WRONLY | O_CREAT | append_or_trunc(cmd);
@@ -113,7 +115,7 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 		t_data *data, int *fd1, int *fd2, char ***env)
 {
 	(void)fd2;
-	int(saved_stdout), saved_stdin, flags;
+	int(saved_stdout), saved_stdin, flags, fd_in;
 	int	error = 0;
 	if ((*cmd)->file_output)
 	{
@@ -122,6 +124,11 @@ void	excute_redirection_of_child_builtin(t_command **cmd, int *fd_out,
 	}
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
+	if ((*cmd)->file_input)
+	{
+		fd_in = STDIN_FILENO;
+		open_red_in(&fd_in, cmd);
+	}
 	open_and_duplicate(cmd, &flags, fd_out);
 	my_exit_child(cmd, data, &error);
 	if (error == 1)

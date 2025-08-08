@@ -64,6 +64,12 @@ void	execute_command_logic(t_command *curr, t_child_params *child_params,
 	}
 	else
 	{
+		if (!params->fd_in)
+		{
+			static int stdin_fd = STDIN_FILENO;
+			params->fd_in = &stdin_fd;
+		}
+		excute_redirection_of_child(&curr, child_params->data, params->fd_out, params->fd_in);
 		dup2(params->save, 0);
 		cleanup_and_exit(params->save, params->saved_stdin, child_params->env,
 			0);

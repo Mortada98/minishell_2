@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 19:02:34 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:29:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,5 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	my_env = copy_env(env);
 	make_prompt(&my_env);
+	return (0);
 }

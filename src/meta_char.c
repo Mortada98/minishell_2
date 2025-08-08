@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   meta_char.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:10:38 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/05 16:32:31 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/08 14:12:46 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	handle_redir_out(t_token **current, t_command *cmd)
 	filename = gc_strdup((*current)->next->av);
 	if (!filename)
 		return (0);
-	open_output_file_0(cmd, filename);
+	cmd->file_output = filename;
 	cmd->append = 0;
 	(*current) = (*current)->next->next;
 	return (1);
@@ -98,8 +98,7 @@ int	handle_redir_append(t_token **current, t_command *cmd)
 	filename = gc_strdup((*current)->next->av);
 	if (!filename)
 		return (0);
-	if (!open_output_file_1(cmd, filename))
-		return (0);
+	cmd->file_output = filename;
 	cmd->append = 1;
 	(*current) = (*current)->next->next;
 	return (1);

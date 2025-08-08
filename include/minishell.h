@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 19:02:34 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 13:41:20 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,7 @@ void					convert_exit_status(char **word);
 size_t					count_word(char const *s, char c, char k);
 int						open_output_file_0(t_command *cmd, char *filename);
 int						open_output_file_1(t_command *cmd, char *filename);
+int						check_input_file(char *filename, t_command *cmd);
 void					print_open_error(char *filename);
 int						check_redir_syntax(t_token **current);
 int						*set_redir_error(void);
@@ -398,6 +399,7 @@ void					free_token(t_token **token);
 char					*remove_quotes(char *str);
 char					*get_env(char *name, char **env);
 char					**copy_env(char **env);
+void					free_env(char **env);
 char					*get_env(char *name, char **env);
 void					cd(char *cmd, char ***env);
 void					update_oldpwd(char ***env);

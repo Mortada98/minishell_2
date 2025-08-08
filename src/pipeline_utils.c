@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/07 18:20:37 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 10:29:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ static void	handle_child_fork(t_child_params *child_params,
 		child_params->env);
 }
 
-int	process_pipeline_iteration(t_child_params *child_params,
-	t_exec_params *params, t_parent_params *parent_params)
+static int	handle_pipe_setup(t_child_params *child_params,
+	t_exec_params *params)
 {
-	pid_t	pid;
-
 	params->save = dup(0);
+	if (params->save < 0)
+		return (0);
 	if (!setup_pipe(child_params->curr, params->fd))
 	{
 		close(params->save);
@@ -38,6 +38,16 @@ int	process_pipeline_iteration(t_child_params *child_params,
 		close(params->saved_stdin);
 		return (0);
 	}
+	return (1);
+}
+
+int	process_pipeline_iteration(t_child_params *child_params,
+	t_exec_params *params, t_parent_params *parent_params)
+{
+	pid_t	pid;
+
+	if (!handle_pipe_setup(child_params, params))
+		return (0);
 	pid = fork();
 	if (pid == 0)
 		handle_child_fork(child_params, params);
@@ -48,7 +58,10 @@ int	process_pipeline_iteration(t_child_params *child_params,
 		handle_fork_error(params->save, params->saved_stdin);
 		return (0);
 	}
-	dup2(params->save, 0);
-	close(params->save);
+	if (params->save >= 0)
+	{
+		dup2(params->save, 0);
+		close(params->save);
+	}
 	return (1);
 }
