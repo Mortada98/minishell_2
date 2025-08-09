@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 19:41:10 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 15:22:18 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_command	*create_command(void)
 	cmd->herdoc_file = NULL;
 	cmd->file = false;
 	cmd->redir_error = false;
+	cmd->cmd_quoted = false;
 	cmd->next = NULL;
 	return (cmd);
 }
