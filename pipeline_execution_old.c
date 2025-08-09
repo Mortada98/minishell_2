@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipeline_execution.c                               :+:      :+:    :+:   */
+/*   pipeline_execution_old.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:10:47 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 10:35:39 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ static void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 	if ((*env)[0])
 		free_2d_array(*env);
 	rl_clear_history();
+	close_fds_except_std();
 	exit(status);
 }
 
 static void	execute_builtin_child(t_builtin_params *bp)
 {
-	excute_redirection_of_child_builtin(bp->curr, bp->fd_out, bp->data,
-		bp->saved_stdin, bp->save, bp->env);
+	excute_redirection_of_child_builtin(bp);
 	cleanup_and_exit(*(bp->save), *(bp->saved_stdin), bp->env, get_status());
 }
 

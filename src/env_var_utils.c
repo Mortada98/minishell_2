@@ -26,7 +26,7 @@ static char	*create_new_entry(char *name, char *value)
 }
 
 static int	find_and_update_var(char **env, char *name, char *new_entry,
-	size_t len)
+		size_t len)
 {
 	int	i;
 

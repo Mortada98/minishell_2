@@ -28,7 +28,7 @@ static void	setup_child_io(int prev_fd, int *fd, t_command *curr)
 }
 
 void	execute_child_process(t_command *curr, t_data **data,
-	t_exec_params *params, char ***env)
+		t_exec_params *params, char ***env)
 {
 	t_builtin_params	bp;
 	t_child_params		child_params;
@@ -38,6 +38,6 @@ void	execute_child_process(t_command *curr, t_data **data,
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	setup_child_io(params->prev_fd, params->fd, curr);
-	excute_redirection_of_child(&curr, data, params->fd_out, params->fd_in);
+	excute_redirection_of_child(&curr, data, params->fd_out, params->fd_in, *env);
 	execute_command_logic(curr, &child_params, params, &bp);
 }

@@ -13,7 +13,7 @@
 #include "../include/minishell.h"
 
 static void	handle_child_fork(t_child_params *child_params,
-	t_exec_params *params)
+		t_exec_params *params)
 {
 	if ((child_params->cmd)->file)
 	{
@@ -26,7 +26,7 @@ static void	handle_child_fork(t_child_params *child_params,
 }
 
 static int	handle_pipe_setup(t_child_params *child_params,
-	t_exec_params *params)
+		t_exec_params *params)
 {
 	params->save = dup(0);
 	if (params->save < 0)
@@ -42,7 +42,7 @@ static int	handle_pipe_setup(t_child_params *child_params,
 }
 
 int	process_pipeline_iteration(t_child_params *child_params,
-	t_exec_params *params, t_parent_params *parent_params)
+		t_exec_params *params, t_parent_params *parent_params)
 {
 	pid_t	pid;
 

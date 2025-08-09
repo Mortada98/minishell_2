@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_execution.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 09:59:52 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 18:46:56 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 
 void	execute_command(t_command *cmd, char ***env, t_data **data)
 {
-	int		saved_stdin;
+	t_fd	fd;
 	bool	has_command;
 
 	if (!cmd)
 		return ;
-	saved_stdin = dup(0);
+	fd.saved_stdin = dup(0);
 	if (cmd && cmd->next == NULL && cmd->args && cmd->args[0]
 		&& built_in(cmd->args[0]))
 	{
-		handle_single_builtin(cmd, env, data, saved_stdin);
+		handle_single_builtin(cmd, env, data, &fd);
 		return ;
 	}
 	has_command = empty_command(cmd);
 	if (!has_command)
 	{
-		handle_empty_command(cmd, data, saved_stdin, env);
+		handle_empty_command(cmd, data, fd.saved_stdin, env);
 		return ;
 	}
-	execute_pipeline_loop(cmd, data, env, saved_stdin);
-	dup2(saved_stdin, 0);
-	close(saved_stdin);
+	execute_pipeline_loop(cmd, data, env, fd.saved_stdin);
+	dup2(fd.saved_stdin, 0);
+	close(fd.saved_stdin);
 }

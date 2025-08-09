@@ -27,13 +27,12 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 
 static void	execute_builtin_child(t_builtin_params *bp)
 {
-	excute_redirection_of_child_builtin(bp->curr, bp->fd_out, bp->data,
-		bp->saved_stdin, bp->save, bp->env);
+	excute_redirection_of_child_builtin(bp);
 	cleanup_and_exit(*(bp->save), *(bp->saved_stdin), bp->env, get_status());
 }
 
-static void	execute_external_command(t_command *curr, char ***env,
-	int save, int saved_stdin)
+static void	execute_external_command(t_command *curr, char ***env, int save,
+		int saved_stdin)
 {
 	char	*command;
 
@@ -45,8 +44,10 @@ static void	execute_external_command(t_command *curr, char ***env,
 }
 
 void	execute_command_logic(t_command *curr, t_child_params *child_params,
-	t_exec_params *params, t_builtin_params *bp)
+		t_exec_params *params, t_builtin_params *bp)
 {
+	static int	stdin_fd = STDIN_FILENO;
+
 	if (curr->args && curr->args[0] && curr->args[0][0] != '\0')
 	{
 		if (built_in(curr->args[0]))
@@ -66,10 +67,10 @@ void	execute_command_logic(t_command *curr, t_child_params *child_params,
 	{
 		if (!params->fd_in)
 		{
-			static int stdin_fd = STDIN_FILENO;
 			params->fd_in = &stdin_fd;
 		}
-		excute_redirection_of_child(&curr, child_params->data, params->fd_out, params->fd_in);
+		excute_redirection_of_child(&curr, child_params->data, params->fd_out,
+			params->fd_in, (*bp->env));
 		dup2(params->save, 0);
 		cleanup_and_exit(params->save, params->saved_stdin, child_params->env,
 			0);

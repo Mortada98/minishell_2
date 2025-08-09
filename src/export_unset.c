@@ -53,7 +53,7 @@ static char	**allocate_new_env(char **env)
 }
 
 static void	copy_env_without_var(char **env, char **new_env, char *name,
-	size_t len)
+		size_t len)
 {
 	int	i;
 	int	j;

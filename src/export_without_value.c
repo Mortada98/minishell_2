@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_without_value.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 21:07:14 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static int	var_already_exists(char *name, char **env, size_t len)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], name, len) == 0
-			&& (env[i][len] == '=' || env[i][len] == '\0'))
+		if (ft_strncmp(env[i], name, len) == 0 && (env[i][len] == '='
+			|| env[i][len] == '\0'))
 			return (1);
 		i++;
 	}

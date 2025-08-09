@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 11:33:55 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 19:41:10 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,23 @@ t_command	*create_command(void)
 	return (cmd);
 }
 
+int	simple_condition(t_var *var, char *str, char **env)
+{
+	var->string = split_var(&var->i, str, &var->start);
+	if (!var->string)
+		return (0);
+	var->valeur = get_env(var->string, env);
+	if (var->valeur)
+		make_the_envirement(var);
+	else if (!var->valeur)
+		var->result[var->j++] = '\0';
+	return (1);
+}
+
 char	*expand_env(char *str, char **env)
 {
 	t_var	var;
 
-	// (void)cmd_found; // Avoid unused parameter warning
 	if (!init_var(str, &var))
 		return (NULL);
 	while (str[var.i])
@@ -49,20 +61,15 @@ char	*expand_env(char *str, char **env)
 		if (var.condition && str[var.i] == '$' && str[var.i + 1]
 			&& (ft_isalnum(str[var.i + 1]) || str[var.i + 1] == '_'))
 		{
-			var.string = split_var(&var.i, str, &var.start);
-			if (!var.string)
+			if (simple_condition(&var, str, env) == 0)
 				return (NULL);
-			var.valeur = get_env(var.string, env);
-			if (var.valeur)
-				make_the_envirement(&var);
-			else if (!var.valeur)
-				var.result[var.j++] = '\0';
 			continue ;
 		}
 		var.result[var.j++] = str[var.i++];
 	}
 	return (var.result);
 }
+
 t_command	*parsing_command(t_token *token, t_data **data)
 {
 	t_parse	var;

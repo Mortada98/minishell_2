@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 13:41:20 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 11:27:27 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,23 +92,6 @@ typedef struct s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
-
-// typedef struct s_exec
-// {
-// 	int					prev_fd;
-// 	int					fd[2];
-// 	pid_t				pid;
-// 	int					fd_out;
-// 	int					fd_in;
-// 	t_command			*curr;
-// 	int					saved_stdin;
-// 	pid_t				pids[1024];
-// 	int					pid_count;
-// 	int					save;
-// 	int					hd_fd;
-// 	char				*command;
-// 	bool				has_command;
-// }						t_exec;
 
 typedef struct s_command
 {
@@ -212,6 +195,12 @@ typedef struct s_pipeline_setup
 	int					saved_stdin;
 }						t_pipeline_setup;
 
+typedef struct s_fd
+{
+	int					saved_stdin;
+	int					fd_out;
+}						t_fd;
+
 typedef struct s_all_params
 {
 	t_exec_params		*params;
@@ -220,9 +209,14 @@ typedef struct s_all_params
 	t_pipeline_state	*state;
 }						t_all_params;
 
-
-void	process_options(char **args, bool *has_n, int *idx);
-void	print_args(char **args, int idx);
+void					print_args(char **args, int idx);
+void					unique_error(char *cmd, char *error);
+void					close_fd2(int *saved_stdin1, int *saved_stdout1, t_fd *fd,
+							char ***env);
+void					print_message(char *cmd, int status, char *format1,
+							char *format2);
+void					process_options(char **args, bool *has_n, int *idx);
+void					print_args(char **args, int idx);
 int						handle_redir_append_token(t_parse *var);
 int						handle_pipe_token(t_parse *var, t_data **data);
 int						handle_redir_in_token(t_parse *var, t_data **data);
@@ -288,8 +282,8 @@ int						*set_redir_error(void);
 void					reset_redir_error(int value);
 int						get_redir_error(void);
 void					join_nodes(t_token **token);
-void					excute_redirection_of_parent(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1, char ***env);
+void					excute_redirection_of_parent(t_command **cmd, t_fd *fd,
+							t_data *data, char ***env);
 int						is_directory_parent(t_command **cmd);
 void					open_and_duplicate(t_command **cmd, int *flags,
 							int *fd_out);
@@ -300,10 +294,10 @@ void					my_exit(t_command **cmd, t_data *data, int *error);
 int						make_exit(t_command *cmd);
 int						validation(t_command *cmd);
 void					excute_redirection_of_child(t_command **cmd,
-							t_data **data, int *fd_out, int *fd_in);
+							t_data **data, int *fd_out, int *fd_in, char **env);
 int						append_or_trunc(t_command **cmd);
 int						is_directory(t_command **cmd);
-void					open_red_out(t_command **cmd, int *fd_out);
+void					open_red_out(t_command **cmd, int *fd_out, char **env);
 void					open_red_in(int *fd_in, t_command **cmd);
 int						heredoc_realloc(int *i, t_command *cmd,
 							t_token **current);
@@ -318,9 +312,7 @@ void					my_handler(int sig);
 void					cleanup_exit_handler(int sig);
 void					free_array(char **arr);
 void					my_echo(t_command *cmd);
-void					excute_redirection_of_child_builtin(t_command **cmd,
-							int *fd_out, t_data *data, int *fd1, int *fd2,
-							char ***env);
+void					excute_redirection_of_child_builtin(t_builtin_params *param);
 void					check_exit_status(t_command *cmd, t_data **data);
 void					excute_herdoc_for_child(t_command **cmd, t_data **data,
 							char **env);
@@ -331,7 +323,7 @@ char					*get_command(char *cmd, char **env);
 void					execute_command(t_command *cmd, char ***env,
 							t_data **data);
 int						handle_single_builtin(t_command *cmd, char ***env,
-							t_data **data, int saved_stdin);
+							t_data **data, t_fd *fd);
 int						handle_empty_command(t_command *cmd, t_data **data,
 							int saved_stdin, char ***env);
 void					execute_pipeline_loop(t_command *cmd, t_data **data,

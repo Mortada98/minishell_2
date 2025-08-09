@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 21:25:49 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:18:52 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	execute_builtin_command(t_command *cmd, char ***env)
 void	iterate_on_env(char **env, char **path_env, char *cmd)
 {
 	int	i;
-	int j;
+	int	j;
 
 	if (!env || !*env)
 		return ;
@@ -111,17 +111,11 @@ char	*get_command(char *cmd, char **env)
 			return (var.complete_path);
 		if (!access(var.complete_path, F_OK) && !S_ISDIR(var.sb.st_mode))
 		{
-			write(2, "minishell: ", 11);
-			write(2, cmd, ft_strlen(cmd));
-			write(2, ": Permission denied\n", 20);
-			set_status(126);
+			print_message(cmd, 126, "minishell: ", ": Permission denied\n");
 			return (NULL);
 		}
 		i++;
 	}
-	write(2, "minishell: ", 11);
-	write(2, cmd, ft_strlen(cmd));
-	write(2, ": command not found\n", 20);
-	set_status(127);
+	print_message(cmd, 127, "minishell: ", ": command not found\n");
 	return (NULL);
 }

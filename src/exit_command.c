@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:01:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 20:39:02 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 11:23:40 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,46 @@ int	make_exit(t_command *cmd)
 	{
 		i = validation(cmd);
 		if (i != 0)
-		return (i);
+			return (i);
 		status = ft_atoi(cmd->args[1]) % 256;
 		if (status < 0)
-		status += 256;
+			status += 256;
 		return (status);
 	}
 	return (0);
 }
 
-void	my_exit(t_command **cmd, t_data *data, int *error)
+void	fill_error(t_command **cmd, int *error)
 {
 	int	i;
+
+	i = make_exit(*cmd);
+	if (i == 2)
+	{
+		set_status(2);
+		*error = 0;
+		return ;
+	}
+	if (i == 0)
+	{
+		set_status(get_status());
+		*error = 1;
+		return ;
+	}
+	set_status(i);
+	*error = 1;
+}
+
+void	my_exit(t_command **cmd, t_data *data, int *error)
+{
 	int	arg_count;
-	
+
 	(void)data;
 	if (ft_strcmp((*cmd)->args[0], "exit") == 0)
 	{
 		arg_count = 0;
 		while ((*cmd)->args[arg_count])
 			arg_count++;
-		
 		if (arg_count > 2 && is_number((*cmd)->args[1]))
 		{
 			write(2, "minishell: exit: too many arguments\n", 36);
@@ -64,28 +83,12 @@ void	my_exit(t_command **cmd, t_data *data, int *error)
 			return ;
 		}
 		write(1, "exit\n", 5);
-		i = make_exit(*cmd);
-		if (i == 2)
-		{
-			set_status(2);
-			*error = 0;
-			return ;
-		}
-		if (i == 0)
-		{
-			set_status(get_status());
-			*error = 1;
-			return ;
-		}
-		set_status(i);
-		*error = 1;
-		return ;
+		fill_error(cmd, error);
 	}
 }
 
 void	my_exit_child(t_command **cmd, t_data *data, int *error)
 {
-	int	i;
 	int	arg_count;
 
 	(void)data;
@@ -94,29 +97,13 @@ void	my_exit_child(t_command **cmd, t_data *data, int *error)
 		arg_count = 0;
 		while ((*cmd)->args[arg_count])
 			arg_count++;
-			
-		if (arg_count > 2)
+		if (arg_count > 2 && is_number((*cmd)->args[1]))
 		{
 			write(2, "minishell: exit: too many arguments\n", 36);
 			set_status(1);
 			*error = 0;
 			return ;
 		}
-		i = make_exit(*cmd);
-		if (i == 2)
-		{
-			set_status(2);
-			*error = 0;
-			return ;
-		}
-		if (i == 0)
-		{
-			set_status(get_status());
-			*error = 1;
-			return ;
-		}
-		set_status(i);
-		*error = 1;
-		return ;
+		fill_error(cmd, error);
 	}
 }

@@ -28,7 +28,8 @@ void	add_token(t_token **token, t_token *new_token)
 	new_token->prev = current;
 }
 
-t_token	*creat_token(char *line, t_token_type type, bool should_join, bool found)
+t_token	*creat_token(char *line, t_token_type type, bool should_join,
+		bool found)
 {
 	t_token	*new_token;
 

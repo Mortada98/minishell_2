@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils_clean.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/08 11:54:23 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 10:41:55 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 static void	initialize_pipeline_state(t_exec_params *params,
-	t_pipeline_state *state)
+		t_pipeline_state *state)
 {
 	state->prev_fd = -1;
 	state->pid_count = 0;
@@ -25,7 +25,7 @@ static void	initialize_pipeline_state(t_exec_params *params,
 }
 
 static void	handle_child_fork(t_child_params *child_params,
-	t_exec_params *params)
+		t_exec_params *params)
 {
 	if ((child_params->cmd)->file)
 	{
@@ -38,7 +38,7 @@ static void	handle_child_fork(t_child_params *child_params,
 }
 
 int	process_pipeline_iteration(t_child_params *child_params,
-	t_exec_params *params, t_parent_params *parent_params)
+		t_exec_params *params, t_parent_params *parent_params)
 {
 	pid_t	pid;
 
@@ -64,6 +64,8 @@ int	process_pipeline_iteration(t_child_params *child_params,
 	}
 	if (params->save >= 0)
 	{
+		close(parent_params->fd[0]);
+		close(parent_params->fd[1]);
 		dup2(params->save, 0);
 		close(params->save);
 	}
@@ -85,7 +87,7 @@ static void	cleanup_pipeline_fds(t_exec_params *params, t_pipeline_state *state)
 }
 
 static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
-	t_exec_params *params)
+		t_exec_params *params)
 {
 	t_parent_params		parent_params;
 	t_child_params		child_params;
@@ -93,10 +95,10 @@ static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 	t_command			*curr;
 
 	initialize_pipeline_state(params, &state);
-	params->fd = (int [2]){0, 0};
+	params->fd = (int[2]){0, 0};
 	parent_params.prev_fd = &state.prev_fd;
 	parent_params.fd = params->fd;
-	parent_params.pids = (pid_t [1024]){0};
+	parent_params.pids = (pid_t[1024]){0};
 	parent_params.pid_count = &state.pid_count;
 	child_params.cmd = cmd;
 	child_params.data = data;
@@ -105,9 +107,14 @@ static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 	while (curr && !(cmd)->file)
 	{
 		child_params.curr = curr;
-		if (!process_pipeline_iteration(&child_params, params,
-				&parent_params))
+		if (!process_pipeline_iteration(&child_params, params, &parent_params))
+		{
+			cleanup_pipeline_fds(params, &state);
+			dup2(params->saved_stdin, 0);
+			close(params->saved_stdin);
 			return ;
+		}
+		
 		curr = curr->next;
 	}
 	cleanup_pipeline_fds(params, &state);
@@ -116,9 +123,9 @@ static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 }
 
 void	execute_pipeline_loop(t_command *cmd, t_data **data, char ***env,
-	int saved_stdin)
+		int saved_stdin)
 {
-	t_exec_params		params;
+	t_exec_params	params;
 
 	params.saved_stdin = saved_stdin;
 	setup_params_and_loop(cmd, data, env, &params);

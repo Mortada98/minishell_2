@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:16:43 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/07 15:22:03 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 21:17:15 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,19 @@ static char	*get_cd_target(char *cmd, char **env)
 	{
 		target = get_env("HOME", env);
 		if (!target)
-			return (write(2, "cd: HOME not set\n", 18), (char *) NULL);
+		{
+			write(2, "cd: HOME not set\n", 18);
+			return (NULL);
+		}
 	}
 	else if (ft_strcmp(cmd, "-") == 0)
 	{
 		target = get_env("OLDPWD", env);
 		if (!target)
-			return (write(2, "cd: OLDPWD not set\n", 20), (char *) NULL);
+		{
+			write(2, "cd: OLDPWD not set\n", 20);
+			return (NULL);
+		}
 		printf("%s\n", target);
 	}
 	else

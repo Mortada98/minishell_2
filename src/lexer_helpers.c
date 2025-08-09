@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:34:54 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 11:22:55 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 21:05:44 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ char	*handle_expansion(t_data *data, char *word, char **env)
 				return (NULL);
 			}
 		}
-		// if (!small_condition(str, data))
-		// 	return (NULL);
 		return (str);
 	}
 	return (word);
@@ -59,7 +57,8 @@ char	*process_quotes(char *str, int *flag)
 	return (str);
 }
 
-void	create_add_token(t_token **token, char *word, t_token_type value, t_word_processing *wp)
+void	create_add_token(t_token **token, char *word, t_token_type value,
+		t_word_processing *wp)
 {
 	t_token	*new;
 
@@ -71,8 +70,6 @@ void	create_add_token(t_token **token, char *word, t_token_type value, t_word_pr
 void	process_word(t_token **token, t_word_processing *wp)
 {
 	join_expansion(wp->str, token);
-	// if ((wp->str[0] != '"' || wp->str[0] != '\'') && wp->str[0] == '\0')
-	// 	return ;
 	wp->str = process_quotes(wp->str, &wp->flag);
 	if (wp->str && wp->str != wp->word)
 		wp->word = wp->str;

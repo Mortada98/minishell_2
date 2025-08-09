@@ -29,7 +29,7 @@ int	setup_pipe(t_command *curr, int *fd)
 }
 
 void	handle_parent_process(pid_t pid, t_command *curr,
-	t_parent_params *parent_params)
+		t_parent_params *parent_params)
 {
 	if (*(parent_params->prev_fd) != -1)
 		close(*(parent_params->prev_fd));

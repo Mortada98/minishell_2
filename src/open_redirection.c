@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 14:12:46 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 09:57:49 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	open_red_in(int *fd_in, t_command **cmd)
 			if (!(*cmd)->redir_error)
 			{
 				write(2, "minishell: ", 11);
-				write(2, (*cmd)->file_input[i], ft_strlen((*cmd)->file_input[i]));
+				write(2, (*cmd)->file_input[i],
+					ft_strlen((*cmd)->file_input[i]));
 				if (errno == ENOTDIR)
 					write(2, ": Not a directory\n", 18);
 				else if (errno == ENOENT)
@@ -52,20 +53,8 @@ void	open_red_in(int *fd_in, t_command **cmd)
 	}
 }
 
-void	open_red_out(t_command **cmd, int *fd_out)
+void	set_errno(int *fd_out, t_command **cmd, char **env)
 {
-	int	flags;
-
-	if (!fd_out)
-		return;
-	if (is_directory(cmd))
-	{
-		gc_cleanup();
-		close_fds_except_std();
-		exit(1);
-	}
-	flags = O_WRONLY | O_CREAT | append_or_trunc(cmd);
-	*fd_out = open((*cmd)->file_output, flags, 0644);
 	if (*fd_out < 0)
 	{
 		write(2, "minishell: ", 11);
@@ -82,9 +71,27 @@ void	open_red_out(t_command **cmd, int *fd_out)
 			write(2, ": No such file or directory\n", 28);
 		set_status(1);
 		gc_cleanup();
+		free_2d_array(env);
 		close_fds_except_std();
 		exit(1);
 	}
+}
+
+void	open_red_out(t_command **cmd, int *fd_out, char **env)
+{
+	int	flags;
+
+	if (!fd_out)
+		return ;
+	if (is_directory(cmd))
+	{
+		gc_cleanup();
+		close_fds_except_std();
+		exit(1);
+	}
+	flags = O_WRONLY | O_CREAT | append_or_trunc(cmd);
+	*fd_out = open((*cmd)->file_output, flags, 0644);
+	set_errno(fd_out, cmd, env);
 	dup2(*fd_out, STDOUT_FILENO);
 	close(*fd_out);
 }
@@ -118,7 +125,7 @@ int	append_or_trunc(t_command **cmd)
 }
 
 void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
-		int *fd_in)
+		int *fd_in, char **env)
 {
 	int	hd_fd;
 
@@ -126,13 +133,13 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 	// Process output redirection first to match bash behavior
 	if ((*cmd)->file_output)
 	{
-		open_red_out(cmd, fd_out);
+		open_red_out(cmd, fd_out, env);
 	}
 	if ((*cmd)->file_input)
 	{
 		open_red_in(fd_in, cmd);
 		if ((*cmd)->redir_error)
-			return;
+			return ;
 	}
 	if ((*cmd)->herdoc_file)
 	{

@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_main.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/07 18:48:36 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/08 21:08:02 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 void	execute_pipeline_loop(t_command *cmd, t_data **data, char ***env,
-	int saved_stdin)
+		int saved_stdin)
 {
 	t_command	*curr;
 	int			vars[2];
