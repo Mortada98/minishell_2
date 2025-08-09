@@ -38,6 +38,7 @@ void	execute_child_process(t_command *curr, t_data **data,
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	setup_child_io(params->prev_fd, params->fd, curr);
-	excute_redirection_of_child(&curr, data, params->fd_out, params->fd_in, *env);
+	excute_redirection_of_child(&curr, data, params->fd_out, params->fd_in,
+		*env);
 	execute_command_logic(curr, &child_params, params, &bp);
 }
