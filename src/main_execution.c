@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 18:46:56 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 20:34:57 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ void	execute_command(t_command *cmd, char ***env, t_data **data)
 		return ;
 	}
 	has_command = empty_command(cmd);
-	if (!has_command)
-	{
-		handle_empty_command(cmd, data, fd.saved_stdin, env);
-		return ;
-	}
+	(void)has_command;
 	execute_pipeline_loop(cmd, data, env, fd.saved_stdin);
 	dup2(fd.saved_stdin, 0);
 	close(fd.saved_stdin);

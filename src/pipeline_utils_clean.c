@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/09 10:41:55 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 20:39:59 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ static void	initialize_pipeline_state(t_exec_params *params,
 static void	handle_child_fork(t_child_params *child_params,
 		t_exec_params *params)
 {
-	if ((child_params->cmd)->file)
-	{
-		(child_params->cmd)->file = false;
-		set_status(130);
-		exit(130);
-	}
+	// if ((child_params->cmd)->file)
+	// {
+	// 	(child_params->cmd)->file = false;
+	// 	set_status(130);
+	// 	exit(130);
+	// }
 	execute_child_process(child_params->curr, child_params->data, params,
 		child_params->env);
 }
@@ -64,8 +64,6 @@ int	process_pipeline_iteration(t_child_params *child_params,
 	}
 	if (params->save >= 0)
 	{
-		close(parent_params->fd[0]);
-		close(parent_params->fd[1]);
 		dup2(params->save, 0);
 		close(params->save);
 	}
@@ -114,7 +112,6 @@ static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 			close(params->saved_stdin);
 			return ;
 		}
-		
 		curr = curr->next;
 	}
 	cleanup_pipeline_fds(params, &state);

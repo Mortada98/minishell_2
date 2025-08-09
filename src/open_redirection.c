@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 09:57:49 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 20:41:18 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 	int	hd_fd;
 
 	(void)data;
-	// Process output redirection first to match bash behavior
 	if ((*cmd)->file_output)
 	{
 		open_red_out(cmd, fd_out, env);
