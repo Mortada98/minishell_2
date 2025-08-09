@@ -1,6 +1,0 @@
-mkdir folder
-cd folder
-rm -rf ../folder
-unset PWD
-cd ..
-exit

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 11:24:45 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 14:56:28 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ t_token	*creat_token(char *line, t_token_type type, bool should_join,
 	new_token->type = type;
 	new_token->found = found;
 	new_token->info = should_join;
+	new_token->quoted = get_bool();
 	new_token->next = NULL;
 	new_token->prev = NULL;
+	set_bool(false);
 	return (new_token);
 }
 

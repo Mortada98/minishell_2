@@ -1,9 +1,0 @@
-pwd
-mkdir folder
-cd folder
-pwd
-rm -rf ../folder
-pwd
-cd ..
-pwd
-exit

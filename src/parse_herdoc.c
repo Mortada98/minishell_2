@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_herdoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:45:55 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 11:10:11 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 15:37:50 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ static char	*generate_file_name(void)
 	return (buffer);
 }
 
-static void	herdoc_expansion(int *fd, char **line, t_data **data, char **env)
+static void	herdoc_expansion(int *fd, char **line, t_command *cmd, char **env)
 {
 	char	*str;
 	char	*expanded_line;
 
 	str = *line;
-	if (!(*data)->should_expand_inside)
+	
+	if (!cmd->cmd_quoted)
 	{
 		expanded_line = expand_env(str, env);
 		if (expanded_line && expanded_line != str)
@@ -81,7 +82,7 @@ static void	make_loop(t_command **cmd, int *fd, t_data **data, char **env)
 		{
 			return ;
 		}
-		herdoc_expansion(fd, &line, data, env);
+		herdoc_expansion(fd, &line, *cmd, env);
 		write(*fd, "\n", 1);
 	}
 }
@@ -111,6 +112,7 @@ static int	minishell_init(char **buffer, char **join, int *fd)
 	return (1);
 }
 
+
 void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)
 {
 	int		save;
@@ -136,5 +138,4 @@ void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)
 	close(save);
 	signal(SIGINT, my_handler);
 	(*data)->count_herdoc = 0;
-	(*data)->should_expand_inside = false;
 }

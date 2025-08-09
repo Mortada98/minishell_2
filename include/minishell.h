@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 11:27:27 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 15:20:20 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_token
 	char				*av;
 	bool				info;
 	bool				found;
+	bool				quoted;
 	t_token_type		type;
 	struct s_token		*next;
 	struct s_token		*prev;
@@ -102,6 +103,7 @@ typedef struct s_command
 	char				*herdoc_file;
 	int					append;
 	bool				file;
+	bool				cmd_quoted;
 	bool redir_error; // Flag to mark redirection errors
 	struct s_command	*next;
 }						t_command;
@@ -153,7 +155,7 @@ typedef struct s_data
 	int					end;
 	int					start;
 	bool				should_expand_outside;
-	bool				should_expand_inside;
+	// bool				should_expand_inside;
 	int					count_herdoc;
 	int					count_red_in;
 	bool				ambigiouse;
@@ -209,10 +211,13 @@ typedef struct s_all_params
 	t_pipeline_state	*state;
 }						t_all_params;
 
+bool						get_bool(void);
+bool						*init_bool(void);
+void					set_bool(bool val);
 void					print_args(char **args, int idx);
 void					unique_error(char *cmd, char *error);
-void					close_fd2(int *saved_stdin1, int *saved_stdout1, t_fd *fd,
-							char ***env);
+void					close_fd2(int *saved_stdin1, int *saved_stdout1,
+							t_fd *fd, char ***env);
 void					print_message(char *cmd, int status, char *format1,
 							char *format2);
 void					process_options(char **args, bool *has_n, int *idx);

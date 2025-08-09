@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:15:47 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 16:51:29 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 15:06:49 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,15 @@ void	join_nodes(t_token **token)
 			if (!joined)
 				return ;
 			curr->av = joined;
+			if (curr->quoted)
+				curr->quoted = true;
 			curr->next = next->next;
 			if (!next->info)
 				curr->info = false;
 			continue ;
 		}
+		else
+			curr->quoted = false;
 		curr = curr->next;
 	}
 }
