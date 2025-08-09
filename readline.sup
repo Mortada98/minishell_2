@@ -4,3 +4,17 @@
    ...
    obj:*/libreadline.so.*
 }
+
+{
+   vscode_v8_context_snapshot
+   Memcheck:Leak
+   ...
+   obj:*/v8_context_snapshot.bin
+}
+
+{
+   vscode_ptyhost_log
+   Memcheck:Leak
+   ...
+   obj:*/ptyhost.log
+}

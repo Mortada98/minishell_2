@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/09 12:15:51 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	**allocate_new_env(char **env)
 	count = 0;
 	while (env[count])
 		count++;
-	new_env = malloc(sizeof(char *) * count);
+	new_env = malloc(sizeof(char *) * (count + 1));
 	return (new_env);
 }
 
