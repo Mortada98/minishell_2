@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 16:50:19 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:34:41 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,30 +31,6 @@ int	open_red_in(int *fd_in, char *cmd)
 		close(*fd_in);
 	}
 	return (1);
-}
-
-void	set_errno(int *fd_out, t_redir **cmd, char **env)
-{
-	if (*fd_out < 0)
-	{
-		write(2, "minishell: ", 11);
-		write(2, (*cmd)->data, ft_strlen((*cmd)->data));
-		if (errno == ENOTDIR)
-			write(2, ": Not a directory\n", 18);
-		else if (errno == ENOENT)
-			write(2, ": No such file or directory\n", 28);
-		else if (errno == EACCES)
-			write(2, ": Permission denied\n", 20);
-		else if (errno == EISDIR)
-			write(2, ": Is a directory\n", 17);
-		else
-			write(2, ": No such file or directory\n", 28);
-		set_status(1);
-		gc_cleanup();
-		free_2d_array(env);
-		close_fds_except_std();
-		exit(1);
-	}
 }
 
 int	open_red_out(char *cmd, int *fd_out, char **env, int append)
@@ -101,36 +77,8 @@ int	is_directory_str(char *cmd)
 	return (0);
 }
 
-int	is_directory(t_command **cmd)
-{
-	t_redir	*temp;
-
-	if (!cmd || !*cmd)
-		return (0);
-	temp = (*cmd)->redir;
-	while (temp)
-	{
-		if (temp->type == TOKEN_REDIR_OUT || temp->type == TOKEN_REDIR_APPEND)
-		{
-			if (is_directory_str(temp->data))
-				return (1);
-		}
-		temp = temp->next;
-	}
-	return (0);
-}
-
-int	append_or_trunc(t_command **cmd)
-{
-	if ((*cmd)->append)
-	{
-		return (O_APPEND);
-	}
-	else
-		return (O_TRUNC);
-}
-
-int	execute_red_of_child_check(t_command **cmd, int *fd_out, int *fd_in, char **env)
+int	execute_red_of_child_check(t_command **cmd, int *fd_out, int *fd_in,
+		char **env)
 {
 	t_redir	*temp;
 
@@ -156,9 +104,10 @@ int	execute_red_of_child_check(t_command **cmd, int *fd_out, int *fd_in, char **
 	return (1);
 }
 
-int	excute_redirection_of_child(t_command **cmd, t_data **data, t_exec_params *params, char **env)
+int	excute_redirection_of_child(t_command **cmd, t_data **data,
+		t_exec_params *params, char **env)
 {
-	int		hd_fd;	
+	int	hd_fd;
 
 	(void)data;
 	if (!execute_red_of_child_check(cmd, params->fd_out, params->fd_in, env))

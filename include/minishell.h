@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 16:28:11 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:20:01 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,8 +220,21 @@ typedef struct s_all_params
 	t_pipeline_state	*state;
 }						t_all_params;
 
-bool						get_bool(void);
-bool						*init_bool(void);
+int						setup_params_helper(t_child_params *child_params,
+							t_exec_params *params, t_pipeline_state state,
+							t_parent_params parent_params);
+void					initialize_pipeline_state(t_exec_params *params,
+							t_pipeline_state *state);
+void					setup_params_and_loop(t_command *cmd, t_data **data,
+							char ***env, t_exec_params *params);
+void					setup_params_and_loop(t_command *cmd, t_data **data,
+							char ***env, t_exec_params *params);
+void					cleanup_pipeline_fds(t_exec_params *params,
+							t_pipeline_state *state);
+void					handle_child_fork(t_child_params *child_params,
+							t_exec_params *params);
+bool					get_bool(void);
+bool					*init_bool(void);
 void					set_bool(bool val);
 void					print_args(char **args, int idx);
 void					unique_error(char *cmd, char *error);
@@ -306,11 +319,13 @@ void					my_exit_child(t_command **cmd, t_data *data,
 void					my_exit(t_command **cmd, t_data *data, int *error);
 int						make_exit(t_command *cmd);
 int						validation(t_command *cmd);
-int					excute_redirection_of_child(t_command **cmd, t_data **data, t_exec_params *params, char **env);
+int						excute_redirection_of_child(t_command **cmd,
+							t_data **data, t_exec_params *params, char **env);
 int						append_or_trunc(t_command **cmd);
 int						is_directory(t_command **cmd);
 int						is_directory_str(char *cmd);
-int						open_red_out(char *cmd, int *fd_out, char **env, int append);
+int						open_red_out(char *cmd, int *fd_out, char **env,
+							int append);
 int						open_red_in(int *fd_in, char *cmd);
 int						heredoc_realloc(int *i, t_command *cmd,
 							t_token **current);
@@ -369,8 +384,10 @@ int						handle_pipe(t_token **current, t_command **current_cmd,
 							t_command *first_cmd, t_data **data);
 int						handle_redir_in(t_token **current, t_command *cmd,
 							t_data **data);
-int						handle_redir_out(t_token **current, t_command *cmd, t_data **data);
-int						handle_redir_append(t_token **current, t_command *cmd, t_data **data);
+int						handle_redir_out(t_token **current, t_command *cmd,
+							t_data **data);
+int						handle_redir_append(t_token **current, t_command *cmd,
+							t_data **data);
 int						handle_heredoc(t_token **current, t_command *cmd,
 							int *i);
 bool					con(char *str);
@@ -425,9 +442,11 @@ int						update_existing_var(char *name, char *value,
 							char **env);
 void					free_sorted_env(char **sorted_env, int count);
 char					**copy_and_sort_env(char **env, int count);
-int						red_out_realloc(t_command *cmd, t_data **data, t_token **current);
+int						red_out_realloc(t_command *cmd, t_data **data,
+							t_token **current);
 void					print_errno(t_redir *temp);
-int						execute_red_child_check(t_builtin_params *param, int *fd_in);
+int						execute_red_child_check(t_builtin_params *param,
+							int *fd_in);
 
 // Redirection functions
 t_redir					*cmd_new(char *av, int type, int append);

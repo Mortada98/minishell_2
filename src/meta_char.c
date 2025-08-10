@@ -74,8 +74,8 @@ int	handle_redir_out(t_token **current, t_command *cmd, t_data **data)
 		(*current) = (*current)->next->next;
 		return (1);
 	}
-	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type, O_TRUNC));
-
+	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type,
+			O_TRUNC));
 	cmd->append = 0;
 	(*current) = (*current)->next->next;
 	return (1);
@@ -91,7 +91,8 @@ int	handle_redir_append(t_token **current, t_command *cmd, t_data **data)
 		(*current) = (*current)->next->next;
 		return (1);
 	}
-	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type, O_APPEND));
+	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type,
+			O_APPEND));
 	cmd->append = 1;
 	(*current) = (*current)->next->next;
 	return (1);

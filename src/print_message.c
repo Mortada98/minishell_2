@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 17:12:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 21:12:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:33:37 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,30 @@ void	print_args(char **args, int idx)
 		if (args[idx + 1])
 			ft_putstr_fd(" ", 1);
 		idx++;
+	}
+}
+
+void	set_errno(int *fd_out, t_redir **cmd, char **env)
+{
+	if (*fd_out < 0)
+	{
+		write(2, "minishell: ", 11);
+		write(2, (*cmd)->data, ft_strlen((*cmd)->data));
+		if (errno == ENOTDIR)
+			write(2, ": Not a directory\n", 18);
+		else if (errno == ENOENT)
+			write(2, ": No such file or directory\n", 28);
+		else if (errno == EACCES)
+			write(2, ": Permission denied\n", 20);
+		else if (errno == EISDIR)
+			write(2, ": Is a directory\n", 17);
+		else
+			write(2, ": No such file or directory\n", 28);
+		set_status(1);
+		gc_cleanup();
+		free_2d_array(env);
+		close_fds_except_std();
+		exit(1);
 	}
 }
 

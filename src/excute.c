@@ -111,7 +111,8 @@ char	*get_command(char *cmd, char **env)
 		if (!access(var.complete_path, X_OK) && !S_ISDIR(var.sb.st_mode))
 			return (var.complete_path);
 		if (!access(var.complete_path, F_OK) && !S_ISDIR(var.sb.st_mode))
-			return (print_message(cmd, 126, "minishell: ", ": Permission denied\n"), NULL);
+			return (print_message(cmd, 126, "minishell: ",
+					": Permission denied\n"), NULL);
 		i++;
 	}
 	print_message(cmd, 127, "minishell: ", ": command not found\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 16:29:06 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:21:39 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,8 @@ static int	check_redirections(t_command *cmd)
 static void	execute_redirection_child(t_command *cmd, t_data **data,
 		int saved_stdin, char ***env)
 {
-	// int	fd_out;
-	// int	fd_in;
-
-	// (void)data;
 	t_exec_params	params;
+
 	excute_redirection_of_child(&cmd, data, &params, *env);
 	if ((*env)[0])
 		free_2d_array(*env);

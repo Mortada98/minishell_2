@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:15:47 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:06:49 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:23:22 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	handle_other_cases(t_token **token, char *line, t_data **data,
 		(*data)->start = (*data)->end;
 	}
 	else if (line[(*data)->end] == '\"' || line[(*data)->end] == '\'')
+	{
+		set_bool(true);
 		handle_special_quot(token, line, data, env);
+	}
 	else if (line[(*data)->end] == ' ' || line[(*data)->end] == '\t')
 		handle_white_spaces(token, line, data, env);
 	else

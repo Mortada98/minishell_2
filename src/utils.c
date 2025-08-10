@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:39:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 14:28:43 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 18:22:46 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	handle_dollar(t_token **token, char *line, t_data **data, char **env)
 	(*data)->start = (*data)->end;
 	(*data)->end++;
 	while ((ft_isalnum(line[(*data)->end]) || line[(*data)->end] == '_')
-	&& line[(*data)->end])
-	(*data)->end++;
+		&& line[(*data)->end])
+		(*data)->end++;
 	if ((*data)->end > (*data)->start)
 	{
 		handle_word_token(token, line, data, env);
@@ -35,7 +35,6 @@ void	handle_special_quot(t_token **token, char *line, t_data **data,
 {
 	char	q;
 
-	set_bool(true);
 	if (line[(*data)->start] == '$' && (line[(*data)->end] == '\"'
 			|| line[(*data)->end] == '\''))
 		(*data)->start = (*data)->end;

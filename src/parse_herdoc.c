@@ -43,7 +43,6 @@ static void	herdoc_expansion(int *fd, char **line, t_command *cmd, char **env)
 	char	*expanded_line;
 
 	str = *line;
-	
 	if (!cmd->cmd_quoted)
 	{
 		expanded_line = expand_env(str, env);
@@ -111,7 +110,6 @@ static int	minishell_init(char **buffer, char **join, int *fd)
 	}
 	return (1);
 }
-
 
 void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)
 {
