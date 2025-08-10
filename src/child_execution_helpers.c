@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   child_execution_helpers.c                         :+:      :+:    :+:   */
+/*   child_execution_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2024/12/19 22:00:00 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 16:16:01 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 	if ((*env)[0])
 		free_2d_array(*env);
 	rl_clear_history();
+	set_status(status);
 	exit(status);
 }
 
@@ -38,9 +39,27 @@ static void	execute_external_command(t_command *curr, char ***env, int save,
 
 	command = get_command(curr->args[0], *env);
 	if (!command)
-		cleanup_and_exit(save, saved_stdin, env, 127);
+		cleanup_and_exit(save, saved_stdin, env, get_status());
 	if (execve(command, curr->args, *env) == -1)
 		cleanup_and_exit(save, saved_stdin, env, 126);
+}
+
+void	execute_command_logic_check(t_command *curr,
+			t_child_params *child_params,
+			t_exec_params *params, t_builtin_params *bp)
+{
+	if (built_in(curr->args[0]))
+	{
+		bp->curr = &curr;
+		bp->fd_out = params->fd_out;
+		bp->data = *(child_params->data);
+		bp->saved_stdin = &params->saved_stdin;
+		bp->save = &params->save;
+		bp->env = child_params->env;
+		execute_builtin_child(bp);
+	}
+	execute_external_command(curr, child_params->env, params->save,
+		params->saved_stdin);
 }
 
 void	execute_command_logic(t_command *curr, t_child_params *child_params,
@@ -50,18 +69,7 @@ void	execute_command_logic(t_command *curr, t_child_params *child_params,
 
 	if (curr->args && curr->args[0] && curr->args[0][0] != '\0')
 	{
-		if (built_in(curr->args[0]))
-		{
-			bp->curr = &curr;
-			bp->fd_out = params->fd_out;
-			bp->data = *(child_params->data);
-			bp->saved_stdin = &params->saved_stdin;
-			bp->save = &params->save;
-			bp->env = child_params->env;
-			execute_builtin_child(bp);
-		}
-		execute_external_command(curr, child_params->env, params->save,
-			params->saved_stdin);
+		execute_command_logic_check(curr, child_params, params, bp);
 	}
 	else
 	{
@@ -69,8 +77,8 @@ void	execute_command_logic(t_command *curr, t_child_params *child_params,
 		{
 			params->fd_in = &stdin_fd;
 		}
-		excute_redirection_of_child(&curr, child_params->data, params->fd_out,
-			params->fd_in, (*bp->env));
+		excute_redirection_of_child(&curr, child_params->data,
+			params, *(child_params->env));
 		dup2(params->save, 0);
 		cleanup_and_exit(params->save, params->saved_stdin, child_params->env,
 			0);

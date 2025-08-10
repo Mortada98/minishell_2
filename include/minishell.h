@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:20:20 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 16:28:11 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,19 +94,27 @@ typedef struct s_token
 	struct s_token		*prev;
 }						t_token;
 
+typedef struct s_redir
+{
+	char				*data;
+	int					append;
+	t_token_type		type;
+	struct s_redir		*next;
+}						t_redir;
+
 typedef struct s_command
 {
 	char				**args;
-	char				**file_input;
-	char				*file_output;
 	char				**herdoc;
 	char				*herdoc_file;
 	int					append;
 	bool				file;
+	t_redir				*redir;
 	bool				cmd_quoted;
 	bool redir_error; // Flag to mark redirection errors
 	struct s_command	*next;
 }						t_command;
+
 typedef struct s_parse
 {
 	t_token				*current;
@@ -158,6 +166,7 @@ typedef struct s_data
 	// bool				should_expand_inside;
 	int					count_herdoc;
 	int					count_red_in;
+	int					count_red_out;
 	bool				ambigiouse;
 	bool				cmd_found;
 	int					flags;
@@ -222,11 +231,10 @@ void					print_message(char *cmd, int status, char *format1,
 							char *format2);
 void					process_options(char **args, bool *has_n, int *idx);
 void					print_args(char **args, int idx);
-int						handle_redir_append_token(t_parse *var);
+int						handle_redir_append_token(t_parse *var, t_data **data);
 int						handle_pipe_token(t_parse *var, t_data **data);
 int						handle_redir_in_token(t_parse *var, t_data **data);
-int						handle_redir_out_token(t_parse *var);
-int						handle_redir_out_token(t_parse *var);
+int						handle_redir_out_token(t_parse *var, t_data **data);
 int						handle_heredoc_token(t_parse *var);
 int						handle_word(t_parse *var, t_data **data);
 int						process_current_token(t_parse *var, t_data **data);
@@ -241,7 +249,7 @@ void					her_cmd_by_cmd(t_command *cmd, t_data *data, char **env,
 int						access_file(t_command *cmd);
 void					handle_core_dumped(int *pids, int pid_count,
 							t_data **data);
-bool					empty_command(t_command *cmd);
+void					empty_command(t_command *cmd);
 char					*check_file(char *cmd);
 void					compare_newline(char **str, bool *j, int *i);
 bool					is_redirection(t_token_type type);
@@ -298,12 +306,12 @@ void					my_exit_child(t_command **cmd, t_data *data,
 void					my_exit(t_command **cmd, t_data *data, int *error);
 int						make_exit(t_command *cmd);
 int						validation(t_command *cmd);
-void					excute_redirection_of_child(t_command **cmd,
-							t_data **data, int *fd_out, int *fd_in, char **env);
+int					excute_redirection_of_child(t_command **cmd, t_data **data, t_exec_params *params, char **env);
 int						append_or_trunc(t_command **cmd);
 int						is_directory(t_command **cmd);
-void					open_red_out(t_command **cmd, int *fd_out, char **env);
-void					open_red_in(int *fd_in, t_command **cmd);
+int						is_directory_str(char *cmd);
+int						open_red_out(char *cmd, int *fd_out, char **env, int append);
+int						open_red_in(int *fd_in, char *cmd);
 int						heredoc_realloc(int *i, t_command *cmd,
 							t_token **current);
 int						red_in_realloc(t_command *cmd, t_data **data,
@@ -361,8 +369,8 @@ int						handle_pipe(t_token **current, t_command **current_cmd,
 							t_command *first_cmd, t_data **data);
 int						handle_redir_in(t_token **current, t_command *cmd,
 							t_data **data);
-int						handle_redir_out(t_token **current, t_command *cmd);
-int						handle_redir_append(t_token **current, t_command *cmd);
+int						handle_redir_out(t_token **current, t_command *cmd, t_data **data);
+int						handle_redir_append(t_token **current, t_command *cmd, t_data **data);
 int						handle_heredoc(t_token **current, t_command *cmd,
 							int *i);
 bool					con(char *str);
@@ -417,6 +425,13 @@ int						update_existing_var(char *name, char *value,
 							char **env);
 void					free_sorted_env(char **sorted_env, int count);
 char					**copy_and_sort_env(char **env, int count);
+int						red_out_realloc(t_command *cmd, t_data **data, t_token **current);
+void					print_errno(t_redir *temp);
+int						execute_red_child_check(t_builtin_params *param, int *fd_in);
+
+// Redirection functions
+t_redir					*cmd_new(char *av, int type, int append);
+void					cmd_back(t_redir **redir, t_redir *new_redir);
 
 // Garbage Collector functions
 t_gc					*gc_init(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/09 14:24:29 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:06:47 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char	*make_content(char *line, t_data **data)
 	char	*word;
 
 	word = gc_substr(line, (*data)->start, (*data)->end - (*data)->start);
-	// if (ft_strchr(word, '\'') || ft_strchr(word, '\"'))
-	// 	set_bool(true);
 	if (!word)
 		return (NULL);
 	return (word);

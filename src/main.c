@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 10:29:18 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 11:18:08 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,9 @@ void	part_execution(t_command **cmd, char ***env, t_data **data)
 {
 	g_value = 0;
 	if (*cmd)
-	{
-		if (*cmd)
-			execute_command(*cmd, env, data);
-		else if ((*cmd)->herdoc_file)
-			unlink((*cmd)->herdoc_file);
-	}
+		execute_command(*cmd, env, data);
+	else if ((*cmd)->herdoc_file)
+		unlink((*cmd)->herdoc_file);
 	close_fds_except_std();
 	gc_cleanup_partial();
 }

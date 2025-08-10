@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_execution.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 18:46:56 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 14:54:00 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	execute_command(t_command *cmd, char ***env, t_data **data)
 {
 	t_fd	fd;
-	bool	has_command;
 
 	if (!cmd)
 		return ;
@@ -26,12 +25,7 @@ void	execute_command(t_command *cmd, char ***env, t_data **data)
 		handle_single_builtin(cmd, env, data, &fd);
 		return ;
 	}
-	has_command = empty_command(cmd);
-	if (!has_command)
-	{
-		handle_empty_command(cmd, data, fd.saved_stdin, env);
-		return ;
-	}
+	empty_command(cmd);
 	execute_pipeline_loop(cmd, data, env, fd.saved_stdin);
 	dup2(fd.saved_stdin, 0);
 	close(fd.saved_stdin);

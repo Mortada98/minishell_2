@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 10:00:36 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 16:29:06 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	check_redirections(t_command *cmd)
 	temp_cmd = cmd;
 	while (temp_cmd)
 	{
-		if (temp_cmd->file_input || temp_cmd->file_output || temp_cmd->herdoc)
+		if (temp_cmd->redir || temp_cmd->herdoc)
 			return (1);
 		temp_cmd = temp_cmd->next;
 	}
@@ -47,10 +47,12 @@ static int	check_redirections(t_command *cmd)
 static void	execute_redirection_child(t_command *cmd, t_data **data,
 		int saved_stdin, char ***env)
 {
-	int	fd_out;
-	int	fd_in;
+	// int	fd_out;
+	// int	fd_in;
 
-	excute_redirection_of_child(&cmd, data, &fd_out, &fd_in, *env);
+	// (void)data;
+	t_exec_params	params;
+	excute_redirection_of_child(&cmd, data, &params, *env);
 	if ((*env)[0])
 		free_2d_array(*env);
 	close(saved_stdin);

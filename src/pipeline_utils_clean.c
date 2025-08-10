@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils_clean.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/09 10:41:55 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 14:51:13 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	process_pipeline_iteration(t_child_params *child_params,
 {
 	pid_t	pid;
 
+	params->prev_fd = *(parent_params->prev_fd);
 	params->save = dup(0);
 	if (params->save < 0)
 		return (0);
@@ -64,8 +65,11 @@ int	process_pipeline_iteration(t_child_params *child_params,
 	}
 	if (params->save >= 0)
 	{
-		close(parent_params->fd[0]);
-		close(parent_params->fd[1]);
+		if (!child_params->curr->next)
+		{
+			close(parent_params->fd[0]);
+			close(parent_params->fd[1]);
+		}
 		dup2(params->save, 0);
 		close(params->save);
 	}
@@ -114,7 +118,6 @@ static void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 			close(params->saved_stdin);
 			return ;
 		}
-		
 		curr = curr->next;
 	}
 	cleanup_pipeline_fds(params, &state);

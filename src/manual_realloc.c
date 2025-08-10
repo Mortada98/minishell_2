@@ -3,38 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   manual_realloc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:22:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:21:04 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:57:55 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+t_redir	*cmd_new(char *av, int type, int append)
+{
+	t_redir	*redir;
+
+	redir = gc_malloc(sizeof(t_redir));
+	if (!redir)
+		return (NULL);
+	redir->data = gc_strdup(av);
+	redir->type = type;
+	redir->append = append;
+	redir->next = NULL;
+	return (redir);
+}
+
+void	cmd_back(t_redir **redir, t_redir *new_redir)
+{
+	t_redir	*temp;
+
+	if (!redir || !new_redir)
+		return ;
+	temp = *redir;
+	if (!*redir)
+	{
+		*redir = new_redir;
+		return ;
+	}
+	temp = *redir;
+	while (temp && temp->next)
+		temp = temp->next;
+	temp->next = new_redir;
+}
+
 int	red_in_realloc(t_command *cmd, t_data **data, t_token **current)
 {
-	char	**new_file_input;
-	int		j;
+	t_redir	*new_redir;
 
-	new_file_input = gc_malloc(sizeof(char *) * ((*data)->count_red_in + 2));
-	if (!new_file_input)
-	{
+	new_redir = cmd_new((*current)->next->av, TOKEN_REDIR_IN, 0);
+	if (!new_redir)
 		return (0);
-	}
-	if (cmd->file_input)
-	{
-		j = -1;
-		while (++j < (*data)->count_red_in)
-			new_file_input[j] = cmd->file_input[j];
-	}
-	cmd->file_input = new_file_input;
-	cmd->file_input[(*data)->count_red_in] = gc_strdup((*current)->next->av);
-	if (!cmd->file_input[(*data)->count_red_in])
-	{
-		return (0);
-	}
-	cmd->file_input[(*data)->count_red_in + 1] = NULL;
+	cmd_back(&(cmd->redir), new_redir);
 	(*data)->count_red_in++;
 	return (1);
 }
@@ -65,5 +82,21 @@ int	heredoc_realloc(int *i, t_command *cmd, t_token **current)
 		cmd->cmd_quoted = false;
 	cmd->herdoc[*i + 1] = NULL;
 	(*i)++;
+	return (1);
+}
+
+int	red_out_realloc(t_command *cmd, t_data **data, t_token **current)
+{
+	t_redir	*new_redir;
+	int		append;
+
+	append = 0;
+	if ((*current)->type == TOKEN_REDIR_APPEND)
+		append = 1;
+	new_redir = cmd_new((*current)->next->av, (*current)->type, append);
+	if (!new_redir)
+		return (0);
+	cmd_back(&(cmd->redir), new_redir);
+	(*data)->count_red_out++;
 	return (1);
 }

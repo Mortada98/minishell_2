@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_helper.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 11:55:44 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/05 15:33:37 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 10:06:58 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	parse_redirections(t_command **current_cmd, t_token **current,
 	}
 	else if ((*current)->type == TOKEN_REDIR_OUT)
 	{
-		if (!handle_redir_out(current, *current_cmd))
+		if (!handle_redir_out(current, *current_cmd, data))
 			return (0);
 	}
 	else if ((*current)->type == TOKEN_REDIR_APPEND)
 	{
-		if (!handle_redir_append(current, *current_cmd))
+		if (!handle_redir_append(current, *current_cmd, data))
 			return (0);
 	}
 	return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 17:18:52 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 15:54:01 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ void	execute_builtin_command(t_command *cmd, char ***env)
 	built_in_part2(cmd, env);
 }
 
-void	iterate_on_env(char **env, char **path_env, char *cmd)
+int	iterate_on_env(char **env, char **path_env, char *cmd)
 {
 	int	i;
 	int	j;
 
 	if (!env || !*env)
-		return ;
+		return (0);
 	*path_env = NULL;
 	i = 0;
 	j = 0;
@@ -85,10 +85,10 @@ void	iterate_on_env(char **env, char **path_env, char *cmd)
 	}
 	if (j == 0)
 	{
-		write(2, "minishell: ", 12);
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": No such file pr directory\n", 29);
+		print_message(cmd, 127, "minishell: ", ": No such file or directory\n");
+		return (0);
 	}
+	return (1);
 }
 
 char	*get_command(char *cmd, char **env)
@@ -99,7 +99,8 @@ char	*get_command(char *cmd, char **env)
 	i = 0;
 	if (ft_strchr(cmd, '/'))
 		return (check_file(cmd));
-	iterate_on_env(env, &var.path_env, cmd);
+	if (!iterate_on_env(env, &var.path_env, cmd))
+		return (NULL);
 	var.split_env = ft_split(var.path_env, ':');
 	var.first_join = gc_strjoin("/", cmd);
 	i = 0;
@@ -110,10 +111,7 @@ char	*get_command(char *cmd, char **env)
 		if (!access(var.complete_path, X_OK) && !S_ISDIR(var.sb.st_mode))
 			return (var.complete_path);
 		if (!access(var.complete_path, F_OK) && !S_ISDIR(var.sb.st_mode))
-		{
-			print_message(cmd, 126, "minishell: ", ": Permission denied\n");
-			return (NULL);
-		}
+			return (print_message(cmd, 126, "minishell: ", ": Permission denied\n"), NULL);
 		i++;
 	}
 	print_message(cmd, 127, "minishell: ", ": command not found\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:22:18 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 12:14:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,11 @@ t_command	*create_command(void)
 		return (NULL);
 	}
 	cmd->args = NULL;
-	cmd->file_input = NULL;
-	cmd->file_output = NULL;
 	cmd->herdoc = NULL;
 	cmd->herdoc_file = NULL;
 	cmd->file = false;
 	cmd->redir_error = false;
+	cmd->redir = NULL;
 	cmd->cmd_quoted = false;
 	cmd->next = NULL;
 	return (cmd);

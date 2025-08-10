@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:54:31 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 21:45:14 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 12:14:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,51 +60,44 @@ void	handle_core_dumped(int *pids, int pid_count, t_data **data)
 	}
 }
 
-bool	empty_command(t_command *cmd)
+void	empty_command(t_command *cmd)
 {
 	t_command	*temp_cmd;
-	bool		has_command;
 
-	has_command = false;
 	temp_cmd = cmd;
 	if (!temp_cmd)
-		return (true);
+		return ;
 	while (temp_cmd)
 	{
 		if (temp_cmd->args && temp_cmd->args[0][0] == '\0')
 		{
 			write(2, "minishell : '' : command not found\n", 36);
 		}
-		if (temp_cmd->args && temp_cmd->args[0] && temp_cmd->args[0][0] != '\0')
-		{
-			has_command = true;
-		}
 		temp_cmd = temp_cmd->next;
 	}
-	return (has_command);
 }
 
 int	access_file(t_command *cmd)
 {
-	int	j;
-	int	fd;
+	int		fd;
+	t_redir	*redir;
 
-	j = 0;
-	if (cmd->file_input)
+	redir = cmd->redir;
+	while (redir)
 	{
-		while (cmd->file_input[j])
+		if (redir->type == TOKEN_REDIR_IN)
 		{
-			fd = open(cmd->file_input[j], O_RDONLY);
+			fd = open(redir->data, O_RDONLY);
 			if (fd < 0)
 			{
 				write(2, "minishell: ", 11);
-				write(2, cmd->file_input[j], ft_strlen(cmd->file_input[j]));
+				write(2, redir->data, ft_strlen(redir->data));
 				write(2, ": No such file or directory\n", 28);
 				return (0);
 			}
 			close(fd);
-			j++;
 		}
+		redir = redir->next;
 	}
 	return (1);
 }

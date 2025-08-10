@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:10:38 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 14:12:46 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 16:57:02 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	handle_pipe(t_token **current, t_command **current_cmd,
 	t_command	*new_cmd;
 
 	(void)first_cmd;
-	if ((*current)->prev == NULL)
+	if ((*current)->prev == NULL || (*current)->prev->type != TOKEN_WORD)
 	{
 		write(2, "minishell: syntax error near unexpected token `|'\n", 54);
 		set_status(2);
@@ -43,6 +43,7 @@ int	handle_pipe(t_token **current, t_command **current_cmd,
 
 int	handle_redir_in(t_token **current, t_command *cmd, t_data **data)
 {
+	(void)data;
 	if (!(*current)->next)
 	{
 		write(2, "minishell: syntax error near unexpected token `newline'\n",
@@ -58,16 +59,14 @@ int	handle_redir_in(t_token **current, t_command *cmd, t_data **data)
 		set_status(2);
 		return (0);
 	}
-	if (red_in_realloc(cmd, data, current) == 0)
-		return (0);
+	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type, 0));
 	(*current) = (*current)->next->next;
 	return (1);
 }
 
-int	handle_redir_out(t_token **current, t_command *cmd)
+int	handle_redir_out(t_token **current, t_command *cmd, t_data **data)
 {
-	char	*filename;
-
+	(void)data;
 	if (!check_redir_syntax(current))
 		return (0);
 	if (get_redir_error())
@@ -75,19 +74,16 @@ int	handle_redir_out(t_token **current, t_command *cmd)
 		(*current) = (*current)->next->next;
 		return (1);
 	}
-	filename = gc_strdup((*current)->next->av);
-	if (!filename)
-		return (0);
-	cmd->file_output = filename;
+	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type, O_TRUNC));
+
 	cmd->append = 0;
 	(*current) = (*current)->next->next;
 	return (1);
 }
 
-int	handle_redir_append(t_token **current, t_command *cmd)
+int	handle_redir_append(t_token **current, t_command *cmd, t_data **data)
 {
-	char	*filename;
-
+	(void)data;
 	if (!check_redir_syntax(current))
 		return (0);
 	if (get_redir_error())
@@ -95,10 +91,7 @@ int	handle_redir_append(t_token **current, t_command *cmd)
 		(*current) = (*current)->next->next;
 		return (1);
 	}
-	filename = gc_strdup((*current)->next->av);
-	if (!filename)
-		return (0);
-	cmd->file_output = filename;
+	cmd_back(&(cmd->redir), cmd_new((*current)->next->av, (*current)->type, O_APPEND));
 	cmd->append = 1;
 	(*current) = (*current)->next->next;
 	return (1);

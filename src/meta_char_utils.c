@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:10:43 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 13:41:20 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/10 10:05:56 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,41 +52,41 @@ void	print_open_error(char *filename)
 	}
 }
 
-int	open_output_file_1(t_command *cmd, char *filename)
-{
-	int	fd;
+// int	open_output_file_1(t_command *cmd, char *filename)
+// {
+// 	int	fd;
 
-	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd < 0)
-	{
-		reset_redir_error(1);
-		cmd->redir_error = true;
-		print_open_error(filename);
-		cmd->file_output = NULL;
-		return (0);
-	}
-	close(fd);
-	cmd->file_output = filename;
-	return (1);
-}
+// 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 	if (fd < 0)
+// 	{
+// 		reset_redir_error(1);
+// 		cmd->redir_error = true;
+// 		print_open_error(filename);
+// 		cmd->file_output = NULL;
+// 		return (0);
+// 	}
+// 	close(fd);
+// 	cmd->file_output = filename;
+// 	return (1);
+// }
 
-int	open_output_file_0(t_command *cmd, char *filename)
-{
-	int	fd;
+// int	open_output_file_0(t_command *cmd, char *filename)
+// {
+// 	int	fd;
 
-	fd = open(filename, O_WRONLY | O_CREAT, 0644);
-	if (fd < 0)
-	{
-		reset_redir_error(1);
-		cmd->redir_error = true;
-		print_open_error(filename);
-		cmd->file_output = NULL;
-		return (0);
-	}
-	close(fd);
-	cmd->file_output = filename;
-	return (1);
-}
+// 	fd = open(filename, O_WRONLY | O_CREAT, 0644);
+// 	if (fd < 0)
+// 	{
+// 		reset_redir_error(1);
+// 		cmd->redir_error = true;
+// 		print_open_error(filename);
+// 		cmd->file_output = NULL;
+// 		return (0);
+// 	}
+// 	close(fd);
+// 	cmd->file_output = filename;
+// 	return (1);
+// }
 
 int	check_input_file(char *filename, t_command *cmd)
 {

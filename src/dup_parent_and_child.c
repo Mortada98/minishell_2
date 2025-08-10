@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 11:24:55 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 17:08:21 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,49 +14,52 @@
 
 void	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 {
-	if (!fd_out)
+	t_redir	*temp;
+
+	if (!fd_out || !(*cmd)->redir)
 		return ;
-	if ((*cmd)->file_output)
+	temp = (*cmd)->redir;
+	while (temp)
 	{
-		*flags = O_WRONLY | O_CREAT | append_or_trunc(cmd);
-		*fd_out = open((*cmd)->file_output, *flags, 0644);
-		if (*fd_out < 0)
-			return ;
-		if (dup2(*fd_out, STDOUT_FILENO) == -1)
+		if (temp->type == TOKEN_REDIR_OUT || temp->type == TOKEN_REDIR_APPEND)
 		{
+			*flags = O_WRONLY | O_CREAT | temp->append;
+			*fd_out = open(temp->data, *flags, 0644);
+			if (*fd_out < 0)
+				return (perror("minishell"), (void)0);
+			if (dup2(*fd_out, STDOUT_FILENO) == -1)
+			{
+				perror("minishell");
+				close(*fd_out);
+				return ;
+			}
 			close(*fd_out);
-			return ;
 		}
-		close(*fd_out);
+		temp = temp->next;
 	}
 }
 
 int	is_directory_parent(t_command **cmd)
 {
-	int	fd;
+	int		fd;
+	int		i;
+	t_redir	*temp;
 
-	if (!(*cmd)->file_output)
+	if (!(*cmd)->redir)
 		return (0);
-	fd = open((*cmd)->file_output, O_WRONLY | O_CREAT, 0644);
-	if (fd < 0)
+	i = 0;
+	temp = (*cmd)->redir;
+	while (temp)
 	{
-		if (errno == EISDIR)
-			print_message((*cmd)->file_output, 1, "minishell: ",
-				": Is a directory\n");
-		else if (errno == ENOTDIR)
-			print_message((*cmd)->file_output, 1, "minishell: ",
-				": Not a directory\n");
-		else if (errno == ENOENT)
-			print_message((*cmd)->file_output, 1, "minishell: ",
-				": No such file or directory\n");
-		else if (errno == EACCES)
-			print_message((*cmd)->file_output, 1, "minishell: ",
-				": Permission denied\n");
-		else
-			unique_error((*cmd)->file_output, strerror(errno));
-		return (1);
+		fd = open(temp->data, O_WRONLY | O_CREAT, 0644);
+		if (fd < 0)
+		{
+			print_errno(temp);
+			return (1);
+		}
+		close(fd);
+		temp = temp->next;
 	}
-	close(fd);
 	return (0);
 }
 
@@ -67,7 +70,7 @@ void	excute_redirection_of_parent(t_command **cmd, t_fd *fd, t_data *data,
 
 	int (saved_stdout1), saved_stdin1, flags;
 	error = 0;
-	if ((*cmd)->file_output)
+	if ((*cmd)->redir)
 	{
 		if (is_directory_parent(cmd))
 			return ;
@@ -109,25 +112,23 @@ void	close_fd(int *saved_stdin1, int *saved_stdout, t_builtin_params *param)
 
 void	excute_redirection_of_child_builtin(t_builtin_params *param)
 {
-	int	error;
+	int		error;
+	int		saved_stdout;
+	int		saved_stdin1;
+	int		flags;
+	int		fd_in;
 
-	int (saved_stdout), saved_stdin1, flags, fd_in;
 	error = 0;
-	if ((*param->curr)->file_output)
-	{
+	if ((*param->curr)->redir)
 		if (is_directory_parent(param->curr))
 			return ;
-	}
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin1 = dup(STDIN_FILENO);
-	if ((*param->curr)->file_input)
-	{
-		fd_in = STDIN_FILENO;
-		open_red_in(&fd_in, param->curr);
-	}
+	if (execute_red_child_check(param, &fd_in))
+		return ;
 	open_and_duplicate(param->curr, &flags, param->fd_out);
 	my_exit_child(param->curr, param->data, &error);
-	if (error == 1)
+	if (error == 1 || get_status() == 1)
 		close_fd(&saved_stdin1, &saved_stdout, param);
 	execute_builtin_command((*param->curr), param->env);
 	dup2(saved_stdout, STDOUT_FILENO);

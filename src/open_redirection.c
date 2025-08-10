@@ -3,62 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 09:57:49 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 16:50:19 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	open_red_in(int *fd_in, t_command **cmd)
+int	open_red_in(int *fd_in, char *cmd)
 {
-	int	i;
-
 	if (!fd_in || !cmd || !*cmd)
-		return ;
-	if (!(*cmd)->file_input)
-		return ;
-	i = 0;
-	while ((*cmd)->file_input && (*cmd)->file_input[i])
+		return (0);
+	if (*fd_in > 2)
+		close(*fd_in);
+	*fd_in = open(cmd, O_RDONLY);
+	if (*fd_in < 0)
 	{
-		if (*fd_in > 2)
-			close(*fd_in);
-		*fd_in = open((*cmd)->file_input[i], O_RDONLY);
-		if (*fd_in < 0)
-		{
-			if (!(*cmd)->redir_error)
-			{
-				write(2, "minishell: ", 11);
-				write(2, (*cmd)->file_input[i],
-					ft_strlen((*cmd)->file_input[i]));
-				if (errno == ENOTDIR)
-					write(2, ": Not a directory\n", 18);
-				else if (errno == ENOENT)
-					write(2, ": No such file or directory\n", 28);
-				else if (errno == EACCES)
-					write(2, ": Permission denied\n", 20);
-				else
-					write(2, ": No such file or directory\n", 28);
-				(*cmd)->redir_error = true;
-				set_status(1);
-			}
-			i++;
-			continue ;
-		}
+		perror("minishell");
+		set_status(1);
+		return (0);
+	}
+	if (*fd_in > 2)
+	{
 		dup2(*fd_in, STDIN_FILENO);
 		close(*fd_in);
-		i++;
 	}
+	return (1);
 }
 
-void	set_errno(int *fd_out, t_command **cmd, char **env)
+void	set_errno(int *fd_out, t_redir **cmd, char **env)
 {
 	if (*fd_out < 0)
 	{
 		write(2, "minishell: ", 11);
-		write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+		write(2, (*cmd)->data, ft_strlen((*cmd)->data));
 		if (errno == ENOTDIR)
 			write(2, ": Not a directory\n", 18);
 		else if (errno == ENOENT)
@@ -77,40 +57,66 @@ void	set_errno(int *fd_out, t_command **cmd, char **env)
 	}
 }
 
-void	open_red_out(t_command **cmd, int *fd_out, char **env)
+int	open_red_out(char *cmd, int *fd_out, char **env, int append)
 {
 	int	flags;
 
-	if (!fd_out)
-		return ;
-	if (is_directory(cmd))
+	(void)env;
+	if (!fd_out || !cmd || !*cmd)
+		return (0);
+	if (is_directory_str(cmd))
+		return (set_status(1), 0);
+	flags = O_WRONLY | O_CREAT | append;
+	if (*fd_out > 2)
+		close(*fd_out);
+	*fd_out = open(cmd, flags, 0644);
+	if (*fd_out < 0)
 	{
-		gc_cleanup();
-		close_fds_except_std();
-		exit(1);
+		perror("minishell");
+		set_status(1);
+		return (0);
 	}
-	flags = O_WRONLY | O_CREAT | append_or_trunc(cmd);
-	*fd_out = open((*cmd)->file_output, flags, 0644);
-	set_errno(fd_out, cmd, env);
-	dup2(*fd_out, STDOUT_FILENO);
-	close(*fd_out);
+	if (*fd_out > 2)
+	{
+		dup2(*fd_out, STDOUT_FILENO);
+		close(*fd_out);
+	}
+	return (1);
 }
 
-int	is_directory(t_command **cmd)
+int	is_directory_str(char *cmd)
 {
 	DIR	*folder;
 
-	folder = opendir((*cmd)->file_output);
+	folder = opendir(cmd);
 	if (folder != NULL)
 	{
 		write(2, "minishell : ", 12);
-		write(2, (*cmd)->file_output, ft_strlen((*cmd)->file_output));
+		write(2, cmd, ft_strlen(cmd));
 		write(2, ":  Is a directory\n", 18);
 		set_status(1);
 		closedir(folder);
 		return (1);
 	}
-	closedir(folder);
+	return (0);
+}
+
+int	is_directory(t_command **cmd)
+{
+	t_redir	*temp;
+
+	if (!cmd || !*cmd)
+		return (0);
+	temp = (*cmd)->redir;
+	while (temp)
+	{
+		if (temp->type == TOKEN_REDIR_OUT || temp->type == TOKEN_REDIR_APPEND)
+		{
+			if (is_directory_str(temp->data))
+				return (1);
+		}
+		temp = temp->next;
+	}
 	return (0);
 }
 
@@ -124,23 +130,39 @@ int	append_or_trunc(t_command **cmd)
 		return (O_TRUNC);
 }
 
-void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
-		int *fd_in, char **env)
+int	execute_red_of_child_check(t_command **cmd, int *fd_out, int *fd_in, char **env)
 {
-	int	hd_fd;
+	t_redir	*temp;
+
+	if ((*cmd)->redir)
+	{
+		temp = (*cmd)->redir;
+		while (temp && get_status() != 1)
+		{
+			if (temp->type == TOKEN_REDIR_IN)
+			{
+				if (!open_red_in(fd_in, temp->data))
+					return (0);
+			}
+			if (temp->type == TOKEN_REDIR_OUT
+				|| temp->type == TOKEN_REDIR_APPEND)
+			{
+				if (!open_red_out(temp->data, fd_out, env, temp->append))
+					return (0);
+			}
+			temp = temp->next;
+		}
+	}
+	return (1);
+}
+
+int	excute_redirection_of_child(t_command **cmd, t_data **data, t_exec_params *params, char **env)
+{
+	int		hd_fd;	
 
 	(void)data;
-	// Process output redirection first to match bash behavior
-	if ((*cmd)->file_output)
-	{
-		open_red_out(cmd, fd_out, env);
-	}
-	if ((*cmd)->file_input)
-	{
-		open_red_in(fd_in, cmd);
-		if ((*cmd)->redir_error)
-			return ;
-	}
+	if (!execute_red_of_child_check(cmd, params->fd_out, params->fd_in, env))
+		return (0);
 	if ((*cmd)->herdoc_file)
 	{
 		hd_fd = open((*cmd)->herdoc_file, O_RDONLY);
@@ -154,4 +176,5 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 		dup2(hd_fd, 0);
 		close(hd_fd);
 	}
+	return (1);
 }

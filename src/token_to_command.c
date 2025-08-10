@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:02:21 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/05 16:11:28 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/10 12:14:18 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ int	handle_redir_in_token(t_parse *var, t_data **data)
 	return (1);
 }
 
-int	handle_redir_out_token(t_parse *var)
+int	handle_redir_out_token(t_parse *var, t_data **data)
 {
-	if (!handle_redir_out(&var->current, var->current_cmd))
+	if (!handle_redir_out(&var->current, var->current_cmd, data))
 		return (0);
 	return (1);
 }
 
-int	handle_redir_append_token(t_parse *var)
+int	handle_redir_append_token(t_parse *var, t_data **data)
 {
-	if (!handle_redir_append(&var->current, var->current_cmd))
+	if (!handle_redir_append(&var->current, var->current_cmd, data))
 		return (0);
 	return (1);
 }

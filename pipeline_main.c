@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_main.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/08 21:08:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/09 21:31:22 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	execute_pipeline_loop(t_command *cmd, t_data **data, char ***env,
 		}
 		curr = curr->next;
 	}
+	close(fd[0]);
+	close(fd[1]);
 	handle_core_dumped(pids, vars[1], data);
 	signal(SIGINT, my_handler);
 	dup2(saved_stdin, 0);
