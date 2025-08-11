@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 12:14:18 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:52:13 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*expand_env(char *str, char **env)
 			continue ;
 		}
 		if (var.condition && str[var.i] == '$' && str[var.i + 1]
-			&& (ft_isalnum(str[var.i + 1]) || str[var.i + 1] == '_'))
+			&& (ft_isalpha(str[var.i + 1]) || str[var.i + 1] == '_'))
 		{
 			if (simple_condition(&var, str, env) == 0)
 				return (NULL);

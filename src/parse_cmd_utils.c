@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:52:21 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/04 12:11:23 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:51:35 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*split_var(size_t *i, char *str, size_t *start)
 
 	(*i)++;
 	*start = *i;
-	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+	while (str[*i] && (ft_isalpha(str[*i]) || str[*i] == '_'))
 		(*i)++;
 	string = gc_substr(str, *start, (*i) - (*start));
 	if (!string)

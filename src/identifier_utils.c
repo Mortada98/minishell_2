@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identifier_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:00:31 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	is_valid_identifier(char *name)
 
 	if (!name || !*name)
 		return (0);
-	if (!ft_isalpha(name[0]) && name[0] != '_')
+	if (!ft_isalnum(name[0]) && name[0] != '_')
 		return (0);
 	i = 1;
 	while (name[i])

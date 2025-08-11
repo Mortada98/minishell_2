@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:34:41 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:13:28 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ int	execute_red_of_child_check(t_command **cmd, int *fd_out, int *fd_in,
 	if ((*cmd)->redir)
 	{
 		temp = (*cmd)->redir;
-		while (temp && get_status() != 1)
+		while (temp)
 		{
 			if (temp->type == TOKEN_REDIR_IN)
 			{
 				if (!open_red_in(fd_in, temp->data))
 					return (0);
 			}
-			if (temp->type == TOKEN_REDIR_OUT
+			else if (temp->type == TOKEN_REDIR_OUT
 				|| temp->type == TOKEN_REDIR_APPEND)
 			{
 				if (!open_red_out(temp->data, fd_out, env, temp->append))
@@ -110,8 +110,12 @@ int	excute_redirection_of_child(t_command **cmd, t_data **data,
 	int	hd_fd;
 
 	(void)data;
-	if (!execute_red_of_child_check(cmd, params->fd_out, params->fd_in, env))
-		return (0);
+	if ((*cmd)->redir)
+	{
+		if (!execute_red_of_child_check(cmd, params->fd_out, params->fd_in,
+				env))
+			return (0);
+	}
 	if ((*cmd)->herdoc_file)
 	{
 		hd_fd = open((*cmd)->herdoc_file, O_RDONLY);

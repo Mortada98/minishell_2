@@ -6,42 +6,19 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:34:54 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 21:05:44 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:19:31 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	small_condition(char *str, t_data *data)
-{
-	if (str[0] == 0)
-	{
-		data->flags = 1;
-		return (0);
-	}
-	return (1);
-}
-
 char	*handle_expansion(t_data *data, char *word, char **env)
 {
 	char	*str;
-	int		count;
 
 	if (!data->should_expand_outside)
 	{
 		str = expand_env(word, env);
-		if (data->ambigiouse && ft_strcmp(str, word) != 0)
-		{
-			count = count_word(str, ' ', '\t');
-			if (data->ambigiouse && (count != 1 || !small_condition(str, data)))
-			{
-				write(2, "minishell : ", 12);
-				write(2, word, ft_strlen(word));
-				write(2, ": ambiguous redirect\n", 21);
-				data->flags = 1;
-				return (NULL);
-			}
-		}
 		return (str);
 	}
 	return (word);

@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:15:47 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:23:22 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:54:02 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ t_token_type	get_token_type(char *str)
 
 int	handle_dollar_cases(t_token **token, t_data **data, char *line, char **env)
 {
-	if (line[(*data)->end] == '$' && (ft_isalnum(line[(*data)->end + 1])
+	if (line[(*data)->end] == '$' && (ft_isalpha(line[(*data)->end + 1])
 			|| line[(*data)->end + 1] == '_'))
 	{
 		handle_dollar(token, line, data, env);
 		return (0);
 	}
-	if (line[(*data)->end] == '$' && !ft_isalnum(line[(*data)->end + 1]))
+	if (line[(*data)->end] == '$' && !ft_isalpha(line[(*data)->end + 1]))
 	{
 		handle_some_cases(token, line, data, env);
 	}

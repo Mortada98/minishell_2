@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:43:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 20:34:41 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:42:19 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,6 @@ bool	ft_space(char c)
 bool	ft_meta_c(char c)
 {
 	return (c == '>' || c == '|' || c == '<');
-}
-
-void	init_var2(int *start, int *i, bool *should_join)
-{
-	*start = 0;
-	*i = 0;
-	*should_join = false;
 }
 
 void	convert_exit_status(char **word)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 11:18:08 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:18:00 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	parsing_process(t_token **token, char **env, t_data *data, t_command **cmd)
 {
 	int	check;
 
-	if (data->flags)
-		return (0);
 	join_nodes(token);
 	*cmd = parsing_command(*token, &data);
 	if (!*cmd)

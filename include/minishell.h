@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:20:01 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:45:27 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,13 +163,10 @@ typedef struct s_data
 	int					end;
 	int					start;
 	bool				should_expand_outside;
-	// bool				should_expand_inside;
 	int					count_herdoc;
 	int					count_red_in;
 	int					count_red_out;
-	bool				ambigiouse;
 	bool				cmd_found;
-	int					flags;
 }						t_data;
 
 typedef struct s_child_params
@@ -290,7 +287,6 @@ char					*process_quotes(char *str, int *flag);
 char					*handle_expansion(t_data *data, char *word, char **env);
 void					lexe_with_space(t_token **token, int *start, int *i,
 							char *word);
-void					init_var2(int *start, int *i, bool *should_join);
 void					check_the_last_element(t_token **token, t_data **data);
 void					make_list(char *word, t_token **token);
 void					join_expansion(char *str, t_token **token);

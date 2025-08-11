@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/10 15:06:47 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 10:17:20 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,4 @@ char	*make_content(char *line, t_data **data)
 	if (!word)
 		return (NULL);
 	return (word);
-}
-
-size_t	count_word(char const *s, char c, char k)
-{
-	size_t	words;
-	size_t	i;
-
-	words = 0;
-	i = 0;
-	while (s[i])
-	{
-		if ((s[i] != c && s[i]) && (s[i + 1] == c || s[i + 1] == k
-				|| s[i + 1] == '\0'))
-			words++;
-		i++;
-	}
-	return (words);
 }
