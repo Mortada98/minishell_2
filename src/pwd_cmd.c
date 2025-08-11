@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 19:24:54 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 21:07:35 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	*manage_saved_cwd(int action, char *new_value)
 			saved_cwd = temp;
 		return (NULL);
 	}
-	else
-		return (NULL);
+	saved_cwd = NULL;
+	return (NULL);
 }
 
 char	*get_current_directory(char **env)

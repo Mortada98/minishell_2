@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 18:24:07 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:24:12 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 21:31:04 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ void	print_errno(t_redir *temp)
 		print_message(temp->data, 1, "minishell: ",
 			": Is a directory\n");
 	else if (errno == ENOTDIR)
+	{
 		print_message(temp->data, 1, "minishell: ",
 			": Not a directory\n");
+			set_status(126);
+	}
 	else if (errno == ENOENT)
 		print_message(temp->data, 1, "minishell: ",
 			": No such file or directory\n");

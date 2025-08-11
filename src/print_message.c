@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 17:12:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 12:10:25 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 21:51:33 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,13 @@ void	unique_error(char *cmd, char *error)
 char	*check_file(char *cmd)
 {
 	struct stat	st;
-	DIR			*folder;
+	// DIR			*folder;
 
 	if (stat(cmd, &st) == -1)
 	{
-		perror("minishell: ");
-		set_status(127);
+		print_open_error(cmd);
 		return (NULL);
 	}
-	folder = opendir(cmd);
-	if (folder != NULL)
-	{
-		print_message(cmd, 126, "minishell: ", ": Is a directory\n");
-		closedir(folder);
-		return (NULL);
-	}
-	closedir(folder);
 	if (access(cmd, X_OK) == 0)
 		return (gc_strdup(cmd));
 	if (access(cmd, F_OK) == 0)
@@ -68,7 +59,10 @@ void	set_errno(int *fd_out, t_redir **cmd, char **env)
 	if (*fd_out < 0)
 	{
 		if (errno == ENOTDIR)
+		{
 			write(2, "minishell: Not a directory\n", 28);
+			set_status(126);
+		}
 		else if (errno == ENOENT)
 			write(2, "minishell: No such file or directory\n", 38);
 		else if (errno == EACCES)
