@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:48:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:21:39 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:26:36 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@ int	handle_single_builtin(t_command *cmd, char ***env, t_data **data, t_fd *fd)
 	fd->fd_out = -1;
 	if (!access_file(cmd))
 		return (close(fd->saved_stdin), 0);
-	if (cmd->redir_error)
-	{
-		dup2(fd->saved_stdin, 0);
-		close(fd->saved_stdin);
-		set_status(1);
-		return (0);
-	}
 	excute_redirection_of_parent(&cmd, fd, *data, env);
 	dup2(fd->saved_stdin, 0);
 	close(fd->saved_stdin);

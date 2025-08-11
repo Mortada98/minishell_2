@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tchevrie <tchevrie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 16:56:46 by tchevrie          #+#    #+#             */
-/*   Updated: 2022/10/05 04:32:47 by tchevrie         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:33:48 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,3 @@ char	**ft_split(char const *s, char c)
 	set_mem(tab, s, c);
 	return (tab);
 }
-
-// int main()
-// {
-//   while(1)
-//   {
-//     char *line = readline("> ");
-//     if (line == NULL)
-//       exit(1);
-//     char **split = ft_split(line, ' ');
-//     for (int i = 0;split[i]; i++)
-//     {
-//       printf("%s\n", split[i]);
-//     }
-//     free(line);
-//   }
-// }

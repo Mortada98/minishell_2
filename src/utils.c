@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:39:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:54:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:37:54 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool	check_somthing(char *word)
 {
 	if (!is_closed_quotes(word))
 	{
-		printf("minishell : the quote does not close!\n");
+		write(2, "minishell : the quote does not close!\n", 39);
 		set_status(0);
 		return (false);
 	}

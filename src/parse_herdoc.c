@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:45:55 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:37:50 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:53:08 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,7 @@ static void	make_loop(t_command **cmd, int *fd, t_data **data, char **env)
 		if (!line)
 		{
 			if (!g_value)
-				printf("warning: delimited by end-of-file (wanted `%s')\n",
-					(*cmd)->herdoc[(*data)->start]);
+				write(2, "warning: delimited by end-of-file\n", 35);
 			break ;
 		}
 		gc_register_external(line);

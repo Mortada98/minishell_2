@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:01:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 11:23:40 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 14:11:41 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ int	validation(t_command *cmd)
 {
 	if (cmd->args[1] && !is_number(cmd->args[1]))
 	{
-		write(2, "minishell: exit: ", 17);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
-		write(2, ": numeric argument required\n", 28);
+		write(2, "minishell: exit: numeric argument required\n", 44);
 		return (2);
 	}
 	return (0);
@@ -52,7 +50,7 @@ void	fill_error(t_command **cmd, int *error)
 	if (i == 2)
 	{
 		set_status(2);
-		*error = 0;
+		*error = 1;
 		return ;
 	}
 	if (i == 0)
@@ -75,6 +73,7 @@ void	my_exit(t_command **cmd, t_data *data, int *error)
 		arg_count = 0;
 		while ((*cmd)->args[arg_count])
 			arg_count++;
+		write(1, "exit\n", 5);
 		if (arg_count > 2 && is_number((*cmd)->args[1]))
 		{
 			write(2, "minishell: exit: too many arguments\n", 36);
@@ -82,7 +81,6 @@ void	my_exit(t_command **cmd, t_data *data, int *error)
 			*error = 0;
 			return ;
 		}
-		write(1, "exit\n", 5);
 		fill_error(cmd, error);
 	}
 }

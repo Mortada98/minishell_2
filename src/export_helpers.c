@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:50:06 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 static int	handle_export_error(char *arg, char *name)
 {
-	write(2, "minishell: export: `", 20);
-	write(2, arg, ft_strlen(arg));
-	write(2, "': not a valid identifier\n", 26);
+	(void)arg;
+	write(2, "minishell: export: not a valid identifier\n", 43);
 	if (name)
 		free(name);
 	set_status(1);

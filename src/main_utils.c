@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:54:31 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 12:14:18 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:52:20 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,8 @@ int	access_file(t_command *cmd)
 			fd = open(redir->data, O_RDONLY);
 			if (fd < 0)
 			{
-				write(2, "minishell: ", 11);
-				write(2, redir->data, ft_strlen(redir->data));
-				write(2, ": No such file or directory\n", 28);
+				write(2, "minishell: No such file or directory\n", 38);
+				set_status(1);
 				return (0);
 			}
 			close(fd);

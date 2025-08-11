@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:16:43 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/08 21:17:15 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:40:58 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,15 @@ static char	*get_cd_target(char *cmd, char **env)
 {
 	char	*target;
 
-	if (!cmd || ft_strcmp(cmd, "~") == 0)
+	if (!cmd)
 	{
 		target = get_env("HOME", env);
 		if (!target)
 		{
 			write(2, "cd: HOME not set\n", 18);
+			set_status(1);
 			return (NULL);
 		}
-	}
-	else if (ft_strcmp(cmd, "-") == 0)
-	{
-		target = get_env("OLDPWD", env);
-		if (!target)
-		{
-			write(2, "cd: OLDPWD not set\n", 20);
-			return (NULL);
-		}
-		printf("%s\n", target);
 	}
 	else
 		target = cmd;

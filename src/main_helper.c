@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:56:44 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 15:38:59 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 12:45:02 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	process_line(t_token **token, char **line, char **env, t_data **data)
 	*line = readline(prompt(env));
 	if (!*line)
 	{
-		printf("exit\n");
+		write(2, "exit\n", 6);
 		gc_cleanup();
 		return (2);
 	}

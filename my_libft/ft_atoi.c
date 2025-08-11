@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 00:44:51 by tchevrie          #+#    #+#             */
-/*   Updated: 2025/08/04 18:15:40 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:34:48 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_atoi(char *str)
 	{
 		if (nbr > LONG_MAX || (nbr * sign) < LONG_MIN)
 		{
-			printf("minishell: exit: %s: numeric argument required\n", str);
+			write(2, "minishell: exit: numeric argument required\n", 44);
 			return (2);
 		}
 		nbr = nbr * 10 + str[i] - '0';

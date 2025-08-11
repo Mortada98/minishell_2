@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 15:10:54 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/11 10:17:20 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 13:17:31 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	lexe_with_space(t_token **token, int *start, int *i, char *word)
 		str = gc_substr(word, *start, *i - *start);
 		add_token(token, creat_token(str, TOKEN_WORD, false, false));
 	}
-	while (word[*i] == ' ' || word[*i] == '\t')
+	while ((word[*i] == ' ' || word[*i] == '\t'))
 		(*i)++;
 	*start = *i;
 }

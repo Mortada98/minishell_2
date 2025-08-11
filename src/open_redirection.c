@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 16:44:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:13:28 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 11:59:47 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,7 @@ int	is_directory_str(char *cmd)
 	folder = opendir(cmd);
 	if (folder != NULL)
 	{
-		write(2, "minishell : ", 12);
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ":  Is a directory\n", 18);
+		write(2, "minishell:  Is a directory\n", 28);
 		set_status(1);
 		closedir(folder);
 		return (1);
