@@ -14,13 +14,10 @@
 
 int	setup_pipe(t_command *curr, int *fd)
 {
-	int	i;
-
 	if (curr->next)
 	{
 		if (pipe(fd) == -1)
 		{
-			i = 0;
 			perror("pipe");
 			return (0);
 		}

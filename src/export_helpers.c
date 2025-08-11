@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_helpers.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 11:50:06 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ static int	add_new_variable(char *name, char *value, char ***env)
 
 static int	process_export_value(char *name, char *value, char ***env)
 {
+	// Remove from exported variables list if it was there
+	remove_exported_var(name);
+	
 	if (!update_existing_var(name, value, *env))
 	{
 		if (!add_new_variable(name, value, env))

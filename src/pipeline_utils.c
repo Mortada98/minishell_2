@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 18:13:22 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 18:30:54 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 16:50:05 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 {
 	t_pipeline_state	state;
 	t_parent_params		parent_params;
-	t_command			*curr;
 	t_child_params		child_params;
 
 	initialize_pipeline_state(params, &state);
@@ -55,7 +54,6 @@ void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 	child_params.cmd = cmd;
 	child_params.data = data;
 	child_params.env = env;
-	curr = cmd;
 	if (!setup_params_helper(&child_params, params, state, parent_params))
 		return ;
 	cleanup_pipeline_fds(params, &state);

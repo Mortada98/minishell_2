@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:16:43 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/11 11:40:58 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 17:54:50 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	update_pwd(char ***env)
 		handle_getcwd_error();
 		return ;
 	}
+	update_saved_cwd_public();
 	new_pwd = ft_strjoin("PWD=", cwd);
 	if (free(cwd), !new_pwd)
 		return ;

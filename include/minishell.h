@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 13:17:16 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ typedef struct s_gc
 	t_gc_node			*allocations;
 	size_t				count;
 }						t_gc;
+
+// Exported variables without values structure
+typedef struct s_exported_var
+{
+	char				*name;
+	struct s_exported_var	*next;
+}						t_exported_var;
 
 typedef struct s_exec_params
 {
@@ -307,8 +314,7 @@ void					join_nodes(t_token **token);
 void					excute_redirection_of_parent(t_command **cmd, t_fd *fd,
 							t_data *data, char ***env);
 int						is_directory_parent(t_command **cmd);
-void					open_and_duplicate(t_command **cmd, int *flags,
-							int *fd_out);
+int						open_and_duplicate(t_command **cmd, int *flags, int *fd_out);
 int						is_number(char *str);
 void					my_exit_child(t_command **cmd, t_data *data,
 							int *error);
@@ -425,7 +431,11 @@ void					update_pwd(char ***env);
 int						add_env_variable(char *new_var, char ***env);
 int						my_export(char *arg, char ***env);
 int						my_unset(char *name, char ***env);
-void					my_pwd(void);
+void					my_pwd(char **env);
+void					init_saved_cwd(void);
+void					update_saved_cwd_public(void);
+char					*get_saved_cwd(void);
+void					cleanup_saved_cwd(void);
 int						update_existing_var(char *name, char *value,
 							char **env);
 void					print_env(char **env);
@@ -434,10 +444,17 @@ int						is_valid_identifier(char *name);
 int						export_without_value(char *name, char ***env);
 int						export_with_value(char *arg, char *equal_sign,
 							char ***env);
+// Exported variables management
+void					add_exported_var(char *name);
+void					remove_exported_var(char *name);
+int						is_exported_var(char *name);
+void					cleanup_exported_vars(void);
+t_exported_var			*get_exported_vars(void);
 int						update_existing_var(char *name, char *value,
 							char **env);
 void					free_sorted_env(char **sorted_env, int count);
 char					**copy_and_sort_env(char **env, int count);
+void					sort_env_array(char **sorted_env, int count);
 int						red_out_realloc(t_command *cmd, t_data **data,
 							t_token **current);
 void					print_errno(t_redir *temp);

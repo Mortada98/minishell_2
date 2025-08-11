@@ -39,6 +39,7 @@ static char	*get_pwd_value(char **env)
 {
 	char	*pwd;
 	char	*result;
+	char	*saved_cwd;
 
 	pwd = getcwd(NULL, 0);
 	if (!pwd)
@@ -50,7 +51,17 @@ static char	*get_pwd_value(char **env)
 			return (apply_tilde_replacement(result, env));
 		}
 		else
+		{
+			// Try to use saved cwd as fallback
+			saved_cwd = get_saved_cwd();
+			if (saved_cwd)
+			{
+				result = gc_strdup(saved_cwd);
+				free(saved_cwd);
+				return (apply_tilde_replacement(result, env));
+			}
 			return (gc_strdup("(unknown)"));
+		}
 	}
 	result = gc_strdup(pwd);
 	free(pwd);

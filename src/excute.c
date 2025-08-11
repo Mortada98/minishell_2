@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/10 15:54:01 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 17:46:12 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	built_in_part1(t_command *cmd, char ***env)
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		print_env(*env);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		my_pwd();
+		my_pwd(*env);
 }
 
 void	execute_builtin_command(t_command *cmd, char ***env)

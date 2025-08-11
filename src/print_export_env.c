@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_export_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,84 @@ static void	print_env_variable(char *env_var)
 	}
 }
 
-void	print_export_env(char **env)
+static int	count_total_vars(char **env, t_exported_var *exported)
 {
-	int		count;
-	char	**sorted_env;
-	int		i;
+	int				count;
+	t_exported_var	*current;
 
 	count = 0;
 	while (env[count])
 		count++;
-	sorted_env = copy_and_sort_env(env, count);
-	if (!sorted_env)
-		return ;
-	i = 0;
-	while (i < count)
+	
+	current = exported;
+	while (current)
 	{
-		print_env_variable(sorted_env[i]);
+		count++;
+		current = current->next;
+	}
+	
+	return (count);
+}
+
+static char	**create_combined_list(char **env, t_exported_var *exported, int total_count)
+{
+	char			**combined;
+	int				i;
+	t_exported_var	*current;
+
+	combined = malloc(sizeof(char *) * (total_count + 1));
+	if (!combined)
+		return (NULL);
+	
+	// Copy environment variables
+	i = 0;
+	while (env[i])
+	{
+		combined[i] = ft_strdup(env[i]);
+		if (!combined[i])
+			return (free_sorted_env(combined, i), NULL);
 		i++;
 	}
-	free_sorted_env(sorted_env, count);
+	
+	// Add exported variables without values
+	current = exported;
+	while (current)
+	{
+		combined[i] = ft_strdup(current->name);
+		if (!combined[i])
+			return (free_sorted_env(combined, i), NULL);
+		i++;
+		current = current->next;
+	}
+	
+	combined[total_count] = NULL;
+	return (combined);
+}
+
+void	print_export_env(char **env)
+{
+	int				total_count;
+	char			**combined_list;
+	t_exported_var	*exported;
+	int				i;
+
+	exported = get_exported_vars();
+	total_count = count_total_vars(env, exported);
+	
+	combined_list = create_combined_list(env, exported, total_count);
+	if (!combined_list)
+		return ;
+	
+	// Sort the combined list
+	sort_env_array(combined_list, total_count);
+	
+	// Print all variables
+	i = 0;
+	while (i < total_count)
+	{
+		print_env_variable(combined_list[i]);
+		i++;
+	}
+	
+	free_sorted_env(combined_list, total_count);
 }

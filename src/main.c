@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:13 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 14:01:41 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ void	part_execution(t_command **cmd, char ***env, t_data **data)
 {
 	g_value = 0;
 	if (*cmd)
+	{
 		execute_command(*cmd, env, data);
-	else if ((*cmd)->herdoc_file)
-		unlink((*cmd)->herdoc_file);
+		if ((*cmd)->herdoc_file)
+			unlink((*cmd)->herdoc_file);
+	}
 	close_fds_except_std();
 	gc_cleanup_partial();
 }
@@ -82,7 +84,10 @@ int	main(int ac, char **av, char **env)
 	rl_catch_signals = 0;
 	signal(SIGINT, my_handler);
 	signal(SIGQUIT, SIG_IGN);
+	init_saved_cwd();
 	my_env = copy_env(env);
 	make_prompt(&my_env);
+	cleanup_saved_cwd();
+	cleanup_exported_vars();
 	return (0);
 }

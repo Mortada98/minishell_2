@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_sort_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/07 17:35:33 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	**allocate_and_copy_env(char **env, int count)
 	return (sorted_env);
 }
 
-static void	sort_env_array(char **sorted_env, int count)
+void	sort_env_array(char **sorted_env, int count)
 {
 	char	*temp;
 	int		i;
