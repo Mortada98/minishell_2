@@ -6,34 +6,61 @@
 /*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 17:58:47 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 18:47:29 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*g_saved_cwd = NULL;
-
-static void	update_saved_cwd(void)
+static char	*manage_saved_cwd(int action, char *new_value)
 {
-	char	*cwd;
+	static char	*saved_cwd = NULL;
+	char		*temp;
 
-	cwd = getcwd(NULL, 0);
-	if (cwd)
+	if (action == 0) // GET
 	{
-		if (g_saved_cwd)
-			free(g_saved_cwd);
-		g_saved_cwd = cwd;
+		if (saved_cwd)
+			return (ft_strdup(saved_cwd));
+		return (NULL);
 	}
+	else if (action == 1) // SET
+	{
+		if (saved_cwd)
+			free(saved_cwd);
+		saved_cwd = new_value;
+		return (NULL);
+	}
+	else if (action == 2) // UPDATE from getcwd
+	{
+		temp = getcwd(NULL, 0);
+		if (temp)
+		{
+			if (saved_cwd)
+				free(saved_cwd);
+			saved_cwd = temp;
+		}
+		return (NULL);
+	}
+	else if (action == 3) // CLEANUP
+	{
+		if (saved_cwd)
+		{
+			free(saved_cwd);
+			saved_cwd = NULL;
+		}
+		return (NULL);
+	}
+	return (NULL);
 }
 
 static char	*get_current_directory(char **env)
 {
 	char	*pwd_env;
 	char	*cwd;
+	char	*saved_cwd;
 
 	// Update saved cwd if possible
-	update_saved_cwd();
+	manage_saved_cwd(2, NULL);
 	
 	// First try to get PWD from environment (logical path)
 	pwd_env = get_env("PWD", env);
@@ -56,8 +83,9 @@ static char	*get_current_directory(char **env)
 		return (cwd);
 	
 	// If both fail, use saved cwd as last resort
-	if (g_saved_cwd)
-		return (ft_strdup(g_saved_cwd));
+	saved_cwd = manage_saved_cwd(0, NULL);
+	if (saved_cwd)
+		return (saved_cwd);
 	
 	return (NULL);
 }
@@ -85,26 +113,20 @@ void	my_pwd(char **env)
 
 void	init_saved_cwd(void)
 {
-	update_saved_cwd();
+	manage_saved_cwd(2, NULL);
 }
 
 void	update_saved_cwd_public(void)
 {
-	update_saved_cwd();
+	manage_saved_cwd(2, NULL);
 }
 
 char	*get_saved_cwd(void)
 {
-	if (g_saved_cwd)
-		return (ft_strdup(g_saved_cwd));
-	return (NULL);
+	return (manage_saved_cwd(0, NULL));
 }
 
 void	cleanup_saved_cwd(void)
 {
-	if (g_saved_cwd)
-	{
-		free(g_saved_cwd);
-		g_saved_cwd = NULL;
-	}
+	manage_saved_cwd(3, NULL);
 }
