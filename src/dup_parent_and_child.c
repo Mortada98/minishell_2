@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 17:13:39 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/11 22:05:13 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 			fd_in = open(temp->data, O_RDONLY);
 			if (fd_in < 0)
 			{
-				write(2, "minishell: No such file or directory\n", 38);
-				set_status(1);
+				print_open_error(temp->data);
 				return (0);
 			}
 			if (dup2(fd_in, STDIN_FILENO) == -1)
@@ -48,8 +47,7 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 			*fd_out = open(temp->data, *flags, 0644);
 			if (*fd_out < 0)
 			{
-				write(2, "minishell: Permission denied\n", 30);
-				set_status(1);
+				print_open_error(temp->data);
 				return (0);
 			}
 			if (dup2(*fd_out, STDOUT_FILENO) == -1)
@@ -66,7 +64,6 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 			*fd_out = open(temp->data, *flags, 0644);
 			if (*fd_out < 0)
 			{
-				write(2, "minishell: Permission denied\n", 30);
 				set_status(1);
 				return (0);
 			}

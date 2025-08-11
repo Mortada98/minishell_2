@@ -22,7 +22,6 @@ void	excute_redirection_of_child(t_command **cmd, t_data **data, int *fd_out,
 	int	hd_fd;
 
 	(void)data;
-	// Process output redirection first to match bash behavior  ❌ WRONG
 	if ((*cmd)->file_output)
 	{
 		open_red_out(cmd, fd_out, env);  // Creates 'b' first
