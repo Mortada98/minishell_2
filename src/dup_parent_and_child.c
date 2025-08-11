@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 22:05:13 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/11 23:43:43 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 			*fd_out = open(temp->data, *flags, 0644);
 			if (*fd_out < 0)
 			{
-				set_status(1);
+				print_open_error(temp->data);
 				return (0);
 			}
 			if (dup2(*fd_out, STDOUT_FILENO) == -1)
