@@ -14,6 +14,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 char	*apply_tilde_replacement(char *pwd, char **env)
 {

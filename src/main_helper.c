@@ -56,7 +56,7 @@ int	interupte_herdoc(t_command *cmd, t_data *data, char **env)
 
 int	process_line(t_token **token, char **line, char **env, t_data **data)
 {
-	*line = readline("mini > ");
+	*line = readline(prompt(env));
 	if (!*line)
 	{
 		write(2, "exit\n", 6);

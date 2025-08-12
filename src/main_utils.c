@@ -32,34 +32,45 @@ int	is_number(char *str)
 	return (1);
 }
 
+void    parent_status(int status, int flags, int sig)
+{
+  if (WIFSIGNALED(status))
+  {
+    sig = WTERMSIG(status);
+    if (sig == SIGINT && !flags)
+    {
+      set_status(128 + sig);
+      write(1, "\n", 1);
+    }
+    else if (sig == SIGQUIT)
+      write(2, "Quit (core dumped)\n", 19);
+    set_status(128 + sig);
+  }
+}
+
 void	handle_core_dumped(int *pids, int pid_count, t_data **data)
 {
-	int (i), status, sig;
+	int (i), status, sig, flags;
 	sig = 0;
+  flags = 0;
 	signal(SIGINT, SIG_IGN);
 	i = -1;
+  (void)data;
 	while (++i < pid_count)
 	{
 		waitpid(pids[i], &status, 0);
-		if (WIFSIGNALED(status))
-		{
-			sig = WTERMSIG(status);
-			if (sig == SIGINT)
-			{
-				set_status(128 + sig);
-				write(1, "\n", 1);
-				break ;
-			}
-			else if (sig == SIGQUIT)
-				write(2, "Quit (core dumped)\n", 19);
-			set_status(128 + sig);
-			(*data)->exit = 128 + WTERMSIG(status);
-		}
-		else if (i == pid_count - 1)
+    sig = WTERMSIG(status);
+    if (sig == SIGINT && pid_count != 1 && !flags)
+    {
+      set_status(128 + sig);
+      write(1, "\n", 1);
+      flags = 1;
+    }
+		if (i == pid_count - 1)
 			set_status(WEXITSTATUS(status));
 	}
+  parent_status(status, flags, sig);
 }
-
 void	empty_command(t_command *cmd)
 {
 	t_command	*temp_cmd;
