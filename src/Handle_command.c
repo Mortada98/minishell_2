@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:52:13 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:47:18 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	simple_condition(t_var *var, char *str, char **env)
 	return (1);
 }
 
-char	*expand_env(char *str, char **env)
+char	*expand_env(char *str, char **env, bool expand_herdoc)
 {
 	t_var	var;
 
@@ -58,7 +58,7 @@ char	*expand_env(char *str, char **env)
 			remplace_var(&var);
 			continue ;
 		}
-		if (var.condition && str[var.i] == '$' && str[var.i + 1]
+		if ((var.condition || expand_herdoc) && str[var.i] == '$' && str[var.i + 1]
 			&& (ft_isalpha(str[var.i + 1]) || str[var.i + 1] == '_'))
 		{
 			if (simple_condition(&var, str, env) == 0)

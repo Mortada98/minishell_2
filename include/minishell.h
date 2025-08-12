@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 12:47:58 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:47:52 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -448,7 +448,7 @@ void						append_arg(t_command *cmd, char *str,
 								t_data **data);
 t_command					*create_command(void);
 void						free_cmd(t_command *cmd);
-char						*expand_env(char *str, char **env);
+char						*expand_env(char *str, char **env, bool expand_herdoc);
 t_command					*parsing_command(t_token *token, t_data **data);
 int							is_space(char c);
 void						free_token(t_token **token);

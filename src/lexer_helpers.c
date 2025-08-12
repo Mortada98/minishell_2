@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:34:54 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:19:31 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:47:37 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*handle_expansion(t_data *data, char *word, char **env)
 
 	if (!data->should_expand_outside)
 	{
-		str = expand_env(word, env);
+		str = expand_env(word, env, false);
 		return (str);
 	}
 	return (word);

@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:45:55 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 13:53:08 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 19:46:21 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	herdoc_expansion(int *fd, char **line, t_command *cmd, char **env)
 	str = *line;
 	if (!cmd->cmd_quoted)
 	{
-		expanded_line = expand_env(str, env);
+		expanded_line = expand_env(str, env, true);
 		if (expanded_line && expanded_line != str)
 		{
 			write(*fd, expanded_line, ft_strlen(expanded_line));
