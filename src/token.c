@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/09 14:56:28 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:47:09 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,20 @@ void	handle_word_token(t_token **token, char *line, t_data **data,
 		wp.found = true;
 	}
 	process_word(token, &wp);
+}
+
+void	get_last_element(t_token **token)
+{
+	t_token *cur;
+
+	if (!token || !*token)
+		return;
+	cur = *token;
+	while (cur->next)
+	{
+		cur = cur->next;
+	}
+	cur->info = false;
 }
 
 int	handle_speciale_token(t_token **token, char *line, int i, t_data **data)

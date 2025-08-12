@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:56:44 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 12:45:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:07:37 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	interupte_herdoc(t_command *cmd, t_data *data, char **env)
 
 int	process_line(t_token **token, char **line, char **env, t_data **data)
 {
-	*line = readline(prompt(env));
+	*line = readline("mini > ");
 	if (!*line)
 	{
 		write(2, "exit\n", 6);

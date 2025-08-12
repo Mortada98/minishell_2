@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 11:22:05 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:47:58 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,11 +224,14 @@ typedef struct s_all_params
 	t_pipeline_state		*state;
 }							t_all_params;
 
+void						get_last_element(t_token **token);
 void						execve_error(void);
 char						*apply_tilde_replacement(char *pwd, char **env);
 char						*prompt_helper(char **env);
-int							append_file(int *flags, char *file, int *fd_out, int status);
-int							output_file(int *flags, char *file, int *fd_out, int status);
+int							append_file(int *flags, char *file, int *fd_out,
+								int status);
+int							output_file(int *flags, char *file, int *fd_out,
+								int status);
 int							input_file(int *fd_in, char *file, int status);
 void						cleanup_and_exit2(int save, int saved_stdin,
 								char ***env, int status);

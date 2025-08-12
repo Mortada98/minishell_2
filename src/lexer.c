@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:15:47 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:54:02 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:48:16 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	handle_other_cases(t_token **token, char *line, t_data **data,
 		|| line[(*data)->end] == '>')
 	{
 		handle_word_token(token, line, data, env);
+		get_last_element(token);
 		(*data)->end = handle_speciale_token(token, line, (*data)->end, data);
 		(*data)->start = (*data)->end;
 	}
