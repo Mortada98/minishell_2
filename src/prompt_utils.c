@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 10:34:49 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 10:58:03 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 12:52:01 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ void	execve_error(void)
 		set_status(126);
 		write(2, "minishell: : Permission denied\n", 32);
 	}
-	else
-		perror("minishell");
 }
 
 char	*prompt_helper(char **env)
