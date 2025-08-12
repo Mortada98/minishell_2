@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/08 10:29:18 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:30:15 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	print_env(char **env)
 		printf("%s\n", env[i]);
 		i++;
 	}
+	set_status(0);
 }
 
 char	*get_env(char *name, char **env)

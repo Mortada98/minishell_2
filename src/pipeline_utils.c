@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 18:13:22 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:23:03 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,23 +79,16 @@ void	setup_params_and_loop(t_command *cmd, t_data **data, char ***env,
 	t_pipeline_state	state;
 	t_parent_params		parent_params;
 	t_child_params		child_params;
-	int					*pipe_fds;
+	int					pipe_fds[2];
 	pid_t				*pids;
-	int					command_count;
 
 	initialize_pipeline_state(params, &state);
-	command_count = count_pipeline_commands(cmd);
-	if (command_count == 0)
-		return ;
-	pipe_fds = gc_malloc(2 * sizeof(int));
-	if (!pipe_fds)
-		return ;
 	pipe_fds[0] = 0;
 	pipe_fds[1] = 0;
 	params->fd = pipe_fds;
 	parent_params.prev_fd = &state.prev_fd;
 	parent_params.fd = params->fd;
-	pids = gc_calloc(command_count, sizeof(pid_t));
+	pids = gc_calloc(count_pipeline_commands(cmd), sizeof(pid_t));
 	if (!pids)
 		return ;
 	parent_params.pids = pids;

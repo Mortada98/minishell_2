@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 14:16:43 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/11 17:54:50 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:29:36 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,5 @@ void	cd(char *cmd, char ***env)
 	}
 	update_oldpwd(env);
 	update_pwd(env);
+	set_status(0);
 }

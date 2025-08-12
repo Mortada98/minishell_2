@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_execution_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 10:50:43 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:26:24 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static void	execute_external_command(t_command *curr, char ***env, int save,
 		cleanup_and_exit2(save, saved_stdin, env, 127);
 	if (execve(command, curr->args, *env) == -1)
 		cleanup_and_exit(save, saved_stdin, env, 126);
+	else
+		set_status(0);
 }
 
 void	execute_command_logic_check(t_command *curr,

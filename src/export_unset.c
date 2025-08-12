@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 20:57:18 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:08:42 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ int	my_export(char *arg, char ***env)
 {
 	char	*equal_sign;
 
-	if (!arg || !*arg)
-	{
-		print_export_env(*env);
-		return (1);
-	}
 	equal_sign = ft_strchr(arg, '=');
 	if (!equal_sign)
 	{
@@ -80,9 +75,13 @@ int	my_unset(char *name, char ***env)
 	remove_exported_var(name);
 	new_env = allocate_new_env(*env);
 	if (!new_env)
+	{
+		set_status(1);
 		return (0);
+	}
 	copy_env_without_var(*env, new_env, name, len);
 	free(*env);
 	*env = new_env;
+	set_status(0);
 	return (1);
 }

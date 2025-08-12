@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:54:31 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 13:52:20 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:18:42 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	empty_command(t_command *cmd)
 		if (temp_cmd->args && temp_cmd->args[0][0] == '\0')
 		{
 			write(2, "minishell : '' : command not found\n", 36);
+			set_status(127);
 		}
 		temp_cmd = temp_cmd->next;
 	}

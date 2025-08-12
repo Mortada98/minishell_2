@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:27:14 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ char	*expand_env(char *str, char **env, bool expand_herdoc)
 			remplace_var(&var);
 			continue ;
 		}
-		if ((var.condition || expand_herdoc) && str[var.i] == '$' && str[var.i + 1]
+		if ((var.condition || expand_herdoc)
+			&& str[var.i] == '$' && str[var.i + 1]
 			&& (ft_isalpha(str[var.i + 1]) || str[var.i + 1] == '_'))
 		{
 			if (simple_condition(&var, str, env) == 0)

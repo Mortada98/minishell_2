@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:35:30 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,16 +218,8 @@ typedef struct s_fd
 	int						fd_out;
 }							t_fd;
 
-typedef struct s_all_params
-{
-	t_exec_params			*params;
-	t_parent_params			*parent_params;
-	t_child_params			*child_params;
-	t_pipeline_state		*state;
-}							t_all_params;
-
-
 void            parent_status(int status, int flags, int sig);
+void						cleanup_exported_vars(void);
 void						get_last_element(t_token **token);
 void						execve_error(void);
 char						*apply_tilde_replacement(char *pwd, char **env);

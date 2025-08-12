@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 21:47:57 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ char	*get_command(char *cmd, char **env)
 		return (cmd);
 	var.split_env = ft_split(var.path_env, ':');
 	var.first_join = gc_strjoin("/", cmd);
-	i = 0;
-	while (var.split_env[i])
+	i = -1;
+	while (var.split_env[++i])
 	{
 		var.complete_path = gc_strjoin(var.split_env[i], var.first_join);
 		stat(var.complete_path, &var.sb);
@@ -111,7 +111,6 @@ char	*get_command(char *cmd, char **env)
 			return (var.complete_path);
 		if (!access(var.complete_path, F_OK) && !S_ISDIR(var.sb.st_mode))
 			var.store = var.complete_path;
-		i++;
 	}
 	if (var.store != NULL)
 		return (var.store);

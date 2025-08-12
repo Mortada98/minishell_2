@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 10:34:49 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 12:52:01 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 22:24:36 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	execve_error(void)
 		set_status(126);
 		write(2, "minishell: : Permission denied\n", 32);
 	}
-	else if (errno != ENOTDIR && errno != EACCES && get_status() != 100)
+	else if (errno != ENOTDIR && errno != EACCES
+		&& get_status() != 100 && errno != 0 && get_status() != 1)
 	{
 		perror("minishell");
 		set_status(127);
