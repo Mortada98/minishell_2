@@ -81,10 +81,10 @@ void	handle_word_token(t_token **token, char *line, t_data **data,
 
 void	get_last_element(t_token **token)
 {
-	t_token *cur;
+	t_token	*cur;
 
 	if (!token || !*token)
-		return;
+		return ;
 	cur = *token;
 	while (cur->next)
 	{
