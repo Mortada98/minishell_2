@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 10:52:21 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 10:51:35 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	make_the_envirement(t_var *var)
 		if (var->j + len >= var->old_size)
 		{
 			var->new_size = len + (var->j);
-			var->result = manual_realloc(var->result, var->new_size);
+			var->result = manual_realloc(var->result, var->j, var->new_size);
 			var->old_size = var->new_size;
 		}
 		if (var->flag)

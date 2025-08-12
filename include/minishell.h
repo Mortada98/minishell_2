@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 19:47:52 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ typedef struct s_data
 	int						count_red_in;
 	int						count_red_out;
 	bool					cmd_found;
+	t_exported_var			*exported_vars;
 }							t_data;
 
 typedef struct s_child_params
@@ -389,6 +390,8 @@ void						execute_pipeline_loop(t_command *cmd, t_data **data,
 int							process_pipeline_iteration(t_child_params *child_params,
 								t_exec_params *params,
 								t_parent_params *parent_params);
+int							count_pipeline_commands(t_command *cmd);
+int							count_active_pids(pid_t *pids, int command_count);
 void						execute_child_process(t_command *curr,
 								t_data **data, t_exec_params *params,
 								char ***env);
@@ -410,7 +413,7 @@ void						handle_white_spaces(t_token **token, char *line,
 bool						check_somthing(char *word);
 void						handle_some_cases(t_token **token, char *line,
 								t_data **data, char **env);
-char						*manual_realloc(char *old, size_t len);
+char						*manual_realloc(char *old, size_t old_len, size_t new_len);
 int							handle_pipe(t_token **current,
 								t_command **current_cmd, t_command *first_cmd,
 								t_data **data);

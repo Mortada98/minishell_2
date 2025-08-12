@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:41:03 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 13:19:37 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	make_list(char *word, t_token **token)
 	int		start;
 	int		i;
 
+	if (!word)
+		return ;
 	i = 0;
 	start = 0;
 	while (word[i])

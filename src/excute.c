@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 01:04:12 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char	*get_command(char *cmd, char **env)
 	int			i;
 
 	i = 0;
+	var.store = NULL;
 	if (ft_strchr(cmd, '/'))
 		return (check_file(cmd));
 	if (!iterate_on_env(env, &var.path_env, cmd))

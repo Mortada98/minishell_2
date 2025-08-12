@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils_clean.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/11 10:11:20 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:29:47 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	setup_params_helper(t_child_params *child_params, t_exec_params *params,
 	t_command	*curr;
 
 	curr = child_params->cmd;
-	while (curr && !(child_params->cmd)->file)
+	while (curr && !curr->file)
 	{
 		child_params->curr = curr;
 		if (!process_pipeline_iteration(child_params, params, &parent_params))

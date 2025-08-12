@@ -3,40 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   exported_vars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 10:29:27 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_exported_var	*g_exported_vars = NULL;
+static t_exported_var	**get_exported_vars_ptr(void)
+{
+	static t_exported_var	*exported_vars = NULL;
+
+	return (&exported_vars);
+}
 
 void	add_exported_var(char *name)
 {
 	t_exported_var	*new_var;
 	t_exported_var	*current;
+	t_exported_var	**exported_vars;
 
+	exported_vars = get_exported_vars_ptr();
 	if (is_exported_var(name))
 		return ;
-	new_var = malloc(sizeof(t_exported_var));
+	new_var = gc_malloc(sizeof(t_exported_var));
 	if (!new_var)
 		return ;
-	new_var->name = ft_strdup(name);
+	new_var->name = gc_strdup(name);
 	if (!new_var->name)
-	{
-		free(new_var);
 		return ;
-	}
 	new_var->next = NULL;
-	if (!g_exported_vars)
+	if (!*exported_vars)
 	{
-		g_exported_vars = new_var;
+		*exported_vars = new_var;
 		return ;
 	}
-	current = g_exported_vars;
+	current = *exported_vars;
 	while (current->next)
 		current = current->next;
 	current->next = new_var;
@@ -46,10 +50,12 @@ void	remove_exported_var(char *name)
 {
 	t_exported_var	*current;
 	t_exported_var	*prev;
+	t_exported_var	**exported_vars;
 
-	if (!g_exported_vars)
+	exported_vars = get_exported_vars_ptr();
+	if (!*exported_vars)
 		return ;
-	current = g_exported_vars;
+	current = *exported_vars;
 	prev = NULL;
 	while (current)
 	{
@@ -58,9 +64,7 @@ void	remove_exported_var(char *name)
 			if (prev)
 				prev->next = current->next;
 			else
-				g_exported_vars = current->next;
-			free(current->name);
-			free(current);
+				*exported_vars = current->next;
 			return ;
 		}
 		prev = current;
@@ -71,8 +75,10 @@ void	remove_exported_var(char *name)
 int	is_exported_var(char *name)
 {
 	t_exported_var	*current;
+	t_exported_var	**exported_vars;
 
-	current = g_exported_vars;
+	exported_vars = get_exported_vars_ptr();
+	current = *exported_vars;
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
@@ -84,21 +90,16 @@ int	is_exported_var(char *name)
 
 void	cleanup_exported_vars(void)
 {
-	t_exported_var	*current;
-	t_exported_var	*next;
+	t_exported_var	**exported_vars;
 
-	current = g_exported_vars;
-	while (current)
-	{
-		next = current->next;
-		free(current->name);
-		free(current);
-		current = next;
-	}
-	g_exported_vars = NULL;
+	exported_vars = get_exported_vars_ptr();
+	*exported_vars = NULL;
 }
 
 t_exported_var	*get_exported_vars(void)
 {
-	return (g_exported_vars);
+	t_exported_var	**exported_vars;
+
+	exported_vars = get_exported_vars_ptr();
+	return (*exported_vars);
 }

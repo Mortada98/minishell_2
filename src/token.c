@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:20:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 12:47:09 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	handle_word_token(t_token **token, char *line, t_data **data,
 {
 	t_word_processing	wp;
 
+	ft_bzero(&wp, sizeof(t_word_processing));
 	wp.should_join = false;
 	wp.flag = 0;
 	wp.value = TOKEN_WORD;

@@ -14,6 +14,8 @@
 
 int	setup_pipe(t_command *curr, int *fd)
 {
+	if (!curr || !fd)
+		return (0);
 	if (curr->next)
 	{
 		if (pipe(fd) == -1)

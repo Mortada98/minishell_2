@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Handle_command.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 17:26:30 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 19:47:18 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char	*expand_env(char *str, char **env, bool expand_herdoc)
 		}
 		var.result[var.j++] = str[var.i++];
 	}
+	var.result[var.j] = '\0';
 	return (var.result);
 }
 

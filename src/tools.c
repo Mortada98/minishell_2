@@ -3,27 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:36:39 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/05 16:37:55 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 20:54:52 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*manual_realloc(char *old, size_t len)
+char	*manual_realloc(char *old, size_t old_len, size_t new_len)
 {
 	char	*new;
 
-	new = gc_malloc(len + 1);
+	new = gc_malloc(new_len + 1);
 	if (new == NULL)
 		return (NULL);
-	if (old)
+	if (old && old_len > 0)
 	{
-		ft_memcpy(new, old, len);
+		ft_memcpy(new, old, old_len);
+		new[old_len] = '\0';
 	}
-	new[len] = '\0';
+	else
+		new[0] = '\0';
 	return (new);
 }
 
@@ -71,6 +73,8 @@ void	make_like_bash(char *result, char *valeur, size_t *j)
 
 int	init_var(char *str, t_var *var)
 {
+	if (!str)
+		return (0);
 	var->flag = false;
 	var->old_size = (ft_strlen(str) + 2 + 100);
 	var->i = 0;
