@@ -15,27 +15,22 @@
 
 void	execve_error(void)
 {
-	if (errno == EISDIR)
-	{
-		set_status(127);
-		write(2, "minishell: : Is a directory\n", 29);
-	}
-	else if (errno == ENOTDIR)
+	if (errno == ENOTDIR)
 	{
 		write(2, "minishell: : Not a directory\n", 30);
 		set_status(126);
-	}
-	else if (errno == ENOENT)
-	{
-		set_status(127);
-		write(2, "minishell: : No such file or directory\n", 40);
 	}
 	else if (errno == EACCES)
 	{
 		set_status(126);
 		write(2, "minishell: : Permission denied\n", 32);
 	}
-  else
+  else if (errno != ENOTDIR && errno != EACCES && get_status() != 100)
+  {
+    perror("minishell");
+    set_status(127);
+  }
+  else if (get_status() == 100)
     set_status(0);
 }
 

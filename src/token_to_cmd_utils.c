@@ -21,7 +21,7 @@ int	handle_word(t_parse *var, t_data **data)
 	}
   if (var->current->found)
   {
-    set_status(0);
+    set_status(100);
   }
 	var->current = var->current->next;
 	return (1);
