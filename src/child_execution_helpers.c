@@ -3,17 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   child_execution_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/10 16:16:01 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 01:12:47 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
+void	cleanup_and_exit2(int save, int saved_stdin, char ***env, int status)
 {
+	(void)status;
+	// if (errno == ENOENT)
+	// {
+	// 	// write(2, "minishell: : No such file or directory\n", 40);
+	// 	set_status(127);
+	// }
+	// else
+	// 	set_status(126);
+	// perror("minishell: ");
 	dup2(save, 0);
 	close(save);
 	close(saved_stdin);
@@ -22,8 +31,31 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 	if ((*env)[0])
 		free_2d_array(*env);
 	rl_clear_history();
-	set_status(status);
-	exit(status);
+	// set_status(status);
+	exit(get_status());
+}
+
+void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
+{
+	(void)status;
+	if (errno == ENOENT)
+	{
+		// write(2, "minishell: : No such file or directory\n", 40);
+		set_status(127);
+	}
+	else
+		set_status(126);
+	perror("minishell: ");
+	dup2(save, 0);
+	close(save);
+	close(saved_stdin);
+	close_fds_except_std();
+	gc_cleanup();
+	if ((*env)[0])
+		free_2d_array(*env);
+	rl_clear_history();
+	// set_status(status);
+	exit(get_status());
 }
 
 static void	execute_builtin_child(t_builtin_params *bp)
@@ -39,7 +71,7 @@ static void	execute_external_command(t_command *curr, char ***env, int save,
 
 	command = get_command(curr->args[0], *env);
 	if (!command)
-		cleanup_and_exit(save, saved_stdin, env, get_status());
+		cleanup_and_exit2(save, saved_stdin, env, 127);
 	if (execve(command, curr->args, *env) == -1)
 		cleanup_and_exit(save, saved_stdin, env, 126);
 }

@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 21:22:51 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 01:04:12 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	iterate_on_env(char **env, char **path_env, char *cmd)
 	int	i;
 	int	j;
 
+	(void)cmd;
 	if (!env || !*env)
 		return (0);
 	*path_env = NULL;
@@ -84,10 +85,7 @@ int	iterate_on_env(char **env, char **path_env, char *cmd)
 		i++;
 	}
 	if (j == 0)
-	{
-		print_message(cmd, 127, "minishell: ", ": No such file or directory\n");
 		return (0);
-	}
 	return (1);
 }
 
@@ -100,7 +98,7 @@ char	*get_command(char *cmd, char **env)
 	if (ft_strchr(cmd, '/'))
 		return (check_file(cmd));
 	if (!iterate_on_env(env, &var.path_env, cmd))
-		return (NULL);
+		return (cmd);
 	var.split_env = ft_split(var.path_env, ':');
 	var.first_join = gc_strjoin("/", cmd);
 	i = 0;
@@ -111,8 +109,7 @@ char	*get_command(char *cmd, char **env)
 		if (!access(var.complete_path, X_OK) && !S_ISDIR(var.sb.st_mode))
 			return (var.complete_path);
 		if (!access(var.complete_path, F_OK) && !S_ISDIR(var.sb.st_mode))
-			return (print_message(cmd, 126, "minishell: ",
-					": Permission denied\n"), NULL);
+			return(var.complete_path);
 		i++;
 	}
 	print_message(cmd, 127, "minishell: ", ": command not found\n");
