@@ -25,13 +25,13 @@ void	execve_error(void)
 		set_status(126);
 		write(2, "minishell: : Permission denied\n", 32);
 	}
-  else if (errno != ENOTDIR && errno != EACCES && get_status() != 100)
-  {
-    perror("minishell");
-    set_status(127);
-  }
-  else if (get_status() == 100)
-    set_status(0);
+	else if (errno != ENOTDIR && errno != EACCES && get_status() != 100)
+	{
+		perror("minishell");
+		set_status(127);
+	}
+	else if (get_status() == 100)
+		set_status(0);
 }
 
 char	*prompt_helper(char **env)

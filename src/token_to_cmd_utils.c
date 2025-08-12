@@ -19,10 +19,10 @@ int	handle_word(t_parse *var, t_data **data)
 	{
 		append_arg(var->current_cmd, var->current->av, data);
 	}
-  if (var->current->found)
-  {
-    set_status(100);
-  }
+	if (var->current->found)
+	{
+		set_status(100);
+	}
 	var->current = var->current->next;
 	return (1);
 }

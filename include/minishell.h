@@ -225,6 +225,8 @@ typedef struct s_all_params
 	t_pipeline_state		*state;
 }							t_all_params;
 
+
+void            parent_status(int status, int flags, int sig);
 void						get_last_element(t_token **token);
 void						execve_error(void);
 char						*apply_tilde_replacement(char *pwd, char **env);
