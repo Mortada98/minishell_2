@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 17:12:58 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 21:51:33 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:27:48 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	unique_error(char *cmd, char *error)
 char	*check_file(char *cmd)
 {
 	struct stat	st;
-	// DIR			*folder;
 
 	if (stat(cmd, &st) == -1)
 	{

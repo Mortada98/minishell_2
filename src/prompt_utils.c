@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manage_cwd.c                                       :+:      :+:    :+:   */
+/*   prompt_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/11 18:55:27 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 10:26:44 by helfatih         ###   ########.fr       */
+/*   Created: 2025/08/12 10:34:49 by helfatih          #+#    #+#             */
+/*   Updated: 2025/08/12 10:41:30 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	init_saved_cwd(void)
+char	*prompt_helper(char **env)
 {
-	manage_saved_cwd(2, NULL);
-}
+	char	*result;
+	char	*saved_cwd;
 
-void	update_saved_cwd_public(void)
-{
-	manage_saved_cwd(2, NULL);
-}
-
-char	*get_saved_cwd(void)
-{
-	return (manage_saved_cwd(0, NULL));
-}
-
-void	cleanup_saved_cwd(void)
-{
-	manage_saved_cwd(3, NULL);
+	saved_cwd = get_saved_cwd();
+	if (saved_cwd)
+	{
+		result = gc_strdup(saved_cwd);
+		free(saved_cwd);
+		return (apply_tilde_replacement(result, env));
+	}
+	return (gc_strdup("(unknown)"));
 }

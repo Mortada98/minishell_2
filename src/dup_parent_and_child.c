@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 23:43:43 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:17:47 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,65 +16,23 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 {
 	t_redir	*temp;
 	int		fd_in;
+	int		j;
 
 	if (!(*cmd)->redir)
 		return (1);
 	temp = (*cmd)->redir;
 	fd_in = -1;
+	j = 1;
 	while (temp)
 	{
 		if (temp->type == TOKEN_REDIR_IN)
-		{
-			if (fd_in > 2)
-				close(fd_in);
-			fd_in = open(temp->data, O_RDONLY);
-			if (fd_in < 0)
-			{
-				print_open_error(temp->data);
-				return (0);
-			}
-			if (dup2(fd_in, STDIN_FILENO) == -1)
-			{
-				perror("minishell");
-				close(fd_in);
-				return (0);
-			}
-			close(fd_in);
-		}
+			j = input_file(&fd_in, temp->data);
 		else if (temp->type == TOKEN_REDIR_OUT)
-		{
-			*flags = O_WRONLY | O_CREAT | O_TRUNC;
-			*fd_out = open(temp->data, *flags, 0644);
-			if (*fd_out < 0)
-			{
-				print_open_error(temp->data);
-				return (0);
-			}
-			if (dup2(*fd_out, STDOUT_FILENO) == -1)
-			{
-				perror("minishell");
-				close(*fd_out);
-				return (0);
-			}
-			close(*fd_out);
-		}
+			j = output_file(flags, temp->data, fd_out);
 		else if (temp->type == TOKEN_REDIR_APPEND)
-		{
-			*flags = O_WRONLY | O_CREAT | O_APPEND;
-			*fd_out = open(temp->data, *flags, 0644);
-			if (*fd_out < 0)
-			{
-				print_open_error(temp->data);
-				return (0);
-			}
-			if (dup2(*fd_out, STDOUT_FILENO) == -1)
-			{
-				perror("minishell");
-				close(*fd_out);
-				return (0);
-			}
-			close(*fd_out);
-		}
+			j = append_file(flags, temp->data, fd_out);
+		if (j == 0)
+			return (0);
 		temp = temp->next;
 	}
 	return (1);
@@ -106,10 +64,10 @@ void	excute_redirection_of_parent(t_command **cmd, t_fd *fd, t_data *data,
 		char ***env)
 {
 	int	error;
-	int saved_stdout1;
+	int	saved_stdout1;
 	int	saved_stdin1;
 	int	flags;
-	
+
 	error = 0;
 	saved_stdout1 = dup(STDOUT_FILENO);
 	saved_stdin1 = dup(STDIN_FILENO);
@@ -154,11 +112,11 @@ void	close_fd(int *saved_stdin1, int *saved_stdout, t_builtin_params *param)
 
 void	excute_redirection_of_child_builtin(t_builtin_params *param)
 {
-	int		error;
-	int		saved_stdout;
-	int		saved_stdin1;
-	int		flags;
-	int		fd_in;
+	int	error;
+	int	saved_stdout;
+	int	saved_stdin1;
+	int	flags;
+	int	fd_in;
 
 	error = 0;
 	if ((*param->curr)->redir)

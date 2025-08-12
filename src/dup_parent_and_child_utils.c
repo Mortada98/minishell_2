@@ -15,20 +15,17 @@
 void	print_errno(t_redir *temp)
 {
 	if (errno == EISDIR)
-		print_message(temp->data, 1, "minishell: ",
-			": Is a directory\n");
+		print_message(temp->data, 1, "minishell: ", ": Is a directory\n");
 	else if (errno == ENOTDIR)
 	{
-		print_message(temp->data, 1, "minishell: ",
-			": Not a directory\n");
-			set_status(126);
+		print_message(temp->data, 1, "minishell: ", ": Not a directory\n");
+		set_status(126);
 	}
 	else if (errno == ENOENT)
 		print_message(temp->data, 1, "minishell: ",
 			": No such file or directory\n");
 	else if (errno == EACCES)
-		print_message(temp->data, 1, "minishell: ",
-			": Permission denied\n");
+		print_message(temp->data, 1, "minishell: ", ": Permission denied\n");
 	else
 		unique_error(temp->data, strerror(errno));
 }

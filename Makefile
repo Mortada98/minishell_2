@@ -11,7 +11,7 @@ SRC = src/main.c	src/Handle_command.c	src/Handle_token.c	src/Helper.c  src/promp
 			src/parse_helper.c	src/excute_utils.c	src/main_execution.c	src/main_utils.c	src/main_helper.c	src/token_to_command.c	src/token_to_cmd_utils.c src/print_export_env.c src/export_helpers.c src/pwd_cmd.c \
 			src/identifier_utils.c src/env_sort_utils.c src/env_var_utils.c src/export_without_value.c src/execution_helpers.c src/pipeline_execution.c src/child_execution_helpers.c src/pipeline_setup_utils.c \
 			src/pipeline_utils_clean.c src/fd_cleanup.c	src/print_message.c   src/true_or_false.c \
-			src/dup_parent_and_child_utils.c   src/pipeline_utils.c src/exported_vars.c	src/manage_cwd.c
+			src/dup_parent_and_child_utils.c   src/pipeline_utils.c src/exported_vars.c	src/manage_cwd.c	src/open_files.c	src/prompt_utils.c\
 
 
 LIBFT_SRC = my_libft/ft_isdigit.c my_libft/ft_isalnum.c my_libft/ft_isascii.c my_libft/ft_isprint.c my_libft/ft_strlen.c my_libft/ft_memset.c my_libft/ft_isalpha.c \

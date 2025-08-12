@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_unset.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 18:19:09 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:25:19 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ int	my_unset(char *name, char ***env)
 	char	**new_env;
 
 	len = ft_strlen(name);
-	
-	// Remove from exported variables list as well
 	remove_exported_var(name);
-	
 	new_env = allocate_new_env(*env);
 	if (!new_env)
 		return (0);

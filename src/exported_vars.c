@@ -3,45 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   exported_vars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/11 18:00:00 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:29:27 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static t_exported_var *g_exported_vars = NULL;
+static t_exported_var	*g_exported_vars = NULL;
 
 void	add_exported_var(char *name)
 {
 	t_exported_var	*new_var;
 	t_exported_var	*current;
 
-	// Check if already exists
 	if (is_exported_var(name))
 		return ;
-	
 	new_var = malloc(sizeof(t_exported_var));
 	if (!new_var)
 		return ;
-	
 	new_var->name = ft_strdup(name);
 	if (!new_var->name)
 	{
 		free(new_var);
 		return ;
 	}
-	
 	new_var->next = NULL;
-	
 	if (!g_exported_vars)
 	{
 		g_exported_vars = new_var;
 		return ;
 	}
-	
 	current = g_exported_vars;
 	while (current->next)
 		current = current->next;
@@ -55,10 +49,8 @@ void	remove_exported_var(char *name)
 
 	if (!g_exported_vars)
 		return ;
-	
 	current = g_exported_vars;
 	prev = NULL;
-	
 	while (current)
 	{
 		if (ft_strcmp(current->name, name) == 0)
@@ -67,7 +59,6 @@ void	remove_exported_var(char *name)
 				prev->next = current->next;
 			else
 				g_exported_vars = current->next;
-			
 			free(current->name);
 			free(current);
 			return ;
