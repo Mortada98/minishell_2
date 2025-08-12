@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-
 int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out, int status)
 {
 	t_redir	*temp;

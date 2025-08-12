@@ -12,7 +12,6 @@
 
 #include "../include/minishell.h"
 
-
 void	print_open_error_parent(char *filename)
 {
 	(void)filename;
@@ -45,10 +44,10 @@ int	input_file(int *fd_in, char *file, int status)
 	*fd_in = open(file, O_RDONLY);
 	if (*fd_in < 0)
 	{
-        if (status == 1)
-            print_open_error_parent(file);
-        else
-            print_open_error(file);
+		if (status == 1)
+			print_open_error_parent(file);
+		else
+			print_open_error(file);
 		return (0);
 	}
 	if (dup2(*fd_in, STDIN_FILENO) == -1)
@@ -67,10 +66,10 @@ int	output_file(int *flags, char *file, int *fd_out, int status)
 	*fd_out = open(file, *flags, 0644);
 	if (*fd_out < 0)
 	{
-        if (status == 1)
-            print_open_error_parent(file);
-        else
-		    print_open_error(file);
+		if (status == 1)
+			print_open_error_parent(file);
+		else
+			print_open_error(file);
 		return (0);
 	}
 	if (dup2(*fd_out, STDOUT_FILENO) == -1)
@@ -89,10 +88,10 @@ int	append_file(int *flags, char *file, int *fd_out, int status)
 	*fd_out = open(file, *flags, 0644);
 	if (*fd_out < 0)
 	{
-        if (status == 1)
-            print_open_error_parent(file);
-        else
-		    print_open_error(file);
+		if (status == 1)
+			print_open_error_parent(file);
+		else
+			print_open_error(file);
 		return (0);
 	}
 	if (dup2(*fd_out, STDOUT_FILENO) == -1)

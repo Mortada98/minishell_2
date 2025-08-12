@@ -14,28 +14,28 @@
 
 void	execve_error(void)
 {
-		if (errno == EISDIR)
-        {
-            set_status(127);
-			write(2, "minishell: : Is a directory\n", 29);
-        }
-		else if (errno == ENOTDIR)
-		{
-			write(2, "minishell: : Not a directory\n", 30);
-			set_status(126);
-		}
-		else if (errno == ENOENT)
-        {
-            set_status(127);
-			write(2, "minishell: : No such file or directory\n", 40);
-        }
-		else if (errno == EACCES)
-        {
-            set_status(126);
-			write(2, "minishell: : Permission denied\n", 32);
-        }
-		else
-			perror("minishell");
+	if (errno == EISDIR)
+	{
+		set_status(127);
+		write(2, "minishell: : Is a directory\n", 29);
+	}
+	else if (errno == ENOTDIR)
+	{
+		write(2, "minishell: : Not a directory\n", 30);
+		set_status(126);
+	}
+	else if (errno == ENOENT)
+	{
+		set_status(127);
+		write(2, "minishell: : No such file or directory\n", 40);
+	}
+	else if (errno == EACCES)
+	{
+		set_status(126);
+		write(2, "minishell: : Permission denied\n", 32);
+	}
+	else
+		perror("minishell");
 }
 
 char	*prompt_helper(char **env)
