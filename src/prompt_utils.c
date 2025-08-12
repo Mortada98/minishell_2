@@ -6,11 +6,37 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 10:34:49 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 10:41:30 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:58:03 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	execve_error(void)
+{
+		if (errno == EISDIR)
+        {
+            set_status(127);
+			write(2, "minishell: : Is a directory\n", 29);
+        }
+		else if (errno == ENOTDIR)
+		{
+			write(2, "minishell: : Not a directory\n", 30);
+			set_status(126);
+		}
+		else if (errno == ENOENT)
+        {
+            set_status(127);
+			write(2, "minishell: : No such file or directory\n", 40);
+        }
+		else if (errno == EACCES)
+        {
+            set_status(126);
+			write(2, "minishell: : Permission denied\n", 32);
+        }
+		else
+			perror("minishell");
+}
 
 char	*prompt_helper(char **env)
 {

@@ -6,13 +6,14 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 10:17:47 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 11:22:59 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
+
+int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out, int status)
 {
 	t_redir	*temp;
 	int		fd_in;
@@ -26,11 +27,11 @@ int	open_and_duplicate(t_command **cmd, int *flags, int *fd_out)
 	while (temp)
 	{
 		if (temp->type == TOKEN_REDIR_IN)
-			j = input_file(&fd_in, temp->data);
+			j = input_file(&fd_in, temp->data, status);
 		else if (temp->type == TOKEN_REDIR_OUT)
-			j = output_file(flags, temp->data, fd_out);
+			j = output_file(flags, temp->data, fd_out, status);
 		else if (temp->type == TOKEN_REDIR_APPEND)
-			j = append_file(flags, temp->data, fd_out);
+			j = append_file(flags, temp->data, fd_out, status);
 		if (j == 0)
 			return (0);
 		temp = temp->next;
@@ -71,7 +72,7 @@ void	excute_redirection_of_parent(t_command **cmd, t_fd *fd, t_data *data,
 	error = 0;
 	saved_stdout1 = dup(STDOUT_FILENO);
 	saved_stdin1 = dup(STDIN_FILENO);
-	if (!open_and_duplicate(cmd, &flags, &fd->fd_out))
+	if (!open_and_duplicate(cmd, &flags, &fd->fd_out, 1))
 	{
 		dup2(saved_stdout1, STDOUT_FILENO);
 		dup2(saved_stdin1, STDIN_FILENO);
@@ -126,7 +127,7 @@ void	excute_redirection_of_child_builtin(t_builtin_params *param)
 	saved_stdin1 = dup(STDIN_FILENO);
 	if (execute_red_child_check(param, &fd_in))
 		return ;
-	open_and_duplicate(param->curr, &flags, param->fd_out);
+	open_and_duplicate(param->curr, &flags, param->fd_out, 0);
 	my_exit_child(param->curr, param->data, &error);
 	if (error == 1 || get_status() == 1)
 		close_fd(&saved_stdin1, &saved_stdout, param);

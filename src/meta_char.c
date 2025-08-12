@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 20:10:38 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/11 14:04:53 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:44:58 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	handle_pipe(t_token **current, t_command **current_cmd,
 		set_status(2);
 		return (0);
 	}
-	if ((*current)->next == NULL || (*current)->next->type != TOKEN_WORD)
+	if ((*current)->next == NULL || (*current)->next->type == TOKEN_PIPE)
 	{
 		write(2, "minishell: syntax error\n", 25);
 		set_status(2);

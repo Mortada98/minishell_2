@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 10:40:01 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 11:22:05 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,11 +224,12 @@ typedef struct s_all_params
 	t_pipeline_state		*state;
 }							t_all_params;
 
+void						execve_error(void);
 char						*apply_tilde_replacement(char *pwd, char **env);
 char						*prompt_helper(char **env);
-int							append_file(int *flags, char *file, int *fd_out);
-int							output_file(int *flags, char *file, int *fd_out);
-int							input_file(int *fd_in, char *file);
+int							append_file(int *flags, char *file, int *fd_out, int status);
+int							output_file(int *flags, char *file, int *fd_out, int status);
+int							input_file(int *fd_in, char *file, int status);
 void						cleanup_and_exit2(int save, int saved_stdin,
 								char ***env, int status);
 char						*manage_saved_cwd(int action, char *new_value);
@@ -333,7 +334,7 @@ void						excute_redirection_of_parent(t_command **cmd,
 								t_fd *fd, t_data *data, char ***env);
 int							is_directory_parent(t_command **cmd);
 int							open_and_duplicate(t_command **cmd, int *flags,
-								int *fd_out);
+								int *fd_out, int status);
 int							is_number(char *str);
 void						my_exit_child(t_command **cmd, t_data *data,
 								int *error);

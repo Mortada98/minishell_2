@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 10:00:53 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/12 10:50:43 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 	}
 	else
 		set_status(126);
-	perror("minishell: ");
+	execve_error();
 	dup2(save, 0);
 	close(save);
 	close(saved_stdin);
