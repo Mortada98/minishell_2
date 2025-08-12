@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 void	execve_error(void)
 {
@@ -34,6 +35,8 @@ void	execve_error(void)
 		set_status(126);
 		write(2, "minishell: : Permission denied\n", 32);
 	}
+  else
+    set_status(0);
 }
 
 char	*prompt_helper(char **env)

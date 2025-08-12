@@ -136,6 +136,7 @@ typedef struct s_cmd_var
 	char					**split_env;
 	char					*complete_path;
 	char					*first_join;
+  char          *store;
 	struct stat				sb;
 }							t_cmd_var;
 

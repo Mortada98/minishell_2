@@ -11,16 +11,11 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 {
 	(void)status;
-	if (errno == ENOENT)
-	{
-		set_status(127);
-	}
-	else
-		set_status(126);
 	execve_error();
 	dup2(save, 0);
 	close(save);

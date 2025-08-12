@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <sys/stat.h>
+#include <unistd.h>
 
 void	unique_error(char *cmd, char *error)
 {
@@ -31,6 +33,11 @@ char	*check_file(char *cmd)
 		print_open_error(cmd);
 		return (NULL);
 	}
+  if (S_ISDIR(st.st_mode))
+  {
+		print_message(cmd, 126, "minishell: ", ": Is a directory\n");
+    return (NULL);
+  }
 	if (access(cmd, X_OK) == 0)
 		return (gc_strdup(cmd));
 	if (access(cmd, F_OK) == 0)
