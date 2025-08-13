@@ -1,7 +1,5 @@
 NAME = minishell
 
-#HELLO 	WORLD
-
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
@@ -60,49 +58,4 @@ fclean: clean
 
 re: fclean all
 
-# Valgrind leak testing targets
-valgrind-quick:
-	@echo "$(BLUE)🔍 Running quick valgrind leak test...$(NC)"
-	@./quick_valgrind_test.sh
-
-valgrind-full:
-	@echo "$(BLUE)🔍 Running comprehensive valgrind leak test...$(NC)"
-	@./test_valgrind_leaks.sh
-
-valgrind-comprehensive:
-	@echo "$(BLUE)🔍 Running enhanced comprehensive valgrind leak test...$(NC)"
-	@./test_valgrind_comprehensive.sh
-
-valgrind-check: $(NAME)
-	@echo "$(BLUE)🔍 Quick valgrind check...$(NC)"
-	@echo "echo 'test'; exit" | valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --suppressions=readline.sup ./$(NAME)
-
-valgrind-analyze:
-	@echo "$(BLUE)📊 Analyzing valgrind results...$(NC)"
-	@./simple_analyzer.sh
-
-help-valgrind:
-	@echo "$(YELLOW)Valgrind Testing Targets:$(NC)"
-	@echo "  valgrind-quick         : Run quick leak tests (~30 tests)"
-	@echo "  valgrind-full          : Run comprehensive leak tests (~56 tests)"
-	@echo "  valgrind-comprehensive : Run enhanced comprehensive tests (~200+ tests)"
-	@echo "  valgrind-check         : Single quick valgrind check"
-	@echo "  valgrind-analyze       : Analyze previous test results"
-	@echo "  help-valgrind          : Show this help"
-	@echo ""
-	@echo "$(BLUE)Test Coverage:$(NC)"
-	@echo "  • Built-in commands (echo, pwd, cd, export, unset, env)"
-	@echo "  • External commands (ls, cat, grep, wc, sort, etc.)"
-	@echo "  • Simple and multiple pipes"
-	@echo "  • Input/output redirections"
-	@echo "  • Heredoc functionality"
-	@echo "  • Variable expansion"
-	@echo "  • Error handling and edge cases"
-	@echo "  • Signal handling"
-	@echo "  • Quote handling"
-	@echo "  • Wildcard patterns"
-	@echo ""
-	@echo "$(BLUE)See VALGRIND_TESTING_README.md for detailed usage$(NC)"
-
-.PHONY: all clean fclean re valgrind-quick valgrind-full valgrind-comprehensive valgrind-check valgrind-analyze help-valgrind
-.INTERMEDIATE: $(LIBFT_OBJ) $(OBJ)
+.PHONY: all clean fclean re

@@ -118,7 +118,7 @@ typedef struct s_command
 	bool					file;
 	t_redir					*redir;
 	bool					cmd_quoted;
-	bool redir_error; // Flag to mark redirection errors
+	bool					redir_error;
 	struct s_command		*next;
 }							t_command;
 
@@ -136,7 +136,7 @@ typedef struct s_cmd_var
 	char					**split_env;
 	char					*complete_path;
 	char					*first_join;
-  char          *store;
+	char					*store;
 	struct stat				sb;
 }							t_cmd_var;
 
@@ -218,8 +218,8 @@ typedef struct s_fd
 	int						fd_out;
 }							t_fd;
 
-t_exported_var	**get_exported_vars_ptr(void);
-void            parent_status(int status, int flags, int sig);
+t_exported_var				**get_exported_vars_ptr(void);
+void						parent_status(int status, int flags, int sig);
 void						cleanup_exported_vars(void);
 void						get_last_element(t_token **token);
 void						execve_error(void);
@@ -406,7 +406,8 @@ void						handle_white_spaces(t_token **token, char *line,
 bool						check_somthing(char *word);
 void						handle_some_cases(t_token **token, char *line,
 								t_data **data, char **env);
-char						*manual_realloc(char *old, size_t old_len, size_t new_len);
+char						*manual_realloc(char *old, size_t old_len,
+								size_t new_len);
 int							handle_pipe(t_token **current,
 								t_command **current_cmd, t_command *first_cmd,
 								t_data **data);
@@ -444,7 +445,8 @@ void						append_arg(t_command *cmd, char *str,
 								t_data **data);
 t_command					*create_command(void);
 void						free_cmd(t_command *cmd);
-char						*expand_env(char *str, char **env, bool expand_herdoc);
+char						*expand_env(char *str, char **env,
+								bool expand_herdoc);
 t_command					*parsing_command(t_token *token, t_data **data);
 int							is_space(char c);
 void						free_token(t_token **token);
