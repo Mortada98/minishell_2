@@ -12,13 +12,6 @@
 
 #include "../include/minishell.h"
 
-static t_exported_var	**get_exported_vars_ptr(void)
-{
-	static t_exported_var	*exported_vars = NULL;
-
-	return (&exported_vars);
-}
-
 void	add_exported_var(char *name)
 {
 	t_exported_var	*new_var;

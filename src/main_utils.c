@@ -34,10 +34,10 @@ int	is_number(char *str)
 
 void	handle_core_dumped(int *pids, int pid_count, t_data **data)
 {
-	int i;
-	int status;
-	int sig;
-	int flags;
+	int	i;
+	int	status;
+	int	sig;
+	int	flags;
 
 	sig = 0;
 	flags = 0;

@@ -12,6 +12,13 @@
 
 #include "../include/minishell.h"
 
+t_exported_var	**get_exported_vars_ptr(void)
+{
+	static t_exported_var	*exported_vars = NULL;
+
+	return (&exported_vars);
+}
+
 void	print_open_error_parent(char *filename)
 {
 	(void)filename;
