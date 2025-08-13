@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 21:26:24 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:08:29 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 {
-	(void)status;
-	execve_error();
+	if (status)
+		execve_error();
 	dup2(save, 0);
 	close(save);
 	close(saved_stdin);
@@ -31,7 +31,7 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 static void	execute_builtin_child(t_builtin_params *bp)
 {
 	excute_redirection_of_child_builtin(bp);
-	cleanup_and_exit(*(bp->save), *(bp->saved_stdin), bp->env, get_status());
+	cleanup_and_exit(*(bp->save), *(bp->saved_stdin), bp->env, 0);
 }
 
 static void	execute_external_command(t_command *curr, char ***env, int save,
@@ -43,7 +43,7 @@ static void	execute_external_command(t_command *curr, char ***env, int save,
 	if (!command)
 		cleanup_and_exit2(save, saved_stdin, env, 127);
 	if (execve(command, curr->args, *env) == -1)
-		cleanup_and_exit(save, saved_stdin, env, 126);
+		cleanup_and_exit(save, saved_stdin, env, 1);
 	else
 		set_status(0);
 }
