@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 11:22:59 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:29:03 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,22 +110,16 @@ void	close_fd(int *saved_stdin1, int *saved_stdout, t_builtin_params *param)
 	exit(get_status());
 }
 
-void	excute_redirection_of_child_builtin(t_builtin_params *param)
+void	exec_red_child_built(t_builtin_params *param)
 {
 	int	error;
 	int	saved_stdout;
 	int	saved_stdin1;
 	int	flags;
-	int	fd_in;
 
 	error = 0;
-	if ((*param->curr)->redir)
-		if (is_directory_parent(param->curr))
-			return ;
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin1 = dup(STDIN_FILENO);
-	if (execute_red_child_check(param, &fd_in))
-		return ;
 	open_and_duplicate(param->curr, &flags, param->fd_out, 0);
 	my_exit_child(param->curr, param->data, &error);
 	if (error == 1 || get_status() == 1)

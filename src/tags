@@ -60,7 +60,7 @@ create_new_entry	env_var_utils.c	/^static char	*create_new_entry(char *name, cha
 empty_command	main_utils.c	/^void	empty_command(t_command *cmd)$/;"	f	typeref:typename:void
 excute_herdoc_for_child	parse_herdoc.c	/^void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)$/;"	f	typeref:typename:void
 excute_redirection_of_child	open_redirection.c	/^int	excute_redirection_of_child(t_command **cmd, t_data **data,$/;"	f	typeref:typename:int
-excute_redirection_of_child_builtin	dup_parent_and_child.c	/^void	excute_redirection_of_child_builtin(t_builtin_params *param)$/;"	f	typeref:typename:void
+exec_red_child_built	dup_parent_and_child.c	/^void	exec_red_child_built(t_builtin_params *param)$/;"	f	typeref:typename:void
 excute_redirection_of_parent	dup_parent_and_child.c	/^void	excute_redirection_of_parent(t_command **cmd, t_fd *fd, t_data *data,$/;"	f	typeref:typename:void
 execute_builtin_child	child_execution_helpers.c	/^static void	execute_builtin_child(t_builtin_params *bp)$/;"	f	typeref:typename:void	file:
 execute_builtin_command	excute.c	/^void	execute_builtin_command(t_command *cmd, char ***env)$/;"	f	typeref:typename:void
@@ -212,7 +212,7 @@ process_export_value	export_helpers.c	/^static int	process_export_value(char *na
 process_line	main_helper.c	/^int	process_line(t_token **token, char **line, char **env, t_data **data)$/;"	f	typeref:typename:int
 process_options	excute_utils.c	/^void	process_options(char **args, bool *has_n, int *idx)$/;"	f	typeref:typename:void
 process_pipeline_helper	pipeline_utils_clean.c	/^int	process_pipeline_helper(int pid, t_parent_params *parent_params,$/;"	f	typeref:typename:int
-process_pipeline_iteration	pipeline_utils_clean.c	/^int	process_pipeline_iteration(t_child_params *child_params,$/;"	f	typeref:typename:int
+pipe_iteration	pipeline_utils_clean.c	/^int	pipe_iteration(t_child_params *child_params,$/;"	f	typeref:typename:int
 process_quote	lexer_utils.c	/^int	process_quote(char *str, int *i, bool *in_double, bool *in_single)$/;"	f	typeref:typename:int
 process_quotes	lexer_helpers.c	/^char	*process_quotes(char *str, int *flag)$/;"	f	typeref:typename:char *
 process_word	lexer_helpers.c	/^void	process_word(t_token **token, t_word_processing *wp)$/;"	f	typeref:typename:void

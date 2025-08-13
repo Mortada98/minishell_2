@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/13 18:08:29 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:29:03 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 
 static void	execute_builtin_child(t_builtin_params *bp)
 {
-	excute_redirection_of_child_builtin(bp);
+	exec_red_child_built(bp);
 	cleanup_and_exit(*(bp->save), *(bp->saved_stdin), bp->env, 0);
 }
 

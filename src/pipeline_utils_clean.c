@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipeline_utils_clean.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 20:29:47 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:30:23 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	process_pipeline_helper(int pid, t_parent_params *parent_params,
 	return (1);
 }
 
-int	process_pipeline_iteration(t_child_params *child_params,
+int	pipe_iteration(t_child_params *child_params,
 		t_exec_params *params, t_parent_params *parent_params)
 {
 	pid_t	pid;
@@ -80,7 +80,7 @@ int	setup_params_helper(t_child_params *child_params, t_exec_params *params,
 	while (curr && !curr->file)
 	{
 		child_params->curr = curr;
-		if (!process_pipeline_iteration(child_params, params, &parent_params))
+		if (!pipe_iteration(child_params, params, &parent_params))
 		{
 			cleanup_pipeline_fds(params, &state);
 			dup2(params->saved_stdin, 0);

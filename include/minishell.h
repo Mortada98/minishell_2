@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/05 16:22:52 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 22:35:30 by mbouizak         ###   ########.fr       */
+/*   Created: 2025/08/13 18:39:26 by mbouizak          #+#    #+#             */
+/*   Updated: 2025/08/13 18:39:29 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,7 +363,7 @@ void						my_handler(int sig);
 void						cleanup_exit_handler(int sig);
 void						free_array(char **arr);
 void						my_echo(t_command *cmd);
-void						excute_redirection_of_child_builtin(t_builtin_params *param);
+void						exec_red_child_built(t_builtin_params *param);
 void						check_exit_status(t_command *cmd, t_data **data);
 void						excute_herdoc_for_child(t_command **cmd,
 								t_data **data, char **env);
@@ -380,7 +380,7 @@ int							handle_empty_command(t_command *cmd, t_data **data,
 								int saved_stdin, char ***env);
 void						execute_pipeline_loop(t_command *cmd, t_data **data,
 								char ***env, int saved_stdin);
-int							process_pipeline_iteration(t_child_params *child_params,
+int							pipe_iteration(t_child_params *child_params,
 								t_exec_params *params,
 								t_parent_params *parent_params);
 int							count_pipeline_commands(t_command *cmd);
