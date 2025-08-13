@@ -29,6 +29,8 @@ void	convert_exit_status(char **word)
 
 	if (ft_strncmp(*word, "$?", 2) == 0)
 	{
+    if (get_status() == 200)
+      set_status(1);
 		convert = ft_itoa(get_status());
 		new_word = gc_strdup(convert);
 		set_status(0);

@@ -96,7 +96,7 @@ void	cd(char *cmd, char ***env)
 		return ;
 	if (chdir(target) == -1)
 	{
-		set_status(1);
+		set_status(200);
 		perror(target);
 		return ;
 	}

@@ -18,7 +18,7 @@ static int	handle_export_error(char *arg, char *name)
 	write(2, "minishell: export: not a valid identifier\n", 43);
 	if (name)
 		free(name);
-	set_status(1);
+	set_status(200);
 	return (0);
 }
 

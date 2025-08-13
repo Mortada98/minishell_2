@@ -26,7 +26,7 @@ void	execve_error(void)
 		write(2, "minishell: : Permission denied\n", 32);
 	}
 	else if (errno != ENOTDIR && errno != EACCES
-		&& get_status() != 100 && errno != 0 && get_status() != 1)
+		&& get_status() != 100 && errno != 0 && get_status() != 200)
 	{
 		perror("minishell");
 		set_status(127);
