@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:54:31 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 21:18:42 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/13 08:31:02 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ int	is_number(char *str)
 
 void	handle_core_dumped(int *pids, int pid_count, t_data **data)
 {
-	int (i), status, sig, flags;
+	int i;
+	int status;
+	int sig;
+	int flags;
+
 	sig = 0;
 	flags = 0;
 	signal(SIGINT, SIG_IGN);
