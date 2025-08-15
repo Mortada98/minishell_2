@@ -47,7 +47,8 @@ void	create_add_token(t_token **token, char *word, t_token_type value,
 void	process_word(t_token **token, t_word_processing *wp)
 {
 	join_expansion(wp->str, token);
-	wp->str = process_quotes(wp->str, &wp->flag);
+	// wp->str = process_quotes(wp->str, &wp->flag);
+	wp->str = wp->str;
 	if (wp->str && wp->str != wp->word)
 		wp->word = wp->str;
 	if (!wp->flag)
