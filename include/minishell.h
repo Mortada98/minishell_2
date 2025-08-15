@@ -218,6 +218,7 @@ typedef struct s_fd
 	int						fd_out;
 }							t_fd;
 
+void  suprimer_quote(t_token **token);
 t_exported_var				**get_exported_vars_ptr(void);
 void						parent_status(int status, int flags, int sig);
 void						cleanup_exported_vars(void);

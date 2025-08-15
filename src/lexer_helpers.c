@@ -24,16 +24,6 @@ char	*handle_expansion(t_data *data, char *word, char **env)
 	return (word);
 }
 
-char	*process_quotes(char *str, int *flag)
-{
-	if (str[0] == '"' || str[0] == '\'')
-	{
-		str = remove_quotes(str);
-		*flag = 1;
-	}
-	return (str);
-}
-
 void	create_add_token(t_token **token, char *word, t_token_type value,
 		t_word_processing *wp)
 {
@@ -47,7 +37,6 @@ void	create_add_token(t_token **token, char *word, t_token_type value,
 void	process_word(t_token **token, t_word_processing *wp)
 {
 	join_expansion(wp->str, token);
-	// wp->str = process_quotes(wp->str, &wp->flag);
 	wp->str = wp->str;
 	if (wp->str && wp->str != wp->word)
 		wp->word = wp->str;
