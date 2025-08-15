@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exported_vars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/12 22:38:51 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/15 11:10:41 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,15 @@ void	add_exported_var(char *name)
 	exported_vars = get_exported_vars_ptr();
 	if (is_exported_var(name))
 		return ;
-	new_var = gc_malloc(sizeof(t_exported_var));
+	new_var = malloc(sizeof(t_exported_var));
 	if (!new_var)
 		return ;
-	new_var->name = gc_strdup(name);
+	new_var->name = ft_strdup(name);
 	if (!new_var->name)
+	{
+		free(new_var);
 		return ;
+	}
 	new_var->next = NULL;
 	if (!*exported_vars)
 	{
@@ -58,6 +61,8 @@ void	remove_exported_var(char *name)
 				prev->next = current->next;
 			else
 				*exported_vars = current->next;
+			free(current->name);
+			free(current);
 			return ;
 		}
 		prev = current;
@@ -85,7 +90,17 @@ void	cleanup_exported_vars(void)
 {
 	t_exported_var	**exported_vars;
 
+	t_exported_var *current;
+	t_exported_var *next;
 	exported_vars = get_exported_vars_ptr();
+	current = *exported_vars;
+	while (current)
+	{
+		next = current->next;
+		free(current->name);
+		free(current);
+		current = next;
+	}
 	*exported_vars = NULL;
 }
 
