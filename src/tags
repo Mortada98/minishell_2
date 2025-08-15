@@ -4,7 +4,7 @@
 !_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
 !_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
 !_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
-!_TAG_PROC_CWD	/home/helfatih/Documents/minishell_2/src/	//
+!_TAG_PROC_CWD	/home/helfatih/Documents/my/src/	//
 !_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
 !_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
@@ -60,8 +60,8 @@ create_new_entry	env_var_utils.c	/^static char	*create_new_entry(char *name, cha
 empty_command	main_utils.c	/^void	empty_command(t_command *cmd)$/;"	f	typeref:typename:void
 excute_herdoc_for_child	parse_herdoc.c	/^void	excute_herdoc_for_child(t_command **cmd, t_data **data, char **env)$/;"	f	typeref:typename:void
 excute_redirection_of_child	open_redirection.c	/^int	excute_redirection_of_child(t_command **cmd, t_data **data,$/;"	f	typeref:typename:int
-exec_red_child_built	dup_parent_and_child.c	/^void	exec_red_child_built(t_builtin_params *param)$/;"	f	typeref:typename:void
 excute_redirection_of_parent	dup_parent_and_child.c	/^void	excute_redirection_of_parent(t_command **cmd, t_fd *fd, t_data *data,$/;"	f	typeref:typename:void
+exec_red_child_built	dup_parent_and_child.c	/^void	exec_red_child_built(t_builtin_params *param)$/;"	f	typeref:typename:void
 execute_builtin_child	child_execution_helpers.c	/^static void	execute_builtin_child(t_builtin_params *bp)$/;"	f	typeref:typename:void	file:
 execute_builtin_command	excute.c	/^void	execute_builtin_command(t_command *cmd, char ***env)$/;"	f	typeref:typename:void
 execute_child_process	pipeline_execution.c	/^void	execute_child_process(t_command *curr, t_data **data,$/;"	f	typeref:typename:void
@@ -105,7 +105,7 @@ get_command	excute.c	/^char	*get_command(char *cmd, char **env)$/;"	f	typeref:ty
 get_current_directory	pwd_cmd.c	/^char	*get_current_directory(char **env)$/;"	f	typeref:typename:char *
 get_env	enviroment.c	/^char	*get_env(char *name, char **env)$/;"	f	typeref:typename:char *
 get_exported_vars	exported_vars.c	/^t_exported_var	*get_exported_vars(void)$/;"	f	typeref:typename:t_exported_var *
-get_exported_vars_ptr	exported_vars.c	/^static t_exported_var	**get_exported_vars_ptr(void)$/;"	f	typeref:typename:t_exported_var **	file:
+get_exported_vars_ptr	open_files.c	/^t_exported_var	**get_exported_vars_ptr(void)$/;"	f	typeref:typename:t_exported_var **
 get_last_element	token.c	/^void	get_last_element(t_token **token)$/;"	f	typeref:typename:void
 get_path_display	prompt.c	/^static char	*get_path_display(char **env)$/;"	f	typeref:typename:char *	file:
 get_pwd_value	prompt.c	/^static char	*get_pwd_value(char **env)$/;"	f	typeref:typename:char *	file:
@@ -199,6 +199,7 @@ parse_redirections	parse_helper.c	/^int	parse_redirections(t_command **current_c
 parsing_command	Handle_command.c	/^t_command	*parsing_command(t_token *token, t_data **data)$/;"	f	typeref:typename:t_command *
 parsing_process	main.c	/^int	parsing_process(t_token **token, char **env, t_data *data, t_command **cmd)$/;"	f	typeref:typename:int
 part_execution	main.c	/^void	part_execution(t_command **cmd, char ***env, t_data **data)$/;"	f	typeref:typename:void
+pipe_iteration	pipeline_utils_clean.c	/^int	pipe_iteration(t_child_params *child_params,$/;"	f	typeref:typename:int
 print_args	print_message.c	/^void	print_args(char **args, int idx)$/;"	f	typeref:typename:void
 print_env	enviroment.c	/^void	print_env(char **env)$/;"	f	typeref:typename:void
 print_env_variable	print_export_env.c	/^static void	print_env_variable(char *env_var)$/;"	f	typeref:typename:void	file:
@@ -212,9 +213,7 @@ process_export_value	export_helpers.c	/^static int	process_export_value(char *na
 process_line	main_helper.c	/^int	process_line(t_token **token, char **line, char **env, t_data **data)$/;"	f	typeref:typename:int
 process_options	excute_utils.c	/^void	process_options(char **args, bool *has_n, int *idx)$/;"	f	typeref:typename:void
 process_pipeline_helper	pipeline_utils_clean.c	/^int	process_pipeline_helper(int pid, t_parent_params *parent_params,$/;"	f	typeref:typename:int
-pipe_iteration	pipeline_utils_clean.c	/^int	pipe_iteration(t_child_params *child_params,$/;"	f	typeref:typename:int
 process_quote	lexer_utils.c	/^int	process_quote(char *str, int *i, bool *in_double, bool *in_single)$/;"	f	typeref:typename:int
-process_quotes	lexer_helpers.c	/^char	*process_quotes(char *str, int *flag)$/;"	f	typeref:typename:char *
 process_word	lexer_helpers.c	/^void	process_word(t_token **token, t_word_processing *wp)$/;"	f	typeref:typename:void
 prompt	prompt.c	/^char	*prompt(char **env)$/;"	f	typeref:typename:char *
 prompt_helper	prompt_utils.c	/^char	*prompt_helper(char **env)$/;"	f	typeref:typename:char *
@@ -238,6 +237,7 @@ setup_pipe	pipeline_setup_utils.c	/^int	setup_pipe(t_command *curr, int *fd)$/;"
 simple_condition	Handle_command.c	/^int	simple_condition(t_var *var, char *str, char **env)$/;"	f	typeref:typename:int
 sort_env_array	env_sort_utils.c	/^void	sort_env_array(char **sorted_env, int count)$/;"	f	typeref:typename:void
 split_var	parse_cmd_utils.c	/^char	*split_var(size_t *i, char *str, size_t *start)$/;"	f	typeref:typename:char *
+suprimer_quote	suprimer.c	/^void	suprimer_quote(t_token **token)$/;"	f	typeref:typename:void
 tokenize	lexer.c	/^t_token	*tokenize(char *line, t_data **data, char **env)$/;"	f	typeref:typename:t_token *
 unique_error	print_message.c	/^void	unique_error(char *cmd, char *error)$/;"	f	typeref:typename:void
 update_existing_var	env_var_utils.c	/^int	update_existing_var(char *name, char *value, char **env)$/;"	f	typeref:typename:int

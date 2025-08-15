@@ -42,7 +42,8 @@ void	process_word(t_token **token, t_word_processing *wp)
 		wp->word = wp->str;
 	if (!wp->flag)
 		wp->value = get_token_type(wp->word);
-	if (wp->word[0] != '\'' && wp->word[0] != '"' && (ft_strchr(wp->word, ' ') || ft_strchr(wp->word, '\t')))
+	if (wp->word[0] != '\'' && wp->word[0] != '"' && (ft_strchr(wp->word, ' ')
+		|| ft_strchr(wp->word, '\t')))
 	{
 		make_list(wp->word, token);
 		return ;

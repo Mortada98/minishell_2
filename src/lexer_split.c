@@ -31,7 +31,7 @@ void	convert_exit_status(char **word)
 	{
 		if (get_status() == 200)
 			set_status(1);
-    else if (get_status() == 100)
+		else if (get_status() == 100)
 			set_status(0);
 		convert = ft_itoa(get_status());
 		new_word = gc_strdup(convert);

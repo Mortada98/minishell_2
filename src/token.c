@@ -42,10 +42,9 @@ t_token	*creat_token(char *line, t_token_type type, bool should_join,
 	new_token->type = type;
 	new_token->found = found;
 	new_token->info = should_join;
-	new_token->quoted = get_bool();
+	new_token->quoted = false;
 	new_token->next = NULL;
 	new_token->prev = NULL;
-	set_bool(false);
 	return (new_token);
 }
 

@@ -14,10 +14,7 @@
 
 void	add_exported_var(char *name)
 {
-	t_exported_var	*new_var;
-	t_exported_var	*current;
-	t_exported_var	**exported_vars;
-
+	t_exported_var (*new_var), *current, **exported_vars;
 	exported_vars = get_exported_vars_ptr();
 	if (is_exported_var(name))
 		return ;
@@ -26,10 +23,7 @@ void	add_exported_var(char *name)
 		return ;
 	new_var->name = ft_strdup(name);
 	if (!new_var->name)
-	{
-		free(new_var);
-		return ;
-	}
+		return (free(new_var), (void)0);
 	new_var->next = NULL;
 	if (!*exported_vars)
 	{
@@ -89,9 +83,9 @@ int	is_exported_var(char *name)
 void	cleanup_exported_vars(void)
 {
 	t_exported_var	**exported_vars;
+	t_exported_var	*current;
+	t_exported_var	*next;
 
-	t_exported_var *current;
-	t_exported_var *next;
 	exported_vars = get_exported_vars_ptr();
 	current = *exported_vars;
 	while (current)

@@ -26,7 +26,7 @@ int	my_export(char *arg, char ***env)
 	char	*equal_sign;
 
 	equal_sign = ft_strchr(arg, '=');
-	if (!equal_sign)
+	if (!equal_sign || arg[0] == '=')
 	{
 		if (!is_valid_identifier(arg))
 			return (handle_invalid_identifier_error(arg));
