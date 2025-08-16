@@ -16,7 +16,7 @@ void	add_exported_var(char *name)
 {
 	t_exported_var	**exported_vars;
 	t_exported_var	*current;
-	t_export_var	*new_var;
+	t_exported_var	*new_var;
 
 	exported_vars = get_exported_vars_ptr();
 	if (is_exported_var(name))
