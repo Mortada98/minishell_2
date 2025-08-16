@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/15 11:10:41 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/16 10:21:06 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 void	add_exported_var(char *name)
 {
-	t_exported_var (*new_var), *current, **exported_vars;
+	t_exported_var	**exported_vars;
+	t_exported_var	*current;
+	t_export_var	*new_var;
+
 	exported_vars = get_exported_vars_ptr();
 	if (is_exported_var(name))
 		return ;

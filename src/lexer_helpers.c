@@ -6,7 +6,7 @@
 /*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 21:34:54 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 19:47:37 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/16 10:23:36 by helfatih         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	process_word(t_token **token, t_word_processing *wp)
 	if (!wp->flag)
 		wp->value = get_token_type(wp->word);
 	if (wp->word[0] != '\'' && wp->word[0] != '"' && (ft_strchr(wp->word, ' ')
-		|| ft_strchr(wp->word, '\t')))
+			|| ft_strchr(wp->word, '\t')))
 	{
 		make_list(wp->word, token);
 		return ;

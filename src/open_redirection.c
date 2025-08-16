@@ -38,7 +38,7 @@ int	open_red_out(char *cmd, int *fd_out, char **env, int append)
 	int	flags;
 
 	(void)env;
-	if (!fd_out || !cmd || !*cmd)
+	if (!fd_out || !cmd)
 		return (0);
 	if (is_directory_str(cmd))
 		return (set_status(1), 0);
