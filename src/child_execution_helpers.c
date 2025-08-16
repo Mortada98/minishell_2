@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_execution_helpers.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 22:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/13 18:29:03 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:10:50 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	cleanup_and_exit(int save, int saved_stdin, char ***env, int status)
 	close(save);
 	close(saved_stdin);
 	close_fds_except_std();
+	cleanup_exported_vars();
 	gc_cleanup();
 	if ((*env)[0])
 		free_2d_array(*env);

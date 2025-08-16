@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_parent_and_child.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:19:17 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/13 18:29:03 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:18:08 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	close_fd(int *saved_stdin1, int *saved_stdout, t_builtin_params *param)
 		close(*param->saved_stdin);
 	gc_cleanup();
 	free_2d_array(*param->env);
+	cleanup_exported_vars();
 	rl_clear_history();
 	exit(get_status());
 }

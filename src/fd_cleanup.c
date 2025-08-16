@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 00:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/13 08:06:10 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:17:03 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	close_fd2(int *saved_stdin1, int *saved_stdout1, t_fd *fd, char ***env)
 		close(fd->saved_stdin);
 	gc_cleanup();
 	free_2d_array(*env);
+	cleanup_exported_vars();
 	rl_clear_history();
 	exit(get_status());
 }

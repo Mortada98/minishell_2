@@ -38,6 +38,10 @@ void	execute_child_process(t_command *curr, t_data **data,
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	setup_child_io(params->prev_fd, params->fd, curr);
+	if (params->saved_stdin >= 0)
+		close(params->saved_stdin);
+	if (params->save >= 0)
+		close(params->save);
 	if (!excute_redirection_of_child(&curr, data, params, *env))
 	{
 		close_all_fds();

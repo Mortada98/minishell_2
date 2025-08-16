@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: helfatih <helfatih@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 09:34:08 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 11:02:39 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:10:41 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	cleanup_and_exit2(int save, int saved_stdin, char ***env, int status)
 	close(save);
 	close(saved_stdin);
 	close_fds_except_std();
+	cleanup_exported_vars();
 	gc_cleanup();
 	if ((*env)[0])
 		free_2d_array(*env);

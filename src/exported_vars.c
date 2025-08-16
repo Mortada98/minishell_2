@@ -6,7 +6,7 @@
 /*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 18:00:00 by mbouizak          #+#    #+#             */
-/*   Updated: 2025/08/16 10:21:06 by helfatih         ###   ########.fr       */
+/*   Updated: 2025/08/16 21:10:27 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	cleanup_exported_vars(void)
 	t_exported_var	*next;
 
 	exported_vars = get_exported_vars_ptr();
+	if (!*exported_vars)
+		return ;
 	current = *exported_vars;
 	while (current)
 	{
