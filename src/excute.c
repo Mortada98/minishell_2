@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excute.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbouizak <mbouizak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbouizak <mbouizak@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 14:00:25 by helfatih          #+#    #+#             */
-/*   Updated: 2025/08/12 21:47:57 by mbouizak         ###   ########.fr       */
+/*   Updated: 2025/08/17 13:42:04 by mbouizak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ void	built_in_part1(t_command *cmd, char ***env)
 		my_echo(cmd);
 	else if (ft_strcmp(cmd->args[0], "cd") == 0)
 	{
+		if (cmd->args[2] != NULL)
+		{
+			write(2, "minishell: cd: too many arguments\n", 34);
+			set_status(1);
+			return ;
+		}
 		if (cmd->args[1])
 			cd(cmd->args[1], env);
 		else
